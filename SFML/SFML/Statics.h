@@ -20,7 +20,7 @@ struct ObstacleProperties
 	sf::Texture* Texture = nullptr;
 	sf::Vector2f StartPos{};
 	sf::Vector2f Scale{ 1,1 };
-	float MoveSpeed{ 200.0f };
+	float MoveSpeed{ 160.0f };
 };
 
 struct PlayerProperties
@@ -78,6 +78,8 @@ public:
 	static float DeltaTime;
 	static float UnscaledDeltaTime;
 	static void CalculateDeltaTime();
+
+	static float m_fGameScore;
 private:
 	static float LastTime;
 };

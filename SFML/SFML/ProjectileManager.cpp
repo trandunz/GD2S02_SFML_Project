@@ -78,7 +78,6 @@ void ProjectileManager::Update()
 						if (projectile->CheckCollision(enemy->GetSprite()))
 						{
 							enemy->TakeDamage(1);
-
 							projectile->Destroy = true;
 							break;
 						}

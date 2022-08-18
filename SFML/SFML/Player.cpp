@@ -172,7 +172,17 @@ bool Player::CheckCollision(sf::Sprite _otherSprite)
 {
 	if (m_Mesh.getGlobalBounds().intersects(_otherSprite.getGlobalBounds()))
 	{
-		m_Mesh.setPosition(m_PreviousMove);
+		if (_otherSprite.getPosition().y + (_otherSprite.getScale().y / 2.0f) < m_PreviousMove.y - 32.0f)
+		{
+			m_Mesh.setPosition(m_PreviousMove + sf::Vector2f(0, 1.0f));
+		}
+		else
+		{
+			m_Mesh.setPosition(m_PreviousMove);
+		}
+
+
+		
 		return true;
 	}
 	return false;

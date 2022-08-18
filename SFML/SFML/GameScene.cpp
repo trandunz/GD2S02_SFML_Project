@@ -17,7 +17,7 @@ GameScene::GameScene()
 
 	PlayerManager::GetInstance().CreatePlayer(
 		{
-			&TextureLoader::LoadTexture("Earth_Mage.png"),
+			&TextureLoader::LoadTexture("Fire_Mage.png"),
 			{600, 600},
 			{300},
 			3,
@@ -63,12 +63,15 @@ void GameScene::Update()
 	PlayerManager::GetInstance().Update();
 	GUI::GetInstance().Update();
 
-	ScrollBackground(200.0f);
-	GUI::GetInstance().SetText("Score", "Score: " + FloatToString(m_fDistanceTravelled, 0));
+	ScrollBackground(160.0f);
+	//GUI::GetInstance().SetText("Score", "Score: " + FloatToString(m_fDistanceTravelled, 0)); // Changing to on killing enemy
+	GUI::GetInstance().SetText("Score", "Score: " + FloatToString(Statics::m_fGameScore, 0));
 
 	ProjectileManager::GetInstance().CleanupDestroyed();
 	EnemyManager::GetInstance().CleanupDestroyed();
 	PlayerManager::GetInstance().CleanupDestroyed();
+
+
 }
 
 void GameScene::Draw()

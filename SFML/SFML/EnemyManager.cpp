@@ -49,6 +49,7 @@ void EnemyManager::Update()
 	{
 		if (enemy->GetCurrentHealth() <= 0)
 		{
+			Statics::m_fGameScore += 20.0f;
 			enemy->Destroy = true;
 		}
 		else

@@ -8,6 +8,7 @@ float Statics::TimeScale{ 1.0f };
 float Statics::DeltaTime{};
 float Statics::UnscaledDeltaTime{};
 float Statics::LastTime{};
+float Statics::m_fGameScore{};
 
 void Statics::CalculateDeltaTime()
 {
