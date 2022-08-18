@@ -29,6 +29,7 @@ struct PlayerProperties
 	sf::Vector2f StartPos{};
 	float MoveSpeed{ 1000.0f };
 	int MaxHealth{ 3 };
+	int MaxMana{ 3 };
 	bool PlayerOne{true};
 	sf::Vector2f Scale{ 1,1 };
 };

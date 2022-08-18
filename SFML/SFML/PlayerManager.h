@@ -19,6 +19,7 @@ public:
 
 	std::vector<sf::Sprite> GetPlayerSprites() const;
 	std::vector<Player*>& GetPlayers();
+	Player* GetPlayerFromIndex(int _index);
 
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
