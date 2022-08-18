@@ -82,6 +82,14 @@ std::vector<Player*>& PlayerManager::GetPlayers()
 	return m_Players;
 }
 
+Player* PlayerManager::GetPlayerFromIndex(int _index)
+{
+	if (m_Players.size() >= _index)
+		return m_Players[_index];
+	else
+		return nullptr;
+}
+
 void PlayerManager::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	for (auto& player : m_Players)

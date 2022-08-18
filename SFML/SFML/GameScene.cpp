@@ -21,6 +21,7 @@ GameScene::GameScene()
 			{600, 600},
 			{300},
 			3,
+			3,
 			false
 		});
 
