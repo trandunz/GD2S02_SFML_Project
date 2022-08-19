@@ -3,6 +3,7 @@
 #include "ObjectManager.h"
 #include "ProjectileManager.h"
 #include "EnemyManager.h"
+#include "VFX.h"
 #include "GUI.h"
 #include "Math.h"
 
@@ -25,13 +26,6 @@ GameScene::GameScene()
 			false
 		});
 
-	//ObjectManager::GetInstance().CreateObstacle(
-	//	{ 
-	//		&TextureLoader::LoadTexture("Rock_temp.png"),
-	//		{400, 200},
-	//		{0.05f, 0.05f}
-	//	});
-
 	GUI::GetInstance().CreateText("Score",
 		{
 			{400,20}
@@ -48,6 +42,7 @@ GameScene::~GameScene()
 	PlayerManager::GetInstance().CleanupPlayers();
 	EnemyManager::GetInstance().CleanupEnemies();
 	GUI::GetInstance().CleanupElements();
+	VFX::GetInstance().CleanupElements();
 }
 
 void GameScene::HandleEvents()
@@ -63,6 +58,7 @@ void GameScene::Update()
 	ObjectManager::GetInstance().Update();
 	PlayerManager::GetInstance().Update();
 	GUI::GetInstance().Update();
+	VFX::GetInstance().Update();
 
 	ScrollBackground(160.0f);
 	//GUI::GetInstance().SetText("Score", "Score: " + FloatToString(m_fDistanceTravelled, 0)); // Changing to on killing enemy
@@ -71,8 +67,6 @@ void GameScene::Update()
 	ProjectileManager::GetInstance().CleanupDestroyed();
 	EnemyManager::GetInstance().CleanupDestroyed();
 	PlayerManager::GetInstance().CleanupDestroyed();
-
-
 }
 
 void GameScene::Draw()
@@ -84,6 +78,7 @@ void GameScene::Draw()
 	Statics::RenderWindow.draw(EnemyManager::GetInstance());
 	Statics::RenderWindow.draw(ProjectileManager::GetInstance());
 	Statics::RenderWindow.draw(PlayerManager::GetInstance());
+	Statics::RenderWindow.draw(VFX::GetInstance());
 	Statics::RenderWindow.draw(GUI::GetInstance());
 }
 

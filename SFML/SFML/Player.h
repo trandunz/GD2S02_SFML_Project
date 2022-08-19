@@ -37,13 +37,9 @@ private:
 	void UpdateHeartsUI(std::string _prefix);
 	void UpdateManaUI(std::string _prefix);
 
-	// Temp
 	void CreateSpecialVFX();
 	void SetP1SpecialVFXPosition(sf::Vector2f _position);
 	void SetP2SpecialVFXPosition(sf::Vector2f _position);
-	sf::Sprite m_P1SpecialVFX{};
-	sf::Sprite m_P2SpecialVFX{};
-	//
 
 	void BasicAttack();
 	void SecondaryAttack();

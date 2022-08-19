@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Scenes">
       <UniqueIdentifier>{1d57a53c-ebff-4f5f-b8d5-6950527deada}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Juice">
+      <UniqueIdentifier>{8fdd6395-ebfd-4179-827a-7d972f57764a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Juice">
+      <UniqueIdentifier>{e2f98d37-4573-4b2f-a333-0f0015cdd6bc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -85,7 +91,10 @@
       <Filter>Source Files\Projectile</Filter>
     </ClCompile>
     <ClCompile Include="GUI.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Juice</Filter>
+    </ClCompile>
+    <ClCompile Include="VFX.cpp">
+      <Filter>Source Files\Juice</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -131,8 +140,11 @@
     <ClInclude Include="ProjectileManager.h">
       <Filter>Header Files\Projectile</Filter>
     </ClInclude>
+    <ClInclude Include="VFX.h">
+      <Filter>Header Files\Juice</Filter>
+    </ClInclude>
     <ClInclude Include="GUI.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Juice</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,7 +10,7 @@ inline float Magnitude(sf::Vector2f _vec)
 
 inline void SetOriginCenter(sf::Sprite& _sprite)
 {
-	_sprite.setOrigin(_sprite.getGlobalBounds().width / 2, _sprite.getGlobalBounds().height / 2);
+	_sprite.setOrigin(_sprite.getLocalBounds().width / 2.0f, _sprite.getLocalBounds().height / 2.0f);
 }
 
 inline void SetOriginCenter(sf::Text& _text)

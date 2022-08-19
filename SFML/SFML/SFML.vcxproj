@@ -161,6 +161,7 @@
     <ClCompile Include="ProjectileManager.cpp" />
     <ClCompile Include="Statics.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
+    <ClCompile Include="VFX.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Enemy.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="ProjectileManager.h" />
     <ClInclude Include="Statics.h" />
     <ClInclude Include="TextureLoader.h" />
+    <ClInclude Include="VFX.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

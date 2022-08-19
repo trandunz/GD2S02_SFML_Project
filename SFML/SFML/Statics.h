@@ -67,6 +67,13 @@ struct ImageProperties
 	sf::Vector2f Scale{ 1,1 };
 };
 
+struct SpecialEffectProperties
+{
+	sf::Texture* Texture = nullptr;
+	sf::Vector2f StartPos{};
+	sf::Vector2f Scale{ 1,1 };
+};
+
 class Statics
 {
 public:

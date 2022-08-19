@@ -1,13 +1,14 @@
 #include "Player.h"
 #include "GUI.h"
 #include "PlayerManager.h"
+#include "VFX.h"
 
 Player::Player(PlayerProperties _properties)
 {
 	m_Mesh.setTexture(*_properties.Texture, true);
-	SetOriginCenter(m_Mesh);
 	SetPosition(_properties.StartPos);
 	m_Mesh.setScale(_properties.Scale);
+	SetOriginCenter(m_Mesh);
 	m_Properties = _properties;
 	SetHPMax();
 	SetManaMax();
@@ -37,13 +38,15 @@ Player::Player(PlayerProperties _properties)
 		CreateManaUI("P1", { 16, 80 }, { 48, 80 }, { 80, 80 });
 	}
 
-	// Temp
 	CreateSpecialVFX();
-	//
 }
 
 Player::~Player()
 {
+	if (m_Properties.PlayerOne)
+		VFX::GetInstance().StopEffect("P1Special");
+	else
+		VFX::GetInstance().StopEffect("P2Special");
 }
 
 void Player::HandleEvents()
@@ -83,29 +86,16 @@ void Player::Update()
 		}
 	}
 
+	if (m_Properties.PlayerOne == true)
+	{
+		SetP1SpecialVFXPosition(GetPosition());
+	}
+	else
+	{
+		SetP2SpecialVFXPosition(GetPosition());
+	}
 	if (m_SpecialTimer > 0)
 	{
-		//Temp
-		Player* otherPlayer = nullptr;
-		if (m_Properties.PlayerOne == true)
-		{
-			SetP1SpecialVFXPosition(GetPosition());
-
-			otherPlayer = PlayerManager::GetInstance().GetPlayerFromIndex(1);
-			if (otherPlayer != nullptr)
-				SetP2SpecialVFXPosition(otherPlayer->GetPosition());
-		}
-		else
-		{
-			otherPlayer = PlayerManager::GetInstance().GetPlayerFromIndex(0);
-			if (otherPlayer != nullptr)
-				SetP1SpecialVFXPosition(otherPlayer->GetPosition());
-
-			SetP2SpecialVFXPosition(GetPosition());
-		}	
-		otherPlayer = nullptr;
-		//
-
 		m_SpecialTimer -= Statics::DeltaTime;
 	}
 
@@ -123,14 +113,6 @@ void Player::Update()
 void Player::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_Mesh);
-
-	// Temp
-	if (m_SpecialTimer > 0)
-	{
-		_target.draw(m_P1SpecialVFX);
-		_target.draw(m_P2SpecialVFX);
-	}
-	//
 }
 
 sf::Vector2f Player::GetMoveInput()
@@ -261,22 +243,34 @@ void Player::UpdateManaUI(std::string _prefix)
 
 void Player::CreateSpecialVFX()
 {
-	m_P1SpecialVFX.setTexture(TextureLoader::LoadTexture("SpecialEffect_Temp.png"));
-	SetOriginCenter(m_P1SpecialVFX);
-	m_P1SpecialVFX.setScale({ 2.0f,2.0f });
-	m_P2SpecialVFX.setTexture(TextureLoader::LoadTexture("SpecialEffect_Temp.png"));
-	SetOriginCenter(m_P2SpecialVFX);
-	m_P2SpecialVFX.setScale({ 2.0f,2.0f });
+	if (m_Properties.PlayerOne)
+	{
+		VFX::GetInstance().CreateEffect("P1Special",
+			{
+				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				{0,0},
+				{ 1.5f,1.5f },
+			});
+	}
+	else
+	{ 
+		VFX::GetInstance().CreateEffect("P2Special",
+			{
+				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				{0,0},
+				{ 1.5f,1.5f },
+			});
+	}
 }
 
 void Player::SetP1SpecialVFXPosition(sf::Vector2f _position)
 {
-	m_P1SpecialVFX.setPosition(_position);
+	VFX::GetInstance().GetEffect("P1Special").setPosition(_position);
 }
 
 void Player::SetP2SpecialVFXPosition(sf::Vector2f _position)
 {
-	m_P2SpecialVFX.setPosition(_position);
+	VFX::GetInstance().GetEffect("P2Special").setPosition(_position);
 }
 
 void Player::BasicAttack()
@@ -302,6 +296,8 @@ void Player::Special()
 	{
 		m_iCurrentMana -= 3;
 		// Spawn Special Effect
+		VFX::GetInstance().PlayEffect("P1Special", m_SpecialDuration);
+		VFX::GetInstance().PlayEffect("P2Special", m_SpecialDuration);
 	}
 }
 
