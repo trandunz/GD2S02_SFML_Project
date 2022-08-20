@@ -1,5 +1,6 @@
 #pragma once
-#include "GameScene.h"
+#include "MenuScene.h"
+
 class LevelLoader
 {
 public:

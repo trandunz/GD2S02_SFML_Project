@@ -1,6 +1,7 @@
 #include "Statics.h"
 #include "LevelLoader.h"
 
+
 void InitRenderWindow(sf::Vector2i _size, std::string _title, sf::Uint32 _style, sf::ContextSettings _settings);
 void InitGlobalFont(std::string _fileName);
 
@@ -35,7 +36,7 @@ void Start()
 	InitRenderWindow({ 800, 800 }, "Game Name", sf::Style::Default, sf::ContextSettings());
 	Statics::RenderWindow.setKeyRepeatEnabled(false);
 	InitGlobalFont("TimesNewRoman.ttf");
-	LevelLoader::LoadLevel(new GameScene);
+	LevelLoader::LoadLevel(new MenuScene);
 }
 
 void Update()

@@ -3,6 +3,8 @@
 #include <sstream>
 #include <iomanip>
 
+#define PI 3.141592654f
+
 inline float Magnitude(sf::Vector2f _vec)
 {
 	return sqrtf((_vec.x * _vec.x) + (_vec.y * _vec.y));
@@ -30,3 +32,12 @@ inline std::string FloatToString(float _float, int _precision = 2)
 	return stream.str();
 }
 
+inline float ToDegrees(float _inAngleRad)
+{
+	return (_inAngleRad * (180.0f / PI));
+}
+
+inline float ToRad(float _inAngleDegrees)
+{
+	return (_inAngleDegrees * (PI / 180.0f));
+}

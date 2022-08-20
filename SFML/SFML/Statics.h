@@ -48,8 +48,8 @@ struct ButtonProperties
 	std::string Label{};
 	sf::Vector2f StartPos{};
 	std::function<void()> OnPressFunction{nullptr};
-	sf::Vector2f Scale{ 1,1 };
 	sf::Texture* Texture = nullptr;
+	sf::Vector2f Scale{ 1,1 };
 };
 
 struct TextProperties

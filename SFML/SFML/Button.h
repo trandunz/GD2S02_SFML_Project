@@ -3,30 +3,24 @@
 #include "Statics.h"
 #include "Math.h"
 
-typedef void (*callback_function)(void);
-
-struct ButtonProperties
-{
-	std::string Label{};
-	sf::Vector2f Position{};
-	callback_function OnPressLambda = nullptr;
-	sf::Vector2f Scale = { 1,1 };
-};
-
 class Button : public sf::Drawable
 {
 public:
+	Button();
 	Button(ButtonProperties _properties);
 	~Button();
 
+	void CallOnMouseOver();
 	void CallOnPress();
 	void SetLabel(std::string _newLabel);
 	void SetPosition(sf::Vector2f _position);
 	void SetScale(sf::Vector2f _scale);
+	void ResetScale();
 private:
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const;
 	
 	void SetTexture(std::string _fileName);
+	void SetTexture(sf::Texture& _texture);
 
 	ButtonProperties m_Properties;
 	sf::Sprite m_Sprite;
