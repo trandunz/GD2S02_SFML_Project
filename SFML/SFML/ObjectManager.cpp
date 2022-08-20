@@ -64,7 +64,6 @@ void ObjectManager::SpawnObstacles(float _rate)
 		m_SpawnTimer = _rate;
 
 		int iRandomNum = rand() % 4;
-		std::cout << iRandomNum << std::endl;
 		if (iRandomNum == 0)
 		{
 			CreateObstacle(

@@ -7,7 +7,7 @@ Projectile::Projectile(ProjectileProperties _properties)
 	SetOriginCenter(m_Mesh);
 	m_Mesh.setScale(_properties.Scale);
 	m_Mesh.setPosition(_properties.StartPos);
-	m_Mesh.setColor(sf::Color::Green);
+	//m_Mesh.setColor(sf::Color::Green);
 	m_Properties.Damage = _properties.Damage;
 	m_Properties.Friendly = _properties.Friendly;
 	m_Properties.MoveSpeed = _properties.MoveSpeed;
