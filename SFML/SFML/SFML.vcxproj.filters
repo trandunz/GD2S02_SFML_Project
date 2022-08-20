@@ -96,6 +96,9 @@
     <ClCompile Include="VFX.cpp">
       <Filter>Source Files\Juice</Filter>
     </ClCompile>
+    <ClCompile Include="MenuScene.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Statics.h">
@@ -145,6 +148,9 @@
     </ClInclude>
     <ClInclude Include="GUI.h">
       <Filter>Header Files\Juice</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuScene.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
