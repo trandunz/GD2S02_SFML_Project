@@ -1,12 +1,13 @@
 #include "GUI.h"
 #include "Math.h"
 #include "Button.h"
+#include "Helper.h"
 
 void GUI::CleanupElements()
 {
-	m_vecTexts.clear();
-	m_vecImages.clear();
-	m_vecButtons.clear();
+	CleanupMap(m_vecTexts);
+	CleanupMap(m_vecImages);
+	CleanupMap(m_vecButtons);
 }
 
 void GUI::CreateButton(std::string _key, ButtonProperties _properties)
@@ -14,9 +15,12 @@ void GUI::CreateButton(std::string _key, ButtonProperties _properties)
 	m_vecButtons.insert_or_assign(_key, Button(_properties));
 }
 
-Button& GUI::GetButton(std::string _key)
+Button* GUI::GetButton(std::string _key)
 {
-	return m_vecButtons[_key];
+	if (m_vecButtons.contains(_key))
+		return &m_vecButtons[_key];
+	else
+		return nullptr;
 }
 
 void GUI::ResetAllButtonsScale()

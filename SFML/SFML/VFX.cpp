@@ -34,6 +34,7 @@ void VFX::CreateEffect(std::string _key, SpecialEffectProperties _properties)
 	m_Effects[_key].second.setScale(_properties.Scale);
 	SetOriginCenter(m_Effects[_key].second);
 	m_Effects[_key].second.setPosition(_properties.StartPos);
+	m_Effects[_key].second.setColor(_properties.Color);
 }
 
 sf::Sprite& VFX::GetEffect(std::string _key)

@@ -171,6 +171,7 @@
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="GUI.h" />
+    <ClInclude Include="Helper.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LevelLoader.h" />
     <ClInclude Include="Math.h" />

@@ -1,6 +1,9 @@
 #include "LevelLoader.h"
+#include "MenuScene.h"
+#include "GameScene.h"
 
 Level* LevelLoader::CurrentLevel = nullptr;
+LEVELS LevelLoader::LevelToLoad = LEVELS::UNASSIGNED;
 
 void LevelLoader::HandleEvents()
 {
@@ -26,13 +29,34 @@ void LevelLoader::Draw()
 	}
 }
 
-void LevelLoader::LoadLevel(Level* _level)
+void LevelLoader::SwitchToLoadedLevel()
 {
-	CleanupLevel();
-	if (CurrentLevel == nullptr)
+	if (LevelToLoad != LEVELS::UNASSIGNED)
 	{
-		CurrentLevel = _level;
+		CleanupLevel();
+		switch (LevelToLoad)
+		{
+		case LEVELS::MENUSCENE:
+		{
+			CurrentLevel = new MenuScene();
+			break;
+		}
+		case LEVELS::GAMESCENE:
+		{
+			CurrentLevel = new GameScene();
+			break;
+		}
+		default:
+			break;
+		}
+
+		LevelToLoad = LEVELS::UNASSIGNED;
 	}
+}
+
+void LevelLoader::LoadLevel(LEVELS _newLevel)
+{
+	LevelToLoad = _newLevel;
 }
 
 void LevelLoader::CleanupLevel()

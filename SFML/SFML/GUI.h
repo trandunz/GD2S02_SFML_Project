@@ -25,7 +25,7 @@ public:
 	void SetImageSprite(std::string _key, sf::Texture& _texture);
 
 	void CreateButton(std::string _key, ButtonProperties _properties);
-	Button& GetButton(std::string _key);
+	Button* GetButton(std::string _key);
 	void ResetAllButtonsScale();
 
 private:

@@ -36,7 +36,7 @@ void Start()
 	InitRenderWindow({ 800, 800 }, "Game Name", sf::Style::Default, sf::ContextSettings());
 	Statics::RenderWindow.setKeyRepeatEnabled(false);
 	InitGlobalFont("TimesNewRoman.ttf");
-	LevelLoader::LoadLevel(new MenuScene);
+	LevelLoader::LoadLevel(LEVELS::MENUSCENE);
 }
 
 void Update()
@@ -49,6 +49,8 @@ void Update()
 		LevelLoader::Update();
 
 		Render();
+
+		LevelLoader::SwitchToLoadedLevel();
 	}
 }
 

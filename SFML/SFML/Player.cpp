@@ -52,9 +52,16 @@ Player::Player(PlayerProperties _properties)
 Player::~Player()
 {
 	if (m_Properties.PlayerOne)
-		VFX::GetInstance().StopEffect("P1Special");
+	{
+
+		VFX::GetInstance().StopEffect("P1_P1Special");
+		VFX::GetInstance().StopEffect("P1_P2Special");
+	}
 	else
-		VFX::GetInstance().StopEffect("P2Special");
+	{
+		VFX::GetInstance().StopEffect("P2_P1Special");
+		VFX::GetInstance().StopEffect("P2_P2Special");
+	}
 }
 
 void Player::HandleEvents()
@@ -94,14 +101,6 @@ void Player::Update()
 		}
 	}
 
-	if (m_Properties.PlayerOne == true)
-	{
-		SetP1SpecialVFXPosition(GetPosition());
-	}
-	else
-	{
-		SetP2SpecialVFXPosition(GetPosition());
-	}
 	if (m_SpecialTimer > 0)
 	{
 		m_SpecialTimer -= Statics::DeltaTime;
@@ -151,15 +150,17 @@ void Player::SetManaMax()
 
 void Player::UpdateGUI()
 {
-	if (m_Properties.PlayerOne == false)
-	{
-		UpdateHeartsUI("P2");
-		UpdateManaUI("P2");
-	}
-	else
+	if (m_Properties.PlayerOne)
 	{
 		UpdateHeartsUI("P1");
 		UpdateManaUI("P1");
+		SetP1SpecialVFXPosition(GetPosition());
+	}
+	else
+	{
+		UpdateHeartsUI("P2");
+		UpdateManaUI("P2");
+		SetP2SpecialVFXPosition(GetPosition());
 	}
 }
 
@@ -253,32 +254,50 @@ void Player::CreateSpecialVFX()
 {
 	if (m_Properties.PlayerOne)
 	{
-		VFX::GetInstance().CreateEffect("P1Special",
+		VFX::GetInstance().CreateEffect("P1_P1Special",
 			{
 				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
 				{0,0},
-				{ 1.5f,1.5f },
+				{ 0.25f,0.25f },
+				{0,255,0}
+			});
+		VFX::GetInstance().CreateEffect("P1_P2Special",
+			{
+				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				{0,0},
+				{ 0.25f,0.25f },
+				{0,255,0}
 			});
 	}
 	else
 	{ 
-		VFX::GetInstance().CreateEffect("P2Special",
+		VFX::GetInstance().CreateEffect("P2_P1Special",
 			{
 				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
 				{0,0},
-				{ 1.5f,1.5f },
+				{ 0.25f,0.25f },
+				{255,0,0}
+			});
+		VFX::GetInstance().CreateEffect("P2_P2Special",
+			{
+				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				{0,0},
+				{ 0.25f,0.25f },
+				{255,0,0}
 			});
 	}
 }
 
 void Player::SetP1SpecialVFXPosition(sf::Vector2f _position)
 {
-	VFX::GetInstance().GetEffect("P1Special").setPosition(_position);
+	VFX::GetInstance().GetEffect("P1_P1Special").setPosition(_position + sf::Vector2f{10, -40 });
+	VFX::GetInstance().GetEffect("P2_P1Special").setPosition(_position - sf::Vector2f{ 10, 40 });
 }
 
 void Player::SetP2SpecialVFXPosition(sf::Vector2f _position)
 {
-	VFX::GetInstance().GetEffect("P2Special").setPosition(_position);
+	VFX::GetInstance().GetEffect("P1_P2Special").setPosition(_position + sf::Vector2f{ 10, -40 });
+	VFX::GetInstance().GetEffect("P2_P2Special").setPosition(_position - sf::Vector2f{ 10, 40 });
 }
 
 void Player::BasicAttack()
@@ -304,8 +323,17 @@ void Player::Special()
 	{
 		m_iCurrentMana -= 3;
 		// Spawn Special Effect
-		VFX::GetInstance().PlayEffect("P1Special", m_SpecialDuration);
-		VFX::GetInstance().PlayEffect("P2Special", m_SpecialDuration);
+		if (m_Properties.PlayerOne)
+		{
+			
+			VFX::GetInstance().PlayEffect("P1_P1Special", m_SpecialDuration);
+			VFX::GetInstance().PlayEffect("P1_P2Special", m_SpecialDuration);
+		}
+		else
+		{
+			VFX::GetInstance().PlayEffect("P2_P1Special", m_SpecialDuration);
+			VFX::GetInstance().PlayEffect("P2_P2Special", m_SpecialDuration);
+		}
 	}
 }
 

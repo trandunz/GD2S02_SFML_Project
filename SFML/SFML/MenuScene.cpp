@@ -14,8 +14,7 @@ MenuScene::MenuScene()
 			{windowSize.x / 2.0f, windowSize.y / 2.0f},
 			[]()
 			{
-				GUI::GetInstance().CleanupElements();
-				LevelLoader::LoadLevel(new GameScene);
+				LevelLoader::LoadLevel(LEVELS::GAMESCENE);
 			},
 			&TextureLoader::LoadTexture("StartButton.png")
 		}
@@ -25,10 +24,7 @@ MenuScene::MenuScene()
 		{
 			"",
 			{windowSize.x / 2.0f, (windowSize.y / 1.5f)},
-			[]()
-			{
-				//LevelLoader::LoadLevel(new OptionsScene);
-			},
+			nullptr,
 			& TextureLoader::LoadTexture("OptionsButton.png")
 		}
 	);
@@ -56,11 +52,11 @@ MenuScene::MenuScene()
 
 MenuScene::~MenuScene()
 {
+	GUI::GetInstance().CleanupElements();
 }
 
 void MenuScene::HandleEvents()
 {
-	GUI::GetInstance().HandleEvents();
 	if (Statics::EventHandle.type == sf::Event::KeyPressed) {
 		if (Statics::EventHandle.key.code == sf::Keyboard::W)
 		{
@@ -76,32 +72,42 @@ void MenuScene::HandleEvents()
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Enter)
 		{
+			Button* button = nullptr;
 			switch (m_iButtonSelected)
 			{
 			case 0:
 			{
-				GUI::GetInstance().GetButton("Quit").CallOnPress();
+				button = GUI::GetInstance().GetButton("Quit");
+				if (button)
+					button->CallOnPress();
 				break;
 			}
 			case 1:
 			{
-				GUI::GetInstance().GetButton("Options").CallOnPress();
+				button = GUI::GetInstance().GetButton("Options");
+				if (button)
+					button->CallOnPress();
 				break;
 			}
 			case 2:
 			{
-				GUI::GetInstance().GetButton("Start").CallOnPress();
+				button = GUI::GetInstance().GetButton("Start");
+				if (button)
+					button->CallOnPress();
 				break;
 			}
 			}
 		}
 	}
+	else
+		GUI::GetInstance().HandleEvents();
 }
 
 void MenuScene::Update()
 {
 	GUI::GetInstance().Update();
 	GUI::GetInstance().ResetAllButtonsScale();
+
 	std::string selectedButton;
 	switch (m_iButtonSelected)
 	{
@@ -132,8 +138,11 @@ void MenuScene::Draw()
 
 void MenuScene::ScaleSelectedButton(std::string _button)
 {
-	Button* button = &GUI::GetInstance().GetButton(_button);
+	Button* button = GUI::GetInstance().GetButton(_button);
 
-	float throb = 1 + sinf(ToRad(Statics::Time.getElapsedTime().asMilliseconds())) / 10;
-	button->SetScale({ throb,throb });
+	if (button)
+	{
+		float throb = 1 + sinf(ToRad(Statics::Time.getElapsedTime().asMilliseconds())) / 10;
+		button->SetScale({ throb,throb });
+	}
 }
