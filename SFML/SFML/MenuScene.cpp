@@ -58,11 +58,13 @@ MenuScene::~MenuScene()
 void MenuScene::HandleEvents()
 {
 	if (Statics::EventHandle.type == sf::Event::KeyPressed) {
-		if (Statics::EventHandle.key.code == sf::Keyboard::W)
+		if (Statics::EventHandle.key.code == sf::Keyboard::W ||
+			Statics::EventHandle.key.code == sf::Keyboard::Up)
 		{
 			m_iButtonSelected = ++m_iButtonSelected % 3;
 		}
-		if (Statics::EventHandle.key.code == sf::Keyboard::S)
+		if (Statics::EventHandle.key.code == sf::Keyboard::S ||
+			Statics::EventHandle.key.code == sf::Keyboard::Down)
 		{
 			m_iButtonSelected = --m_iButtonSelected % 3;
 			if (m_iButtonSelected < 0)
@@ -70,7 +72,13 @@ void MenuScene::HandleEvents()
 				m_iButtonSelected = 2;
 			}
 		}
-		if (Statics::EventHandle.key.code == sf::Keyboard::Enter)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Enter ||
+			Statics::EventHandle.key.code == sf::Keyboard::V ||
+			Statics::EventHandle.key.code == sf::Keyboard::B ||
+			Statics::EventHandle.key.code == sf::Keyboard::N ||
+			Statics::EventHandle.key.code == sf::Keyboard::Numpad1 ||
+			Statics::EventHandle.key.code == sf::Keyboard::Numpad2 ||
+			Statics::EventHandle.key.code == sf::Keyboard::Numpad3)
 		{
 			Button* button = nullptr;
 			switch (m_iButtonSelected)
