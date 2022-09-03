@@ -22,6 +22,6 @@ private:
 	inline ProjectileManager(const ProjectileManager&) {};
 	inline ~ProjectileManager() {}
 
-	std::vector<Projectile*> m_Projectiles;
+	std::vector<Projectile*> m_Projectiles{};
 };
 

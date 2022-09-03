@@ -51,7 +51,7 @@ void EnemyManager::Update()
 		// Destroy enemy if its health is equal or less than 0
 		if (enemy->GetCurrentHealth() <= 0)
 		{
-			Statics::m_fGameScore += 20.0f; // Increase game score
+			Statics::fGameScore += 20.0f; // Increase game score
 			enemy->m_bDestroy = true;
 		}
 		// Destroy enemies if they below the screen
@@ -105,7 +105,7 @@ void EnemyManager::draw(sf::RenderTarget& _target, sf::RenderStates _states) con
 
 void EnemyManager::SpawnEnemies(float _rate)
 {
-	m_fSpawnTimer -= Statics::DeltaTime;
+	m_fSpawnTimer -= Statics::fDeltaTime;
 	if (m_fSpawnTimer <= 0)
 	{
 		m_fSpawnTimer = _rate;

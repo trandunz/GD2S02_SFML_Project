@@ -1,5 +1,5 @@
 #pragma once
-#include "SFML/Graphics/Texture.hpp"
+#include <SFML/Graphics/Texture.hpp>
 #include <map>
 
 #define IMG_HEIGHT 32;
@@ -12,6 +12,6 @@ public:
 	static void CleanupTextures();
 
 private:
-	inline static std::map<std::string, sf::Texture*> m_LoadedTextures;
+	inline static std::map<std::string, sf::Texture*> m_LoadedTextures{};
 };
 

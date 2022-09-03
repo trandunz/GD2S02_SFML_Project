@@ -58,7 +58,7 @@ void ObjectManager::draw(sf::RenderTarget& _target, sf::RenderStates _states) co
 
 void ObjectManager::SpawnObstacles(float _rate)
 {
-	m_SpawnTimer -= Statics::DeltaTime;
+	m_SpawnTimer -= Statics::fDeltaTime;
 	if (m_SpawnTimer <= 0)
 	{
 		m_SpawnTimer = _rate;

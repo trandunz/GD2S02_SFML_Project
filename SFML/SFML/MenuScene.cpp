@@ -174,7 +174,7 @@ void MenuScene::ScaleSelectedButton(std::string _button)
 
 	if (button)
 	{
-		float throb = 1 + sinf(ToRad(Statics::Time.getElapsedTime().asMilliseconds())) / 10;
+		float throb = 1 + sinf(ToRad((float)Statics::Time.getElapsedTime().asMilliseconds())) / 10;
 		button->SetScale({ throb,throb });
 	}
 }

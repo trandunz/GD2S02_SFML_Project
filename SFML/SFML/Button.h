@@ -1,7 +1,5 @@
 #pragma once
-
 #include "Statics.h"
-#include "Math.h"
 
 class Button : public sf::Drawable
 {
@@ -22,8 +20,8 @@ private:
 	void SetTexture(std::string _fileName);
 	void SetTexture(sf::Texture& _texture);
 
-	ButtonProperties m_Properties;
-	sf::Sprite m_Sprite;
-	sf::Text m_Label;
+	ButtonProperties m_Properties{};
+	sf::Sprite m_Sprite{};
+	sf::Text m_Label{};
 };
 

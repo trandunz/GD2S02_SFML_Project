@@ -12,7 +12,7 @@ void VFX::Update()
 	{
 		if (effect.second.first > 0)
 		{
-			effect.second.first -= Statics::DeltaTime;
+			effect.second.first -= Statics::fDeltaTime;
 		}
 	}
 }

@@ -29,6 +29,6 @@ private:
 	inline VFX(const VFX&) {}
 	inline ~VFX() {}
 
-	std::map<std::string, SpecialEffect> m_Effects;
+	std::map<std::string, SpecialEffect> m_Effects{};
 };
 

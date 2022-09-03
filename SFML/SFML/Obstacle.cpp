@@ -1,4 +1,5 @@
 #include "Obstacle.h"
+#include "Math.h"
 
 Obstacle::Obstacle(ObstacleProperties _properties)
 {
@@ -30,5 +31,5 @@ void Obstacle::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 void Obstacle::Movement()
 {
 	m_v2fVelocity = { 0,1 };
-	m_Mesh.move(m_v2fVelocity * m_Properties.MoveSpeed * Statics::DeltaTime);
+	m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 }

@@ -3,7 +3,7 @@
 
 Projectile::Projectile(ProjectileProperties _properties)
 {
-	Animater::AnimStateProp animProperties;
+	AnimStateProperties animProperties;
 	animProperties.StateTexture = _properties.Texture;
 	animProperties.NumberOfFrames = 3;
 	animProperties.FrameInterval = 0.1f;
@@ -18,9 +18,9 @@ Projectile::Projectile(ProjectileProperties _properties)
 	//m_Mesh = m_AnimatedSprite.GetSprite();
 	m_AnimatedSprite.GetSprite().setPosition(_properties.StartPos);
 	//m_AnimatedSprite.GetSprite().setColor(sf::Color::Green);
-	m_Properties.Damage = _properties.Damage;
-	m_Properties.Friendly = _properties.Friendly;
-	m_Properties.MoveSpeed = _properties.MoveSpeed;
+	m_Properties.uDamage = _properties.uDamage;
+	m_Properties.bFriendly = _properties.bFriendly;
+	m_Properties.fMoveSpeed = _properties.fMoveSpeed;
 
 	m_AnimatedSprite.StartState("Moving");
 }
@@ -31,13 +31,13 @@ Projectile::~Projectile()
 
 void Projectile::Update()
 {
-	if (m_Properties.Friendly == true)
+	if (m_Properties.bFriendly == true)
 	{
-		m_AnimatedSprite.GetSprite().move({0.0f, -m_Properties.MoveSpeed * Statics::DeltaTime});
+		m_AnimatedSprite.GetSprite().move({0.0f, -m_Properties.fMoveSpeed * Statics::fDeltaTime});
 	}
-	else if (m_Properties.Friendly == false)
+	else if (m_Properties.bFriendly == false)
 	{
-		m_AnimatedSprite.GetSprite().move({ 0.0f, m_Properties.MoveSpeed * Statics::DeltaTime });
+		m_AnimatedSprite.GetSprite().move({ 0.0f, m_Properties.fMoveSpeed * Statics::fDeltaTime });
 	}
 
 	m_AnimatedSprite.Update();
@@ -55,7 +55,7 @@ sf::Vector2f Projectile::GetPosition() const
 
 bool Projectile::IsFriendly() const
 {
-	return m_Properties.Friendly;
+	return m_Properties.bFriendly;
 }
 
 void Projectile::draw(sf::RenderTarget& _target, sf::RenderStates _states) const

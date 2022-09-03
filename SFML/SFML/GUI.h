@@ -1,5 +1,4 @@
 #pragma once
-#include "Statics.h"
 #include "Button.h"
 
 class GUI : public sf::Drawable
@@ -35,8 +34,8 @@ private:
 	inline GUI(const GUI&) {}
 	inline ~GUI() {}
 
-	std::map<std::string, sf::Sprite> m_vecImages;
-	std::map<std::string, sf::Text> m_vecTexts;
-	std::map<std::string, Button> m_vecButtons;
+	std::map<std::string, sf::Sprite> m_vecImages{};
+	std::map<std::string, sf::Text> m_vecTexts{};
+	std::map<std::string, Button> m_vecButtons{};
 };
 

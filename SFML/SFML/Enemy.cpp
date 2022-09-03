@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "ObjectManager.h"
 #include "Obstacle.h"
+#include "Math.h"
 
 Enemy::Enemy(EnemyProperties _properties)
 {
@@ -11,7 +12,7 @@ Enemy::Enemy(EnemyProperties _properties)
 	m_Properties = _properties;
 	SetHPMax();
 	m_v2fSpriteJumpScale = _properties.Scale * 1.2f;
-	m_fJumpSpeed = _properties.MoveSpeed * 1.4f;
+	m_fJumpSpeed = _properties.fMoveSpeed * 1.4f;
 
 	m_rectangleCollision = new sf::RectangleShape(sf::Vector2f(32, 24));
 	m_rectangleCollision->setPosition(m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f);
@@ -55,7 +56,7 @@ void Enemy::TakeDamage(unsigned _amount)
 
 void Enemy::Heal(unsigned _amount)
 {
-	for (short i = _amount; m_iCurrentHealth < m_Properties.MaxHealth; i--)
+	for (short i = _amount; m_iCurrentHealth < m_Properties.iMaxHealth; i--)
 	{
 		m_iCurrentHealth++;
 	}
@@ -79,7 +80,7 @@ void Enemy::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 
 void Enemy::SetHPMax()
 {
-	m_iCurrentHealth = m_Properties.MaxHealth;
+	m_iCurrentHealth = m_Properties.iMaxHealth;
 }
 
 void Enemy::Movement()
@@ -100,12 +101,12 @@ void Enemy::Movement()
 			if (bColliding)
 			{
 				m_Mesh.setScale(m_v2fSpriteJumpScale);
-				m_Mesh.move(m_v2fVelocity * m_fJumpSpeed * Statics::DeltaTime);
+				m_Mesh.move(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
 			}
 			else
 			{
 				m_Mesh.setScale(m_Properties.Scale);
-				m_Mesh.move(m_v2fVelocity * m_Properties.MoveSpeed * Statics::DeltaTime);
+				m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 			}
 			m_rectangleCollision->setPosition(m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f);
 		}
@@ -114,7 +115,7 @@ void Enemy::Movement()
 
 void Enemy::Attack()
 {
-	m_fAttackTimer -= Statics::DeltaTime;
+	m_fAttackTimer -= Statics::fDeltaTime;
 	if (m_fAttackTimer <= 0)
 	{
 		m_fAttackTimer = m_fAttackSpeed;

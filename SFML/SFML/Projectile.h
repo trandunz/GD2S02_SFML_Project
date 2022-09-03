@@ -1,6 +1,5 @@
 #pragma once
-#include "Statics.h"
-#include "Math.h"
+#include "Animator.h"
 
 class Projectile : public sf::Drawable
 {
@@ -19,8 +18,8 @@ public:
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 	
-	ProjectileProperties m_Properties;
-	Animater m_AnimatedSprite;
+	ProjectileProperties m_Properties{};
+	Animator m_AnimatedSprite{};
 	//sf::Sprite m_Mesh{};
 };
 

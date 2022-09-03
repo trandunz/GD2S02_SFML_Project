@@ -15,6 +15,7 @@ public:
 private:
 	void CreateScrollingBackground();
 	void ScrollBackground(float _speed);
+
 	std::vector<sf::Sprite> m_Backgrounds{};
 	float m_fDistanceTravelled{};
 };

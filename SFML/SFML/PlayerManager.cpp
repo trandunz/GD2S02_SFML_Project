@@ -82,7 +82,7 @@ std::vector<Player*>& PlayerManager::GetPlayers()
 	return m_Players;
 }
 
-Player* PlayerManager::GetPlayerFromIndex(int _index)
+Player* PlayerManager::GetPlayerFromIndex(unsigned _index)
 {
 	if (m_Players.size() > _index)
 		return m_Players[_index];

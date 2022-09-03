@@ -2,6 +2,8 @@
 #include "GUI.h"
 #include "PlayerManager.h"
 #include "VFX.h"
+#include "ProjectileManager.h"
+#include "Math.h"
 
 Player::Player(PlayerProperties _properties)
 {
@@ -13,17 +15,15 @@ Player::Player(PlayerProperties _properties)
 	SetHPMax();
 	SetManaMax();
 
-	
-
-	if (m_Properties.PlayerOne == false)
+	if (m_Properties.bPlayerOne == false)
 	{
-		MoveUpKey = sf::Keyboard::Up;
-		MoveDownKey = sf::Keyboard::Down;
-		MoveLeftKey = sf::Keyboard::Left;
-		MoveRightKey = sf::Keyboard::Right;
-		BasicAttackKey = sf::Keyboard::Numpad1;
-		SecondaryAttackKey = sf::Keyboard::Numpad2;
-		SpecialAttackKey = sf::Keyboard::Numpad3;
+		m_MoveUpKey = sf::Keyboard::Up;
+		m_MoveDownKey = sf::Keyboard::Down;
+		m_MoveLeftKey = sf::Keyboard::Left;
+		m_MoveRightKey = sf::Keyboard::Right;
+		m_BasicAttackKey = sf::Keyboard::Numpad1;
+		m_SecondaryAttackKey = sf::Keyboard::Numpad2;
+		m_SpecialAttackKey = sf::Keyboard::Numpad3;
 
 		CreateHeartsUI("P2", { 704, 40 }, { 736,40 }, { 768,40 });
 		CreateManaUI("P2", { 704, 80 }, { 736, 80 }, { 768, 80 });
@@ -51,7 +51,7 @@ Player::Player(PlayerProperties _properties)
 
 Player::~Player()
 {
-	if (m_Properties.PlayerOne)
+	if (m_Properties.bPlayerOne)
 	{
 
 		VFX::GetInstance().StopEffect("P1_P1Special");
@@ -67,15 +67,15 @@ Player::~Player()
 void Player::HandleEvents()
 {
 	if (Statics::EventHandle.type == sf::Event::KeyPressed
-		&& Statics::EventHandle.key.code == BasicAttackKey)
+		&& Statics::EventHandle.key.code == m_BasicAttackKey)
 	{
 	}
 }
 
 void Player::Update()
 {
-	m_AttackTimer -= Statics::DeltaTime;
-	if (sf::Keyboard::isKeyPressed(SpecialAttackKey))
+	m_AttackTimer -= Statics::fDeltaTime;
+	if (sf::Keyboard::isKeyPressed(m_SpecialAttackKey))
 	{
 		if (m_AttackTimer <= 0 && m_SpecialTimer <= 0)
 		{
@@ -84,7 +84,7 @@ void Player::Update()
 			Special();
 		}
 	}
-	if (sf::Keyboard::isKeyPressed(SecondaryAttackKey))
+	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
 	{
 		if (m_AttackTimer <= 0)
 		{
@@ -92,7 +92,7 @@ void Player::Update()
 			SecondaryAttack();
 		}
 	}
-	if (sf::Keyboard::isKeyPressed(BasicAttackKey))
+	if (sf::Keyboard::isKeyPressed(m_BasicAttackKey))
 	{ 
 		if (m_AttackTimer <= 0)
 		{
@@ -103,14 +103,14 @@ void Player::Update()
 
 	if (m_SpecialTimer > 0)
 	{
-		m_SpecialTimer -= Statics::DeltaTime;
+		m_SpecialTimer -= Statics::fDeltaTime;
 	}
 
 	m_v2fVelocity = GetMoveInput();
 	m_PreviousMove = m_Mesh.getPosition();
 	if (Magnitude(m_v2fVelocity) > 0)
 	{
-		m_Mesh.move(m_v2fVelocity * m_Properties.MoveSpeed * Statics::DeltaTime);
+		m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 	}
 	RestrictToScreen();
 	UpdateGUI();
@@ -126,13 +126,13 @@ sf::Vector2f Player::GetMoveInput()
 {
 	sf::Vector2f input{};
 
-	if (sf::Keyboard::isKeyPressed(MoveUpKey))
+	if (sf::Keyboard::isKeyPressed(m_MoveUpKey))
 		input.y -= 1;
-	if (sf::Keyboard::isKeyPressed(MoveDownKey))
+	if (sf::Keyboard::isKeyPressed(m_MoveDownKey))
 		input.y += 1;
-	if (sf::Keyboard::isKeyPressed(MoveRightKey))
+	if (sf::Keyboard::isKeyPressed(m_MoveRightKey))
 		input.x += 1;
-	if (sf::Keyboard::isKeyPressed(MoveLeftKey))
+	if (sf::Keyboard::isKeyPressed(m_MoveLeftKey))
 		input.x -= 1;
 
 	return Normalize(input);
@@ -140,17 +140,17 @@ sf::Vector2f Player::GetMoveInput()
 
 void Player::SetHPMax()
 {
-	m_iCurrentHealth = m_Properties.MaxHealth;
+	m_iCurrentHealth = m_Properties.iMaxHealth;
 }
 
 void Player::SetManaMax()
 {
-	m_iCurrentMana = m_Properties.MaxMana;
+	m_iCurrentMana = m_Properties.iMaxMana;
 }
 
 void Player::UpdateGUI()
 {
-	if (m_Properties.PlayerOne)
+	if (m_Properties.bPlayerOne)
 	{
 		UpdateHeartsUI("P1");
 		UpdateManaUI("P1");
@@ -252,7 +252,7 @@ void Player::UpdateManaUI(std::string _prefix)
 
 void Player::CreateSpecialVFX()
 {
-	if (m_Properties.PlayerOne)
+	if (m_Properties.bPlayerOne)
 	{
 		VFX::GetInstance().CreateEffect("P1_P1Special",
 			{
@@ -323,7 +323,7 @@ void Player::Special()
 	{
 		m_iCurrentMana -= 3;
 		// Spawn Special Effect
-		if (m_Properties.PlayerOne)
+		if (m_Properties.bPlayerOne)
 		{
 			
 			VFX::GetInstance().PlayEffect("P1_P1Special", m_SpecialDuration);
@@ -364,7 +364,7 @@ void Player::TakeDamage(unsigned _amount)
 
 void Player::Heal(unsigned _amount)
 {
-	for (short i = _amount; m_iCurrentHealth < m_Properties.MaxHealth; i--)
+	for (short i = _amount; m_iCurrentHealth < m_Properties.iMaxHealth; i--)
 	{
 		m_iCurrentHealth++;
 	}
@@ -397,7 +397,7 @@ int Player::GetCurrentHealth() const
 
 sf::Vector2f Player::GetFuturePosition(sf::Vector2f _velocity) const
 {
-	return m_Mesh.getPosition() + (m_v2fVelocity * m_Properties.MoveSpeed * Statics::DeltaTime);
+	return m_Mesh.getPosition() + (m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 }
 
 void Player::RestrictToScreen()

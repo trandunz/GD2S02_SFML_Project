@@ -1,6 +1,5 @@
 #pragma once
 #include "Statics.h"
-#include "Math.h"
 
 class Obstacle : public sf::Drawable
 {
@@ -16,7 +15,7 @@ private:
 
 	void Movement();
 
-	ObstacleProperties m_Properties;
+	ObstacleProperties m_Properties{};
 	sf::Vector2f m_v2fVelocity{};
 	sf::Sprite m_Mesh{};
 };

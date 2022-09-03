@@ -26,6 +26,6 @@ private:
 	inline ~ObjectManager() {}
 
 	float m_SpawnTimer{ 3.0f };
-	std::vector<Obstacle*> Obstacles;
+	std::vector<Obstacle*> Obstacles{};
 };
 

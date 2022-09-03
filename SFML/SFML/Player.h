@@ -1,7 +1,5 @@
 #pragma once
 #include "Statics.h"
-#include "Math.h"
-#include "ProjectileManager.h"
 
 class Player : public sf::Drawable
 {
@@ -48,26 +46,26 @@ private:
 	sf::Vector2f GetFuturePosition(sf::Vector2f _velocity) const;
 	void RestrictToScreen();
 
-	ProjectileProperties m_BasicAttackProperties;
-	ProjectileProperties m_SecondaryAttackProperties;
-	PlayerProperties m_Properties;
+	ProjectileProperties m_BasicAttackProperties{};
+	ProjectileProperties m_SecondaryAttackProperties{};
+	PlayerProperties m_Properties{};
 	float m_AttackSpeed{ 0.2f };
 	float m_SpecialDuration{ 10.0f };
-	float m_SpecialTimer{ 0.0f };
-	float m_AttackTimer{ 0.0f };
-	bool m_bCollided = false;
+	float m_SpecialTimer{ };
+	float m_AttackTimer{ };
+	bool m_bCollided{ false };
 	sf::Sprite m_Mesh{};
 	sf::Vector2f m_PreviousMove{};
 	sf::Vector2f m_v2fVelocity{};
 	int m_iCurrentHealth{};
 	int m_iCurrentMana{};
 
-	sf::Keyboard::Key MoveUpKey = sf::Keyboard::W;
-	sf::Keyboard::Key MoveDownKey = sf::Keyboard::S;
-	sf::Keyboard::Key MoveLeftKey = sf::Keyboard::A;
-	sf::Keyboard::Key MoveRightKey = sf::Keyboard::D;
-	sf::Keyboard::Key BasicAttackKey = sf::Keyboard::V;
-	sf::Keyboard::Key SecondaryAttackKey = sf::Keyboard::B;
-	sf::Keyboard::Key SpecialAttackKey = sf::Keyboard::N;
+	sf::Keyboard::Key m_MoveUpKey {sf::Keyboard::W };
+	sf::Keyboard::Key m_MoveDownKey { sf::Keyboard::S};
+	sf::Keyboard::Key m_MoveLeftKey {sf::Keyboard::A };
+	sf::Keyboard::Key m_MoveRightKey {sf::Keyboard::D };
+	sf::Keyboard::Key m_BasicAttackKey {sf::Keyboard::V };
+	sf::Keyboard::Key m_SecondaryAttackKey {sf::Keyboard::B };
+	sf::Keyboard::Key m_SpecialAttackKey {sf::Keyboard::N };
 };
 

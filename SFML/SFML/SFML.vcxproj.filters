@@ -16,9 +16,6 @@
     <Filter Include="Header Files\Enemy">
       <UniqueIdentifier>{f12b6be9-ff5a-4016-a430-5e23571eb6b1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Scenes">
-      <UniqueIdentifier>{34f6d581-b113-473d-bd69-ecf90997f3fc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Objects">
       <UniqueIdentifier>{18a0caf2-054e-48f6-be18-005e0d67646c}</UniqueIdentifier>
     </Filter>
@@ -40,24 +37,39 @@
     <Filter Include="Source Files\Objects">
       <UniqueIdentifier>{ff677f09-beb8-414d-af50-618acd62a1a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Scenes">
-      <UniqueIdentifier>{1d57a53c-ebff-4f5f-b8d5-6950527deada}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Juice">
       <UniqueIdentifier>{8fdd6395-ebfd-4179-827a-7d972f57764a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Juice">
       <UniqueIdentifier>{e2f98d37-4573-4b2f-a333-0f0015cdd6bc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SceneManagement">
+      <UniqueIdentifier>{34f6d581-b113-473d-bd69-ecf90997f3fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SceneManagement">
+      <UniqueIdentifier>{1d57a53c-ebff-4f5f-b8d5-6950527deada}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Statics">
+      <UniqueIdentifier>{6daecb34-92f4-45bc-865a-961582aac53c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Loaders">
+      <UniqueIdentifier>{a9dcac66-2ed1-4ede-98aa-9933c1117a3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components">
+      <UniqueIdentifier>{34d8d915-28f5-4d91-b231-cb74ce900f33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Components">
+      <UniqueIdentifier>{e21dd645-2839-4d4b-a2ff-67ae79301a5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Statics">
+      <UniqueIdentifier>{72454fda-7396-458e-99a7-1f95386b5066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Loaders">
+      <UniqueIdentifier>{e62abf3d-f1a2-471b-a9ef-90cf7e901ca4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Statics.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Enemy.cpp">
@@ -67,10 +79,10 @@
       <Filter>Source Files\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
-      <Filter>Source Files\Scenes</Filter>
+      <Filter>Source Files\SceneManagement</Filter>
     </ClCompile>
     <ClCompile Include="LevelLoader.cpp">
-      <Filter>Source Files\Scenes</Filter>
+      <Filter>Source Files\SceneManagement</Filter>
     </ClCompile>
     <ClCompile Include="Obstacle.cpp">
       <Filter>Source Files\Objects</Filter>
@@ -97,25 +109,22 @@
       <Filter>Source Files\Juice</Filter>
     </ClCompile>
     <ClCompile Include="MenuScene.cpp">
-      <Filter>Source Files\Scenes</Filter>
+      <Filter>Source Files\SceneManagement</Filter>
     </ClCompile>
     <ClCompile Include="Button.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Animater.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Animator.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Statics.cpp">
+      <Filter>Source Files\Statics</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureLoader.cpp">
+      <Filter>Source Files\Loaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Statics.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Math.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="EnemyManager.h">
       <Filter>Header Files\Enemy</Filter>
     </ClInclude>
@@ -123,13 +132,13 @@
       <Filter>Header Files\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="GameScene.h">
-      <Filter>Header Files\Scenes</Filter>
+      <Filter>Header Files\SceneManagement</Filter>
     </ClInclude>
     <ClInclude Include="Level.h">
-      <Filter>Header Files\Scenes</Filter>
+      <Filter>Header Files\SceneManagement</Filter>
     </ClInclude>
     <ClInclude Include="LevelLoader.h">
-      <Filter>Header Files\Scenes</Filter>
+      <Filter>Header Files\SceneManagement</Filter>
     </ClInclude>
     <ClInclude Include="ObjectManager.h">
       <Filter>Header Files\Objects</Filter>
@@ -156,16 +165,25 @@
       <Filter>Header Files\Juice</Filter>
     </ClInclude>
     <ClInclude Include="MenuScene.h">
-      <Filter>Header Files\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\SceneManagement</Filter>
     </ClInclude>
     <ClInclude Include="Helper.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Statics</Filter>
     </ClInclude>
-    <ClInclude Include="Animater.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Statics.h">
+      <Filter>Header Files\Statics</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.h">
+      <Filter>Header Files\Statics</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureLoader.h">
+      <Filter>Header Files\Loaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

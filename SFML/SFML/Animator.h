@@ -3,7 +3,8 @@
 // Auckland 
 // New Zealand 
 // (c) Media Design School
-// File Name : Animater.cpp 
+// File Name : Animator.h 
+// 
 // Description :
 //  General purpose file to store and animate spritesheets.
 //	Stores different animations tied to string name and records
@@ -13,26 +14,14 @@
 // Author : Chuang, Kee
 
 #pragma once
+#include "Statics.h"
 
-#include <SFML/Graphics.hpp>
-#include <map>
-
-class Animater : public sf::Drawable
+class Animator : public sf::Drawable
 {
 public:
-	struct AnimStateProp
-	{
-		sf::Texture* StateTexture = nullptr;
-		sf::Vector2i TopLeftStartFrame = { 0,0 };
-		int FrameHeight = 32;
-		unsigned NumberOfFrames = 1;
-		float FrameInterval = 0.0f;
-		sf::Vector2f Scale = { 1.0f,1.0f };
-		bool Loops = false;
-	};
 
-	Animater();
-	~Animater();
+	Animator();
+	~Animator();
 
 	/// <summary>
 	/// Add a new animation state.
@@ -40,7 +29,7 @@ public:
 	/// </summary>
 	/// <param name="_stateName"></param>
 	/// <param name="_properties"></param>
-	void AddState(std::string _stateName, AnimStateProp _properties);
+	void AddState(std::string _stateName, AnimStateProperties _properties);
 
 	/// <summary>
 	/// Sets the default state that this animator
@@ -90,13 +79,13 @@ private:
 	/// <returns></returns>
 	bool FindState(std::string _stateName);
 
-	std::map<std::string, AnimStateProp> m_mapAnimationStates;
-	sf::Sprite m_Mesh;
-	sf::IntRect m_irectSpriteFrame;
-	std::string m_sCurrentState;
-	std::string m_sDefaultState;
-	float m_fAnimationProgress;
-	int m_iMaxLeftFramePos;
-	bool m_bError = false;
+	std::map<std::string, AnimStateProperties> m_mapAnimationStates{};
+	sf::Sprite m_Mesh{};
+	sf::IntRect m_irectSpriteFrame{};
+	std::string m_sCurrentState{};
+	std::string m_sDefaultState{};
+	float m_fAnimationProgress{};
+	int m_iMaxLeftFramePos{};
+	bool m_bError{ false };
 };
 

@@ -35,7 +35,7 @@ void GUI::CreateText(std::string _key, TextProperties _properties)
 {
 	m_vecTexts.insert_or_assign(_key, sf::Text());
 	m_vecTexts[_key].setFont(Statics::TimesNewRoman);
-	m_vecTexts[_key].setCharacterSize(_properties.CharacterSize);
+	m_vecTexts[_key].setCharacterSize(_properties.iCharacterSize);
 	m_vecTexts[_key].setFillColor(_properties.Color);
 	m_vecTexts[_key].setString(_properties.String);
 	SetOriginCenter(m_vecTexts[_key]);

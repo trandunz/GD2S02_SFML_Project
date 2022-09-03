@@ -1,10 +1,8 @@
 #pragma once
-#include <vector>
-#include "Statics.h"
 #include "Level.h"
+#include "Statics.h"
 
 class Button;
-
 class MenuScene : public Level
 {
 public:
@@ -17,7 +15,7 @@ public:
 
 	void ScaleSelectedButton(std::string _button);
 private:
-	std::string m_sHighLighted;
-	int m_iButtonSelected;
+	std::string m_sHighLighted{};
+	int m_iButtonSelected{};
 };
 

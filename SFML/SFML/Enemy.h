@@ -10,7 +10,6 @@
 
 #pragma once
 #include "ProjectileManager.h"
-#include "Math.h"
 
 class Enemy : public sf::Drawable
 {
@@ -41,9 +40,9 @@ private:
 	void Movement();
 	void Attack();
 
-	EnemyProperties m_Properties;
+	EnemyProperties m_Properties{};
 	float m_fAttackSpeed{ 1.0f };
-	float m_fAttackTimer{ 0.0f };
+	float m_fAttackTimer{};
 	sf::Sprite m_Mesh{};
 	sf::Vector2f m_v2fVelocity{};
 	int m_iCurrentHealth{};

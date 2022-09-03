@@ -1,7 +1,7 @@
 #pragma once
-#include "Statics.h"
 #include <sstream>
 #include <iomanip>
+#include "Statics.h"
 
 #define PI 3.141592654f
 

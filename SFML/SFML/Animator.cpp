@@ -3,7 +3,7 @@
 // Auckland 
 // New Zealand 
 // (c) Media Design School
-// File Name : Animater.cpp 
+// File Name : Animator.cpp 
 // 
 // Description :
 //  General purpose file to store and animate spritesheets.
@@ -13,11 +13,10 @@
 //  Default state after displaying the last frame			
 // Author : Chuang, Kee
 
-#include "Animater.h"
-#include "Statics.h"
+#include "Animator.h"
 #include "Math.h"
 
-Animater::Animater()
+Animator::Animator()
 {
 	int imgHeight = (int)IMG_HEIGHT;
 	m_irectSpriteFrame = { 0,0,imgHeight,imgHeight };
@@ -25,7 +24,7 @@ Animater::Animater()
 	m_iMaxLeftFramePos = IMG_HEIGHT;
 }
 
-Animater::~Animater()
+Animator::~Animator()
 {
 	for (auto& mapElement : m_mapAnimationStates)
 	{
@@ -38,12 +37,12 @@ Animater::~Animater()
 	m_mapAnimationStates.clear();
 }
 
-void Animater::AddState(std::string _stateName, AnimStateProp _properties)
+void Animator::AddState(std::string _stateName, AnimStateProperties _properties)
 {
 	m_mapAnimationStates.insert_or_assign(_stateName, _properties);
 }
 
-bool Animater::SetDefaultState(std::string _stateName)
+bool Animator::SetDefaultState(std::string _stateName)
 {
 	if (FindState(_stateName))
 	{
@@ -57,13 +56,13 @@ bool Animater::SetDefaultState(std::string _stateName)
 	}
 }
 
-bool Animater::StartState(std::string _stateName)
+bool Animator::StartState(std::string _stateName)
 {
 
 	if (FindState(_stateName))
 	{
 		m_sCurrentState = _stateName;
-		AnimStateProp* currentStateProp = &m_mapAnimationStates[m_sCurrentState];
+		AnimStateProperties* currentStateProp = &m_mapAnimationStates[m_sCurrentState];
 		m_Mesh.setTexture(*currentStateProp->StateTexture);
 		m_irectSpriteFrame.left = 0;
 		m_iMaxLeftFramePos = (currentStateProp->NumberOfFrames - 1) * currentStateProp->FrameHeight;
@@ -79,7 +78,7 @@ bool Animater::StartState(std::string _stateName)
 	}
 }
 
-void Animater::Update()
+void Animator::Update()
 { 
 	if (m_sCurrentState.empty())
 	{
@@ -92,8 +91,8 @@ void Animater::Update()
 	if (!m_sCurrentState.empty())
 	{
 		m_bError = false;
-		AnimStateProp* currentStateProp = &m_mapAnimationStates[m_sCurrentState];
-		m_fAnimationProgress += Statics::DeltaTime;
+		AnimStateProperties* currentStateProp = &m_mapAnimationStates[m_sCurrentState];
+		m_fAnimationProgress += Statics::fDeltaTime;
 		if (m_fAnimationProgress >= currentStateProp->FrameInterval)
 		{
 			m_fAnimationProgress = 0.0f;
@@ -122,12 +121,12 @@ void Animater::Update()
 	}
 }
 
-void Animater::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
+void Animator::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_Mesh);
 }
 
-bool Animater::FindState(std::string _stateName)
+bool Animator::FindState(std::string _stateName)
 {
 	if (m_mapAnimationStates.find(_stateName) != m_mapAnimationStates.end())
 	{
