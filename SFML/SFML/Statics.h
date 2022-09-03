@@ -4,6 +4,7 @@
 #include <functional>
 #include <string> 
 #include "TextureLoader.h"
+#include "Animater.h"
 
 struct ProjectileProperties
 {

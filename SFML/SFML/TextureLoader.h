@@ -2,6 +2,8 @@
 #include "SFML/Graphics/Texture.hpp"
 #include <map>
 
+#define IMG_HEIGHT 32;
+
 class TextureLoader
 {
 public:
