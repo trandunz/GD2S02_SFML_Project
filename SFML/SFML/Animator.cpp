@@ -15,6 +15,7 @@
 
 #include "Animator.h"
 #include "Math.h"
+#include "TextureLoader.h"
 
 Animator::Animator()
 {
@@ -26,15 +27,7 @@ Animator::Animator()
 
 Animator::~Animator()
 {
-	for (auto& mapElement : m_mapAnimationStates)
-	{
-		if (mapElement.second.StateTexture != nullptr)
-		{
-			mapElement.second.StateTexture = nullptr;
-		}
-	}
-
-	m_mapAnimationStates.clear();
+	CleanupMap(m_mapAnimationStates);
 }
 
 void Animator::AddState(std::string _stateName, AnimStateProperties _properties)

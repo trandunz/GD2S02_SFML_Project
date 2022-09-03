@@ -6,6 +6,7 @@
 #include "VFX.h"
 #include "GUI.h"
 #include "Math.h"
+#include "TextureLoader.h"
 
 GameScene::GameScene()
 {

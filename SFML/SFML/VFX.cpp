@@ -3,7 +3,7 @@
 
 void VFX::CleanupElements()
 {
-	m_Effects.clear();
+	CleanupMap(m_Effects);
 }
 
 void VFX::Update()

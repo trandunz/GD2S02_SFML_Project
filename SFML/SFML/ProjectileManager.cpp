@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "EnemyManager.h"
 #include "Enemy.h"
+#include "Helper.h"
 
 void ProjectileManager::CleanupDestroyed()
 {
@@ -27,16 +28,7 @@ void ProjectileManager::CleanupDestroyed()
 
 void ProjectileManager::CleanupProjectiles()
 {
-	for (auto& projectile : m_Projectiles)
-	{
-		if (projectile != nullptr)
-		{
-			delete projectile;
-			projectile = nullptr;
-		}
-	}
-	m_Projectiles.clear();
-	m_Projectiles.resize(0);
+	CleanupVector(m_Projectiles);
 }
 
 void ProjectileManager::CreateProjectile(ProjectileProperties _properties)

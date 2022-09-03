@@ -2,7 +2,8 @@
 #include "Enemy.h"
 #include "PlayerManager.h"
 #include "Player.h"
-#include <iostream>
+#include "TextureLoader.h"
+#include "Helper.h"
 
 void EnemyManager::CleanupDestroyed()
 {
@@ -25,16 +26,7 @@ void EnemyManager::CleanupDestroyed()
 
 void EnemyManager::CleanupEnemies()
 {
-	for (auto& enemy : m_Enemies)
-	{
-		if (enemy != nullptr)
-		{
-			delete enemy;
-			enemy = nullptr;
-		}
-	}
-	m_Enemies.clear();
-	m_Enemies.resize(0);
+	CleanupVector(m_Enemies);
 }
 
 void EnemyManager::CreateEnemy(EnemyProperties _properties)

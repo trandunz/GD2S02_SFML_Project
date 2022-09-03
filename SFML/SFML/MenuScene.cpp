@@ -3,6 +3,7 @@
 #include "GUI.h"
 #include "GameScene.h"
 #include "Math.h"
+#include "TextureLoader.h"
 
 MenuScene::MenuScene()
 {

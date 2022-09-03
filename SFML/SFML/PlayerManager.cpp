@@ -1,6 +1,7 @@
 #include "PlayerManager.h"
 #include "Player.h"
 #include "ObjectManager.h"
+#include "Helper.h"
 
 void PlayerManager::CleanupDestroyed()
 {
@@ -23,16 +24,7 @@ void PlayerManager::CleanupDestroyed()
 
 void PlayerManager::CleanupPlayers()
 {
-	for (auto& player : m_Players)
-	{
-		if (player != nullptr)
-		{
-			delete player;
-			player = nullptr;
-		}
-	}
-	m_Players.clear();
-	m_Players.resize(0);
+	CleanupVector(m_Players);
 }
 
 void PlayerManager::CreatePlayer(PlayerProperties _properties)

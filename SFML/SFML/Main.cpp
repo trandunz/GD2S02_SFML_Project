@@ -1,5 +1,6 @@
 #include "Statics.h"
 #include "LevelLoader.h"
+#include "TextureLoader.h"
 
 void Start();
 void Update();

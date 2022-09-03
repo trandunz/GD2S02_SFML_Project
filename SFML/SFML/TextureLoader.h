@@ -1,6 +1,5 @@
 #pragma once
-#include <SFML/Graphics/Texture.hpp>
-#include <map>
+#include "Statics.h"
 
 #define IMG_HEIGHT 32;
 

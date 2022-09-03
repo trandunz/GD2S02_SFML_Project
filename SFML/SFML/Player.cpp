@@ -4,6 +4,7 @@
 #include "VFX.h"
 #include "ProjectileManager.h"
 #include "Math.h"
+#include "TextureLoader.h"
 
 Player::Player(PlayerProperties _properties)
 {

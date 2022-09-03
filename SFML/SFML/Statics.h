@@ -4,7 +4,10 @@
 #include <functional>
 #include <string>
 #include <vector>
-#include "TextureLoader.h"
+#include <map>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 
 enum class ENEMYTYPE
 {

@@ -1,7 +1,5 @@
 #pragma once
-#include <sstream>
-#include <iomanip>
-#include "Statics.h"
+#include "Helper.h"
 
 #define PI 3.141592654f
 
@@ -23,13 +21,6 @@ inline void SetOriginCenter(sf::Text& _text)
 inline sf::Vector2f Normalize(sf::Vector2f _vec)
 {
 	return _vec / Magnitude(_vec);
-}
-
-inline std::string FloatToString(float _float, int _precision = 2)
-{
-	std::stringstream stream;
-	stream << std::fixed << std::setprecision(_precision) << _float;
-	return stream.str();
 }
 
 inline float ToDegrees(float _inAngleRad)

@@ -1,4 +1,5 @@
 #include "TextureLoader.h"
+#include "Helper.h"
 
 void TextureLoader::InitTextures(std::vector<std::string> _texturesToPreload)
 {
@@ -25,13 +26,5 @@ sf::Texture& TextureLoader::LoadTexture(std::string _fileName)
 
 void TextureLoader::CleanupTextures()
 {
-    for (auto& texture : m_LoadedTextures)
-    {
-        if (texture.second != nullptr)
-        {
-            delete texture.second;
-            texture.second = nullptr;
-        }
-    }
-    m_LoadedTextures.clear();
+    CleanupMap(m_LoadedTextures);
 }

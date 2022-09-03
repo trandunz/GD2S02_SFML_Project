@@ -2,6 +2,7 @@
 #include "ObjectManager.h"
 #include "Obstacle.h"
 #include "Math.h"
+#include "TextureLoader.h"
 
 Enemy::Enemy(EnemyProperties _properties)
 {

@@ -1,20 +1,11 @@
 #include "ObjectManager.h"
 #include "Obstacle.h"
-
-#include <iostream>
+#include "TextureLoader.h"
+#include "Helper.h"
 
 void ObjectManager::CleanupObstacles()
 {
-	for (auto& obstacle : Obstacles)
-	{
-		if (obstacle != nullptr)
-		{
-			delete obstacle;
-			obstacle = nullptr;
-		}
-	}
-	Obstacles.clear();
-	Obstacles.resize(0);
+	CleanupVector(Obstacles);
 }
 
 void ObjectManager::CreateObstacle(ObstacleProperties _properties)
