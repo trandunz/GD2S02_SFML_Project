@@ -20,6 +20,7 @@ private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 	
 	ProjectileProperties m_Properties;
-	sf::Sprite m_Mesh{};
+	Animater m_AnimatedSprite;
+	//sf::Sprite m_Mesh{};
 };
 

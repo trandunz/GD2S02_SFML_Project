@@ -27,7 +27,9 @@ private:
 	inline EnemyManager(const EnemyManager&) {}
 	inline ~EnemyManager() {}
 
-	float m_SpawnTimer{1.0f};
-	std::vector<Enemy*> m_Enemies{};
+	float m_fSpawnTimer{1.0f}; // Timer for spawning enemies
+	std::vector<Enemy*> m_Enemies{}; // Vector to hold all enemy types
+
+	float m_fDestroyDistanceY = 64.0f; // The distance below the game window of when to destroy enemies
 };
 

@@ -1,3 +1,13 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Enemy.h 
+// Description : Enemy class
+// Author : 
+// Mail : 
+
 #pragma once
 #include "ProjectileManager.h"
 #include "Math.h"
@@ -22,7 +32,7 @@ public:
 
 	bool CheckCollision(sf::Sprite _entitySprite);
 
-	bool Destroy = false;
+	bool m_bDestroy = false;
 
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
@@ -32,10 +42,12 @@ private:
 	void Attack();
 
 	EnemyProperties m_Properties;
-	float m_AttackSpeed{ 1.0f };
-	float m_AttackTimer{ 0.0f };
+	float m_fAttackSpeed{ 1.0f };
+	float m_fAttackTimer{ 0.0f };
 	sf::Sprite m_Mesh{};
 	sf::Vector2f m_v2fVelocity{};
 	int m_iCurrentHealth{};
+	sf::Vector2f m_v2fSpriteJumpScale{};
+	float m_fJumpSpeed{};
+	sf::RectangleShape* m_rectangleCollision{};
 };
-

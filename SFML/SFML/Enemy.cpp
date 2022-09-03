@@ -1,4 +1,6 @@
 #include "Enemy.h"
+#include "ObjectManager.h"
+#include "Obstacle.h"
 
 Enemy::Enemy(EnemyProperties _properties)
 {
@@ -6,9 +8,15 @@ Enemy::Enemy(EnemyProperties _properties)
 	SetOriginCenter(m_Mesh);
 	SetPosition(_properties.StartPos);
 	m_Mesh.setScale(_properties.Scale);
-	m_Properties.MoveSpeed = _properties.MoveSpeed;
-	m_Properties.MaxHealth = _properties.MaxHealth;
+	m_Properties = _properties;
 	SetHPMax();
+	m_v2fSpriteJumpScale = _properties.Scale * 1.2f;
+	m_fJumpSpeed = _properties.MoveSpeed * 1.4f;
+
+	m_rectangleCollision = new sf::RectangleShape(sf::Vector2f(32, 24));
+	m_rectangleCollision->setPosition(m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f);
+	m_rectangleCollision->setOrigin(m_rectangleCollision->getSize().x / 2, m_rectangleCollision->getSize().y / 2);
+	m_rectangleCollision->setFillColor(sf::Color::Blue);
 }
 
 Enemy::~Enemy()
@@ -41,7 +49,7 @@ void Enemy::TakeDamage(unsigned _amount)
 
 	if (m_iCurrentHealth <= 0)
 	{
-		Destroy = true;
+		m_bDestroy = true;
 	}
 }
 
@@ -66,6 +74,7 @@ bool Enemy::CheckCollision(sf::Sprite _entitySprite)
 void Enemy::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_Mesh);
+	//_target.draw(*m_rectangleCollision); // Draw rectangle collision box, only turn on when debugging
 }
 
 void Enemy::SetHPMax()
@@ -76,15 +85,39 @@ void Enemy::SetHPMax()
 void Enemy::Movement()
 {
 	m_v2fVelocity = { 0,1 };
-	m_Mesh.move(m_v2fVelocity * m_Properties.MoveSpeed * Statics::DeltaTime);
+
+	switch (m_Properties.EnemyType)
+	{
+		case ENEMYTYPE::KAMIKAZE:
+		{
+			bool bColliding = false;
+			for (unsigned i = 0; i < ObjectManager::GetInstance().GetObstacles().size(); i++)
+			{
+				if (CheckCollision(ObjectManager::GetInstance().GetObstacles()[i]->GetSprite()))
+					bColliding = true;
+			}
+
+			if (bColliding)
+			{
+				m_Mesh.setScale(m_v2fSpriteJumpScale);
+				m_Mesh.move(m_v2fVelocity * m_fJumpSpeed * Statics::DeltaTime);
+			}
+			else
+			{
+				m_Mesh.setScale(m_Properties.Scale);
+				m_Mesh.move(m_v2fVelocity * m_Properties.MoveSpeed * Statics::DeltaTime);
+			}
+			m_rectangleCollision->setPosition(m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f);
+		}
+	}
 }
 
 void Enemy::Attack()
 {
-	m_AttackTimer -= Statics::DeltaTime;
-	if (m_AttackTimer <= 0)
+	m_fAttackTimer -= Statics::DeltaTime;
+	if (m_fAttackTimer <= 0)
 	{
-		m_AttackTimer = m_AttackSpeed;
+		m_fAttackTimer = m_fAttackSpeed;
 		ProjectileManager::GetInstance().CreateProjectile(
 			{
 				&TextureLoader::LoadTexture("Projectile.png"),

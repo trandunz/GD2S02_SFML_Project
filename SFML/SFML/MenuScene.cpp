@@ -11,7 +11,7 @@ MenuScene::MenuScene()
 	GUI::GetInstance().CreateButton("Start",
 		{
 			"",
-			{windowSize.x / 2.0f, windowSize.y / 2.0f},
+			{windowSize.x / 2.0f, windowSize.y / 2.1f},
 			[]()
 			{
 				LevelLoader::LoadLevel(LEVELS::GAMESCENE);
@@ -23,16 +23,28 @@ MenuScene::MenuScene()
 	GUI::GetInstance().CreateButton("Options",
 		{
 			"",
-			{windowSize.x / 2.0f, (windowSize.y / 1.5f)},
+			{windowSize.x / 2.0f, (windowSize.y / 1.6f)},
 			nullptr,
 			& TextureLoader::LoadTexture("OptionsButton.png")
+		}
+	);
+
+	GUI::GetInstance().CreateButton("High Score",
+		{
+			"",
+			{ windowSize.x / 2.0f, (windowSize.y / 1.3f) },
+			[]()
+			{
+				Statics::RenderWindow.close();
+			},
+			&TextureLoader::LoadTexture("HighScoreButton.png")
 		}
 	);
 
 	GUI::GetInstance().CreateButton("Quit",
 		{
 			"",
-			{windowSize.x / 2.0f, (windowSize.y / 1.2f)},
+			{windowSize.x / 2.0f, (windowSize.y / 1.1f)},
 			[]()
 			{
 				Statics::RenderWindow.close();
@@ -41,7 +53,7 @@ MenuScene::MenuScene()
 		}
 	);
 
-	m_iButtonSelected = 2;
+	m_iButtonSelected = 3;
 	GUI::GetInstance().CreateImage("Title",
 		{
 			&TextureLoader::LoadTexture("Title.png"),
@@ -61,15 +73,15 @@ void MenuScene::HandleEvents()
 		if (Statics::EventHandle.key.code == sf::Keyboard::W ||
 			Statics::EventHandle.key.code == sf::Keyboard::Up)
 		{
-			m_iButtonSelected = ++m_iButtonSelected % 3;
+			m_iButtonSelected = ++m_iButtonSelected % 4;
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::S ||
 			Statics::EventHandle.key.code == sf::Keyboard::Down)
 		{
-			m_iButtonSelected = --m_iButtonSelected % 3;
+			m_iButtonSelected = --m_iButtonSelected % 4;
 			if (m_iButtonSelected < 0)
 			{
-				m_iButtonSelected = 2;
+				m_iButtonSelected = 3;
 			}
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Enter ||
@@ -99,6 +111,13 @@ void MenuScene::HandleEvents()
 			}
 			case 2:
 			{
+				button = GUI::GetInstance().GetButton("High Score");
+				if (button)
+					button->CallOnPress();
+				break;
+			}
+			case 3:
+			{
 				button = GUI::GetInstance().GetButton("Start");
 				if (button)
 					button->CallOnPress();
@@ -126,10 +145,15 @@ void MenuScene::Update()
 	}
 	case 1:
 	{
-		selectedButton = "Options";
+		selectedButton = "High Score";
 		break;
 	}
 	case 2:
+	{
+		selectedButton = "Options";
+		break;
+	}
+	case 3:
 	{
 		selectedButton = "Start";
 		break;
