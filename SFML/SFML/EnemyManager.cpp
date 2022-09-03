@@ -2,13 +2,14 @@
 #include "Enemy.h"
 #include "PlayerManager.h"
 #include "Player.h"
+#include <iostream>
 
 void EnemyManager::CleanupDestroyed()
 {
 	auto enemyIt = m_Enemies.begin();
 	while (enemyIt != m_Enemies.end())
 	{
-		if ((*enemyIt)->Destroy == true)
+		if ((*enemyIt)->m_bDestroy == true)
 		{
 			if ((*enemyIt) != nullptr)
 			{
@@ -47,13 +48,20 @@ void EnemyManager::Update()
 
 	for(auto& enemy : m_Enemies)
 	{
+		// Destroy enemy if its health is equal or less than 0
 		if (enemy->GetCurrentHealth() <= 0)
 		{
-			Statics::m_fGameScore += 20.0f;
-			enemy->Destroy = true;
+			Statics::m_fGameScore += 20.0f; // Increase game score
+			enemy->m_bDestroy = true;
+		}
+		// Destroy enemies if they below the screen
+		else if (enemy->GetPosition().y >= Statics::RenderWindow.getSize().y + m_fDestroyDistanceY)
+		{
+			enemy->m_bDestroy = true;
 		}
 		else
 		{
+			
 			for (auto& player : PlayerManager::GetInstance().GetPlayers())
 			{
 				if (player != nullptr)
@@ -62,7 +70,7 @@ void EnemyManager::Update()
 					{
 						player->TakeDamage(1);
 
-						enemy->Destroy = true;
+						enemy->m_bDestroy = true;
 						break;
 					}
 				}
@@ -97,14 +105,15 @@ void EnemyManager::draw(sf::RenderTarget& _target, sf::RenderStates _states) con
 
 void EnemyManager::SpawnEnemies(float _rate)
 {
-	m_SpawnTimer -= Statics::DeltaTime;
-	if (m_SpawnTimer <= 0)
+	m_fSpawnTimer -= Statics::DeltaTime;
+	if (m_fSpawnTimer <= 0)
 	{
-		m_SpawnTimer = _rate;
+		m_fSpawnTimer = _rate;
 		CreateEnemy(
 			{
-				&TextureLoader::LoadTexture("Goblin.png"),
+				&TextureLoader::LoadTexture("GoblinBomb.png"),
 				{100.0f + (rand() % 600), 0},
+				{ENEMYTYPE::KAMIKAZE},
 				{2,2}
 			});
 	}
