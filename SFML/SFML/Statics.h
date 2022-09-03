@@ -34,10 +34,19 @@ struct PlayerProperties
 	sf::Vector2f Scale{ 1,1 };
 };
 
+enum class ENEMYTYPE
+{
+	KAMIKAZE,
+	ARCHER,
+	WARRIOR,
+	SHAMAN
+};
+
 struct EnemyProperties
 {
 	sf::Texture* Texture = nullptr;
 	sf::Vector2f StartPos{};
+	ENEMYTYPE EnemyType{ ENEMYTYPE::KAMIKAZE };
 	sf::Vector2f Scale{ 1,1 };
 	float MoveSpeed{ 200.0f };
 	int MaxHealth{ 3 };
