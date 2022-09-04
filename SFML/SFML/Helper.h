@@ -17,10 +17,10 @@ inline void CleanupMap(std::map<K, V*>& _map)
 {
 	for (auto& item : _map)
 	{
-		if (item != nullptr)
+		if (item.second != nullptr)
 		{
-			delete item;
-			item = nullptr;
+			delete item.second;
+			item.second = nullptr;
 		}
 	}
 	_map.clear();
@@ -55,43 +55,43 @@ inline std::string FloatToString(float _float, int _precision = 2)
 	return stream.str();
 }
 
-inline void Print(std::string _message, bool _newLine)
+inline void Print(std::string _message, bool _newLine = true)
 {
 	std::cout << _message;
 	if (_newLine)
 		std::cout << std::endl;
 }
-inline void Print(int _int, bool _newLine)
+inline void Print(int _int, bool _newLine = true)
 {
 	std::cout << _int;
 	if (_newLine)
 		std::cout << std::endl;
 }
-inline void Print(float _float, bool _newLine, int _precision)
+inline void Print(float _float, bool _newLine = true, int _precision = 2)
 {
 	std::cout << FloatToString(_float, _precision);
 	if (_newLine)
 		std::cout << std::endl;
 }
-inline void Print(char _character, bool _newLine)
+inline void Print(char _character, bool _newLine = true)
 {
 	std::cout << _character;
 	if (_newLine)
 		std::cout << std::endl;
 }
-inline void Print(sf::Vector3f _vector3, bool _newLine)
+inline void Print(sf::Vector3f _vector3, bool _newLine = true)
 {
 	std::cout << "X:" << FloatToString(_vector3.x) << "|Y:" << FloatToString(_vector3.y) << "|Z:" << FloatToString(_vector3.z);
 	if (_newLine)
 		std::cout << std::endl;
 }
-inline void Print(sf::Vector3i _vector3, bool _newLine)
+inline void Print(sf::Vector3i _vector3, bool _newLine = true)
 {
 	std::cout << "X:" << _vector3.x << "|Y:" << _vector3.y << "|Z:" << _vector3.z;
 	if (_newLine)
 		std::cout << std::endl;
 }
-inline void Print(sf::Vector2i _vector2, bool _newLine)
+inline void Print(sf::Vector2i _vector2, bool _newLine = true)
 {
 	std::cout << "X:" << _vector2.x << "|Y:" << _vector2.y;
 	if (_newLine)
