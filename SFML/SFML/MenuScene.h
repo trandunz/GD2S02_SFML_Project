@@ -1,8 +1,24 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : MenuScene.h
+// 
+// Description :
+//  
+//	
+//  
+//	
+//  
+// Author : Bartlett, Benjamin
+
 #pragma once
 #include "Level.h"
 #include "Statics.h"
 
 class Button;
+
 class MenuScene : public Level
 {
 public:
@@ -17,5 +33,7 @@ public:
 private:
 	std::string m_sHighLighted{};
 	int m_iButtonSelected{};
+
+	std::vector<std::string> m_vecButtons;
 };
 

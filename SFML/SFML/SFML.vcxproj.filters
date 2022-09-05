@@ -123,6 +123,9 @@
     <ClCompile Include="TextureLoader.cpp">
       <Filter>Source Files\Loaders</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSelectScene.cpp">
+      <Filter>Source Files\SceneManagement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnemyManager.h">
@@ -184,6 +187,9 @@
     </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSelectScene.h">
+      <Filter>Header Files\SceneManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
