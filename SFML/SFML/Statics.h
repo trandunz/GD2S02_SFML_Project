@@ -93,6 +93,7 @@ struct AnimStateProperties
 	sf::Texture* StateTexture{ nullptr };
 	sf::Vector2i TopLeftStartFrame { 0,0 };
 	int FrameHeight{ 32 };
+	int FrameWidth{ 32 };
 	unsigned NumberOfFrames{ 1 };
 	float FrameInterval{};
 	sf::Vector2f Scale{ 1.0f,1.0f };
