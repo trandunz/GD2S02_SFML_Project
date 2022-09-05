@@ -17,10 +17,10 @@ inline void CleanupMap(std::map<K, V*>& _map)
 {
 	for (auto& item : _map)
 	{
-		if (item != nullptr)
+		if (item.second != nullptr)
 		{
-			delete item;
-			item = nullptr;
+			delete item.second;
+			item.second = nullptr;
 		}
 	}
 	_map.clear();

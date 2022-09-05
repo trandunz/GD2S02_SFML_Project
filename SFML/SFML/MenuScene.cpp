@@ -9,6 +9,7 @@ MenuScene::MenuScene()
 {
 	sf::Vector2f windowSize(Statics::RenderWindow.getSize());
 
+	m_vecButtons.emplace_back("Start");
 	GUI::GetInstance().CreateButton("Start",
 		{
 			"",
@@ -21,6 +22,7 @@ MenuScene::MenuScene()
 		}
 	);
 
+	m_vecButtons.emplace_back("Options");
 	GUI::GetInstance().CreateButton("Options",
 		{
 			"",
@@ -30,6 +32,7 @@ MenuScene::MenuScene()
 		}
 	);
 
+	m_vecButtons.emplace_back("High Score");
 	GUI::GetInstance().CreateButton("High Score",
 		{
 			"",
@@ -42,6 +45,7 @@ MenuScene::MenuScene()
 		}
 	);
 
+	m_vecButtons.emplace_back("Quit");
 	GUI::GetInstance().CreateButton("Quit",
 		{
 			"",
@@ -54,13 +58,16 @@ MenuScene::MenuScene()
 		}
 	);
 
-	m_iButtonSelected = 3;
 	GUI::GetInstance().CreateImage("Title",
 		{
 			&TextureLoader::LoadTexture("Title.png"),
 			{windowSize.x / 2.0f, (windowSize.y / 4.0f)},
 			{1.5f, 1.5f}
 		});
+
+	m_iButtonSelected = 0;
+
+
 }
 
 MenuScene::~MenuScene()
@@ -74,16 +81,17 @@ void MenuScene::HandleEvents()
 		if (Statics::EventHandle.key.code == sf::Keyboard::W ||
 			Statics::EventHandle.key.code == sf::Keyboard::Up)
 		{
-			m_iButtonSelected = ++m_iButtonSelected % 4;
+			m_iButtonSelected = --m_iButtonSelected % m_vecButtons.size();
+			if (m_iButtonSelected < 0)
+			{
+				m_iButtonSelected = m_vecButtons.size() - 1;
+			}
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::S ||
 			Statics::EventHandle.key.code == sf::Keyboard::Down)
 		{
-			m_iButtonSelected = --m_iButtonSelected % 4;
-			if (m_iButtonSelected < 0)
-			{
-				m_iButtonSelected = 3;
-			}
+			m_iButtonSelected = ++m_iButtonSelected % m_vecButtons.size();
+
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Enter ||
 			Statics::EventHandle.key.code == sf::Keyboard::V ||
@@ -94,37 +102,10 @@ void MenuScene::HandleEvents()
 			Statics::EventHandle.key.code == sf::Keyboard::Numpad3)
 		{
 			Button* button = nullptr;
-			switch (m_iButtonSelected)
-			{
-			case 0:
-			{
-				button = GUI::GetInstance().GetButton("Quit");
-				if (button)
-					button->CallOnPress();
-				break;
-			}
-			case 1:
-			{
-				button = GUI::GetInstance().GetButton("Options");
-				if (button)
-					button->CallOnPress();
-				break;
-			}
-			case 2:
-			{
-				button = GUI::GetInstance().GetButton("High Score");
-				if (button)
-					button->CallOnPress();
-				break;
-			}
-			case 3:
-			{
-				button = GUI::GetInstance().GetButton("Start");
-				if (button)
-					button->CallOnPress();
-				break;
-			}
-			}
+
+			button = GUI::GetInstance().GetButton(m_vecButtons[m_iButtonSelected]);
+			if (button)
+				button->CallOnPress();
 		}
 	}
 	else
@@ -136,32 +117,7 @@ void MenuScene::Update()
 	GUI::GetInstance().Update();
 	GUI::GetInstance().ResetAllButtonsScale();
 
-	std::string selectedButton;
-	switch (m_iButtonSelected)
-	{
-	case 0:
-	{
-		selectedButton = "Quit";
-		break;
-	}
-	case 1:
-	{
-		selectedButton = "High Score";
-		break;
-	}
-	case 2:
-	{
-		selectedButton = "Options";
-		break;
-	}
-	case 3:
-	{
-		selectedButton = "Start";
-		break;
-	}
-	}
-
-	ScaleSelectedButton(selectedButton);
+	ScaleSelectedButton(m_vecButtons[m_iButtonSelected]);
 }
 
 void MenuScene::Draw()
@@ -176,6 +132,6 @@ void MenuScene::ScaleSelectedButton(std::string _button)
 	if (button)
 	{
 		float throb = 1 + sinf(ToRad((float)Statics::Time.getElapsedTime().asMilliseconds())) / 10;
-		button->SetScale({ throb,throb });
+		button->SetScale({ throb, throb });
 	}
 }
