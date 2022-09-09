@@ -51,22 +51,28 @@ bool Animator::SetDefaultState(std::string _stateName)
 
 bool Animator::StartState(std::string _stateName)
 {
-
+	//Find the state with the given name, then set the current state to that name
+	//and set the sprite properties to that ones corresponding to that state with that name
 	if (FindState(_stateName))
 	{
 		m_sCurrentState = _stateName;
 		AnimStateProperties* currentStateProp = &m_mapAnimationStates[m_sCurrentState];
 		m_Mesh.setTexture(*currentStateProp->StateTexture);
 		m_irectSpriteFrame.left = 0;
-		m_iMaxLeftFramePos = (currentStateProp->NumberOfFrames - 1) * currentStateProp->FrameHeight;
+		//max left frame refers to the maximuim value of the top left coordinate of the frame 
+		//is calculated by mutltiplying the frame width
+		//with the number of frames (minus one because the first frame is of coordinate zero)
+		m_iMaxLeftFramePos = (currentStateProp->NumberOfFrames - 1) * currentStateProp->FrameWidth;
 		m_Mesh.setTextureRect(m_irectSpriteFrame);
 		m_Mesh.setScale(currentStateProp->Scale);
 		SetOriginCenter(m_Mesh);
+
+		currentStateProp = nullptr;
 		return true;
 	}
 	else
 	{
-		printf("WARN [Animator]: Unable to change state\n");
+		Print("WARN [Animator]: Unable to change state");
 		return false;
 	}
 }
@@ -79,17 +85,30 @@ void Animator::Update()
 		{
 			m_sCurrentState = m_sDefaultState;
 		}
+		else
+		{
+			Print("WARN [Animator]: No default state recorded");
+		}
 	}
 
 	if (!m_sCurrentState.empty())
 	{
 		m_bError = false;
+		//Get a pointer to the current state properties before addind to
+		//the current animation progress. We need to know how long this frame lasts
 		AnimStateProperties* currentStateProp = &m_mapAnimationStates[m_sCurrentState];
 		m_fAnimationProgress += Statics::fDeltaTime;
 		if (m_fAnimationProgress >= currentStateProp->FrameInterval)
 		{
 			m_fAnimationProgress = 0.0f;
-			int newLeftFrameCoord = m_irectSpriteFrame.left + currentStateProp->FrameHeight;
+			//If the current progress is equal or longer than the interval, then change to the next frame.
+			//We do this by changing the texture rect value of the sprite. We add 32 (or whatever the image width is)
+			//to the top left coordinate to change which part of the spritesheet to use.
+			//We also check that teh coordinate is not outside the actual image before we update the sprite.
+			//If it is, we either 
+			// a: reset the coordinate to 0 if we're looping
+			// b: start the default animation.
+			int newLeftFrameCoord = m_irectSpriteFrame.left + currentStateProp->FrameWidth;
 			if (newLeftFrameCoord > m_iMaxLeftFramePos)
 			{
 				m_irectSpriteFrame.left = 0;
@@ -107,9 +126,12 @@ void Animator::Update()
 			}
 		}
 	}
+	//If the currentState is still empty (i.e. doesn't contain a name, then the animator
+	//is in an errorneous state. If this is the first time we've reached this part of the loop,
+	//then print an error and set m_bError to true so that we don't print it again.
 	else if(!m_bError)
 	{
-		printf("ERR [Animator]: No states to animate\n");
+		Print("ERR [Animator]: No states to animate");
 		m_bError = true;
 	}
 }
@@ -121,6 +143,7 @@ void Animator::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 
 bool Animator::FindState(std::string _stateName)
 {
+	//find a the key with the same name and return it if it exists
 	if (m_mapAnimationStates.find(_stateName) != m_mapAnimationStates.end())
 	{
 		return true;
