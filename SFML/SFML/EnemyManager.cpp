@@ -58,13 +58,13 @@ void EnemyManager::Update()
 			{
 				if (player != nullptr)
 				{
-					if (enemy->CheckCollision(player->GetSprite()))
-					{
-						player->TakeDamage(1);
-
-						enemy->m_bDestroy = true;
-						break;
-					}
+					//if (enemy->CheckCollision(player->GetSprite()))
+					//{
+					//	player->TakeDamage(1);
+					//
+					//	enemy->m_bDestroy = true;
+					//	break;
+					//}
 				}
 			}
 		}

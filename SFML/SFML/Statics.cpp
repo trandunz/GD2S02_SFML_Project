@@ -9,6 +9,7 @@ float Statics::fDeltaTime{};
 float Statics::fUnscaledDeltaTime{};
 float Statics::m_fLastTime{};
 float Statics::fGameScore{};
+bool Statics::bDebugMode{ false };
 
 void Statics::CalculateDeltaTime()
 {

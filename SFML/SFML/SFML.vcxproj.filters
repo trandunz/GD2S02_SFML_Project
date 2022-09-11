@@ -126,6 +126,9 @@
     <ClCompile Include="CharacterSelectScene.cpp">
       <Filter>Source Files\SceneManagement</Filter>
     </ClCompile>
+    <ClCompile Include="BoxCollider.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnemyManager.h">
@@ -190,6 +193,9 @@
     </ClInclude>
     <ClInclude Include="CharacterSelectScene.h">
       <Filter>Header Files\SceneManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxCollider.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

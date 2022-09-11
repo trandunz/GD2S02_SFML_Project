@@ -10,6 +10,7 @@
 
 #pragma once
 #include "ProjectileManager.h"
+#include "BoxCollider.h"
 
 class Enemy : public sf::Drawable
 {
@@ -29,7 +30,7 @@ public:
 
 	int GetCurrentHealth() const;
 
-	bool CheckCollision(sf::Sprite _entitySprite);
+	//bool CheckCollision(sf::Sprite _entitySprite);
 
 	bool m_bDestroy = false;
 
@@ -48,5 +49,6 @@ private:
 	int m_iCurrentHealth{};
 	sf::Vector2f m_v2fSpriteJumpScale{};
 	float m_fJumpSpeed{};
-	sf::RectangleShape* m_rectangleCollision{};
+
+	BoxCollider* m_BoxCollider;
 };

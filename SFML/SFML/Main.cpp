@@ -44,10 +44,20 @@ void PollEvents()
 {
 	if (Statics::RenderWindow.pollEvent(Statics::EventHandle))
 	{
-		if (Statics::EventHandle.type == sf::Event::KeyPressed
-			&& Statics::EventHandle.key.code == sf::Keyboard::Escape)
+		if (Statics::EventHandle.type == sf::Event::KeyPressed)
 		{
-			Statics::RenderWindow.close();
+			if (Statics::EventHandle.key.code == sf::Keyboard::Escape)
+			{
+				Statics::RenderWindow.close();
+			}
+			if (Statics::EventHandle.key.code == sf::Keyboard::End)
+			{
+				Statics::bDebugMode = !Statics::bDebugMode;
+				if (Statics::bDebugMode)
+					printf("Debug mode turned on");
+				else
+					printf("Debug mode turned off");
+			}
 		}
 		if (Statics::EventHandle.type == sf::Event::Closed)
 		{

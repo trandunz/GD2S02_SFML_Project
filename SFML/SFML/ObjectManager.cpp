@@ -54,14 +54,16 @@ void ObjectManager::SpawnObstacles(float _rate)
 	{
 		m_SpawnTimer = _rate;
 
-		int iRandomNum = rand() % 4;
+		int iRandomNum = rand() % 3;
 		if (iRandomNum == 0)
 		{
 			CreateObstacle(
 				{
 					&TextureLoader::LoadTexture("rock_obstacle.png"),
 					{100.0f + (rand() % 600), -32.0f},
-					{2,2}
+					{2,2},
+					{40,40},
+					{6.0f}
 				});
 		}
 		else if (iRandomNum == 1)
@@ -70,25 +72,20 @@ void ObjectManager::SpawnObstacles(float _rate)
 				{
 					&TextureLoader::LoadTexture("hedge_obstacle.png"),
 					{100.0f + (rand() % 600), -32.0f},
-					{2,2}
-				});
-		}
-		else if (iRandomNum == 2)
-		{
-			CreateObstacle(
-				{
-					&TextureLoader::LoadTexture("log_obstacle.png"),
-					{100.0f + (rand() % 600), -32.0f},
-					{2,2}
+					{2,2},
+					{40,40},
+					{6.0f}
 				});
 		}
 		else
 		{
 			CreateObstacle(
 				{
-					&TextureLoader::LoadTexture("tree_obstacle.png"),
+					&TextureLoader::LoadTexture("log_obstacle.png"),
 					{100.0f + (rand() % 600), -32.0f},
-					{2,2}
+					{2,2},
+					{54,20},
+					{8.0f}
 				});
 		}
 	}

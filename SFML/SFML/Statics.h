@@ -32,6 +32,8 @@ struct ObstacleProperties
 	sf::Texture* Texture{ nullptr };
 	sf::Vector2f StartPos{};
 	sf::Vector2f Scale{ 1,1 };
+	sf::Vector2f BoxColliderSize{ 10,10 };
+	float fBoxColliderOffsetY{};	
 	float fMoveSpeed{ 160.0f };
 };
 
@@ -116,6 +118,8 @@ public:
 	static void CalculateDeltaTime();
 
 	static float fGameScore;
+
+	static bool bDebugMode;
 private:
 	static float m_fLastTime;
 };

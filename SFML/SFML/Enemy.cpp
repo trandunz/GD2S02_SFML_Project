@@ -15,10 +15,8 @@ Enemy::Enemy(EnemyProperties _properties)
 	m_v2fSpriteJumpScale = _properties.Scale * 1.2f;
 	m_fJumpSpeed = _properties.fMoveSpeed * 1.4f;
 
-	m_rectangleCollision = new sf::RectangleShape(sf::Vector2f(32, 24));
-	m_rectangleCollision->setPosition(m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f);
-	m_rectangleCollision->setOrigin(m_rectangleCollision->getSize().x / 2, m_rectangleCollision->getSize().y / 2);
-	m_rectangleCollision->setFillColor(sf::Color::Blue);
+	// Set box collider
+	m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f));
 }
 
 Enemy::~Enemy()
@@ -68,15 +66,17 @@ int Enemy::GetCurrentHealth() const
 	return m_iCurrentHealth;
 }
 
-bool Enemy::CheckCollision(sf::Sprite _entitySprite)
-{
-	return m_Mesh.getGlobalBounds().intersects(_entitySprite.getGlobalBounds());
-}
+//bool Enemy::CheckCollision(sf::Sprite _entitySprite)
+//{
+//	return m_Mesh.getGlobalBounds().intersects(_entitySprite.getGlobalBounds());
+//}
 
 void Enemy::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_Mesh);
-	//_target.draw(*m_rectangleCollision); // Draw rectangle collision box, only turn on when debugging
+
+	// Draw box collider if debug mode turned on
+	m_BoxCollider->DrawDebug(_target);
 }
 
 void Enemy::SetHPMax()
@@ -92,14 +92,16 @@ void Enemy::Movement()
 	{
 		case ENEMYTYPE::KAMIKAZE:
 		{
-			bool bColliding = false;
+			//bool bColliding = false;
+			m_BoxCollider->bColliding = false;
 			for (unsigned i = 0; i < ObjectManager::GetInstance().GetObstacles().size(); i++)
 			{
-				if (CheckCollision(ObjectManager::GetInstance().GetObstacles()[i]->GetSprite()))
-					bColliding = true;
+				//if (CheckCollision(ObjectManager::GetInstance().GetObstacles()[i]->GetSprite()))
+				if (m_BoxCollider->CheckCollision(ObjectManager::GetInstance().GetObstacles()[i]->GetCollisionBox()))
+				m_BoxCollider->bColliding = true;
 			}
 
-			if (bColliding)
+			if (m_BoxCollider->bColliding)
 			{
 				m_Mesh.setScale(m_v2fSpriteJumpScale);
 				m_Mesh.move(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
@@ -109,7 +111,9 @@ void Enemy::Movement()
 				m_Mesh.setScale(m_Properties.Scale);
 				m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 			}
-			m_rectangleCollision->setPosition(m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f);
+
+			// Update collider position
+			m_BoxCollider->UpdatePosition({ m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f });
 		}
 	}
 }
