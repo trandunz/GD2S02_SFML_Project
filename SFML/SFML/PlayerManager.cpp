@@ -52,7 +52,7 @@ void PlayerManager::Update()
 		{
 			for (auto& obstacle : ObjectManager::GetInstance().GetObstacleSprites())
 			{
-				player->CheckCollision(obstacle);
+				//player->CheckCollision(obstacle);
 			}
 		}
 		player->Update();

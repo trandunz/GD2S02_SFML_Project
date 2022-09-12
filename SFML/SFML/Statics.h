@@ -41,6 +41,8 @@ struct PlayerProperties
 {
 	sf::Texture* Texture{ nullptr };
 	sf::Vector2f StartPos{};
+	sf::Vector2f BoxColliderSize{ 10,10 };
+	float fBoxColliderOffsetY{};
 	float fMoveSpeed{ 1000.0f };
 	int iMaxHealth{ 3 };
 	int iMaxMana{ 3 };

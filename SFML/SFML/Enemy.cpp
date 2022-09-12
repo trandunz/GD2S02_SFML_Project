@@ -1,6 +1,8 @@
 #include "Enemy.h"
 #include "ObjectManager.h"
 #include "Obstacle.h"
+#include "PlayerManager.h"
+#include "Player.h"
 #include "Math.h"
 #include "TextureLoader.h"
 
@@ -66,11 +68,6 @@ int Enemy::GetCurrentHealth() const
 	return m_iCurrentHealth;
 }
 
-//bool Enemy::CheckCollision(sf::Sprite _entitySprite)
-//{
-//	return m_Mesh.getGlobalBounds().intersects(_entitySprite.getGlobalBounds());
-//}
-
 void Enemy::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_Mesh);
@@ -92,11 +89,10 @@ void Enemy::Movement()
 	{
 		case ENEMYTYPE::KAMIKAZE:
 		{
-			//bool bColliding = false;
+			// Checking collisions with obstacles
 			m_BoxCollider->bColliding = false;
 			for (unsigned i = 0; i < ObjectManager::GetInstance().GetObstacles().size(); i++)
 			{
-				//if (CheckCollision(ObjectManager::GetInstance().GetObstacles()[i]->GetSprite()))
 				if (m_BoxCollider->CheckCollision(ObjectManager::GetInstance().GetObstacles()[i]->GetCollisionBox()))
 				m_BoxCollider->bColliding = true;
 			}
@@ -110,6 +106,16 @@ void Enemy::Movement()
 			{
 				m_Mesh.setScale(m_Properties.Scale);
 				m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
+			}
+
+			// Checking collisions with players
+			for (unsigned i = 0; i < PlayerManager::GetInstance().GetPlayers().size(); i++)
+			{
+				if (m_BoxCollider->CheckCollision(PlayerManager::GetInstance().GetPlayers()[i]->GetCollisionBox()))
+				{
+					m_iCurrentHealth = 0;
+					//PlayerManager::GetInstance().GetPlayers()[i]->TakeDamage(1);
+				}
 			}
 
 			// Update collider position

@@ -1,5 +1,6 @@
 #pragma once
 #include "Statics.h"
+#include "BoxCollider.h"
 
 class Player : public sf::Drawable
 {
@@ -18,7 +19,7 @@ public:
 	void TakeDamage(unsigned _amount);
 	void Heal(unsigned _amount);
 
-	bool CheckCollision(sf::Sprite _otherSprite);
+	//bool CheckCollision(sf::Sprite _otherSprite);
 	int GetCurrentHealth() const;
 
 	bool Destroy = false;
@@ -60,6 +61,9 @@ private:
 	int m_iCurrentHealth{};
 	int m_iCurrentMana{};
 
+	BoxCollider* m_BoxCollider;
+	float fColliderOffset;
+
 	sf::Keyboard::Key m_MoveUpKey {sf::Keyboard::W };
 	sf::Keyboard::Key m_MoveDownKey { sf::Keyboard::S};
 	sf::Keyboard::Key m_MoveLeftKey {sf::Keyboard::A };
@@ -67,5 +71,8 @@ private:
 	sf::Keyboard::Key m_BasicAttackKey {sf::Keyboard::V };
 	sf::Keyboard::Key m_SecondaryAttackKey {sf::Keyboard::B };
 	sf::Keyboard::Key m_SpecialAttackKey {sf::Keyboard::N };
+
+public:
+	sf::RectangleShape* GetCollisionBox();
 };
 

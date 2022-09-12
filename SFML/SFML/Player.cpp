@@ -16,6 +16,10 @@ Player::Player(PlayerProperties _properties)
 	SetHPMax();
 	SetManaMax();
 
+	// Set box collider
+	fColliderOffset = _properties.fBoxColliderOffsetY;
+	m_BoxCollider = new BoxCollider(_properties.BoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset));
+
 	if (m_Properties.bPlayerOne == false)
 	{
 		m_MoveUpKey = sf::Keyboard::Up;
@@ -115,12 +119,18 @@ void Player::Update()
 	}
 	RestrictToScreen();
 	UpdateGUI();
+
+	// Update position of collider
+	m_BoxCollider->UpdatePosition(sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset));
 }
 	
 
 void Player::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_Mesh);
+
+	// Draw box collider if debug mode turned on
+	m_BoxCollider->DrawDebug(_target);
 }
 
 sf::Vector2f Player::GetMoveInput()
@@ -371,25 +381,25 @@ void Player::Heal(unsigned _amount)
 	}
 }
 
-bool Player::CheckCollision(sf::Sprite _otherSprite)
-{
-	if (m_Mesh.getGlobalBounds().intersects(_otherSprite.getGlobalBounds()))
-	{
-		if (_otherSprite.getPosition().y + (_otherSprite.getScale().y / 2.0f) < m_PreviousMove.y - 32.0f)
-		{
-			m_Mesh.setPosition(m_PreviousMove + sf::Vector2f(0, 1.0f));
-		}
-		else
-		{
-			m_Mesh.setPosition(m_PreviousMove);
-		}
-
-
-		
-		return true;
-	}
-	return false;
-}
+//bool Player::CheckCollision(sf::Sprite _otherSprite)
+//{
+//	if (m_Mesh.getGlobalBounds().intersects(_otherSprite.getGlobalBounds()))
+//	{
+//		if (_otherSprite.getPosition().y + (_otherSprite.getScale().y / 2.0f) < m_PreviousMove.y - 32.0f)
+//		{
+//			m_Mesh.setPosition(m_PreviousMove + sf::Vector2f(0, 1.0f));
+//		}
+//		else
+//		{
+//			m_Mesh.setPosition(m_PreviousMove);
+//		}
+//
+//
+//		
+//		return true;
+//	}
+//	return false;
+//}
 
 int Player::GetCurrentHealth() const
 {
@@ -419,6 +429,11 @@ void Player::RestrictToScreen()
 	{
 		m_Mesh.setPosition(m_Mesh.getGlobalBounds().width / 2, m_Mesh.getPosition().y);
 	}
+}
+
+sf::RectangleShape* Player::GetCollisionBox()
+{
+	return m_BoxCollider->GetCollider();
 }
 
 

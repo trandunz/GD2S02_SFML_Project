@@ -14,13 +14,18 @@ GameScene::GameScene()
 		{ 
 			&TextureLoader::LoadTexture("Earth_Mage.png"),
 			{200, 600},
+			{32,32},
+			{16},
 			{300}
+			
 		});
 
 	PlayerManager::GetInstance().CreatePlayer(
 		{
 			&TextureLoader::LoadTexture("Fire_Mage.png"),
 			{600, 600},
+			{32,32},
+			{16},
 			{300},
 			3,
 			3,
