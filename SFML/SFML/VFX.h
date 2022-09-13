@@ -1,7 +1,5 @@
 #pragma once
-#include "Statics.h"
-
-using SpecialEffect = std::pair<float, sf::Sprite>;
+#include "Animator.h"
 
 class VFX : public sf::Drawable
 {
@@ -17,12 +15,22 @@ public:
 
 	void CreateAndPlayEffect(std::string _key, SpecialEffectProperties _properties, float _lifeTime);
 	void CreateEffect(std::string _key, SpecialEffectProperties _properties);
-	sf::Sprite& GetEffect(std::string _key);
+
+	std::string CreateAndPlayEffect(SpecialEffectProperties _properties, float _lifeTime);
+	std::string CreateEffect(SpecialEffectProperties _properties);
+
+	Animator& GetEffect(std::string _key);
 	void PlayEffect(std::string _key, float _lifeTime);
 	void StopEffect(std::string _key);
-	void SetEffectSprite(std::string _key, sf::Texture& _texture);
 
 private:
+	struct SpecialEffect
+	{
+		float LifeTime{};
+		Animator Animator{};
+		SpecialEffectProperties Properties{};
+	};
+
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 
 	inline VFX() {}

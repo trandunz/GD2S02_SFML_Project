@@ -301,14 +301,14 @@ void Player::CreateSpecialVFX()
 
 void Player::SetP1SpecialVFXPosition(sf::Vector2f _position)
 {
-	VFX::GetInstance().GetEffect("P1_P1Special").setPosition(_position + sf::Vector2f{10, -40 });
-	VFX::GetInstance().GetEffect("P2_P1Special").setPosition(_position - sf::Vector2f{ 10, 40 });
+	VFX::GetInstance().GetEffect("P1_P1Special").SetPosition(_position + sf::Vector2f{10, -40 });
+	VFX::GetInstance().GetEffect("P2_P1Special").SetPosition(_position - sf::Vector2f{ 10, 40 });
 }
 
 void Player::SetP2SpecialVFXPosition(sf::Vector2f _position)
 {
-	VFX::GetInstance().GetEffect("P1_P2Special").setPosition(_position + sf::Vector2f{ 10, -40 });
-	VFX::GetInstance().GetEffect("P2_P2Special").setPosition(_position - sf::Vector2f{ 10, 40 });
+	VFX::GetInstance().GetEffect("P1_P2Special").SetPosition(_position + sf::Vector2f{ 10, -40 });
+	VFX::GetInstance().GetEffect("P2_P2Special").SetPosition(_position - sf::Vector2f{ 10, 40 });
 }
 
 void Player::BasicAttack()

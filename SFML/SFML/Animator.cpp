@@ -32,7 +32,12 @@ Animator::~Animator()
 
 void Animator::AddState(std::string _stateName, AnimStateProperties _properties)
 {
+	_properties.FrameHeight = _properties.StateTexture->getSize().y;
+	_properties.FrameWidth = _properties.StateTexture->getSize().x / _properties.NumberOfFrames;
 	m_mapAnimationStates.insert_or_assign(_stateName, _properties);
+
+	if (m_mapAnimationStates.size() == 1)
+		SetDefaultState(_stateName);
 }
 
 bool Animator::SetDefaultState(std::string _stateName)
@@ -63,10 +68,11 @@ bool Animator::StartState(std::string _stateName)
 		//is calculated by mutltiplying the frame width
 		//with the number of frames (minus one because the first frame is of coordinate zero)
 		m_iMaxLeftFramePos = (currentStateProp->NumberOfFrames - 1) * currentStateProp->FrameWidth;
+		m_irectSpriteFrame = { 0,0,currentStateProp->FrameWidth,currentStateProp->FrameHeight };
 		m_Mesh.setTextureRect(m_irectSpriteFrame);
 		m_Mesh.setScale(currentStateProp->Scale);
 		SetOriginCenter(m_Mesh);
-
+	
 		currentStateProp = nullptr;
 		return true;
 	}
@@ -123,6 +129,7 @@ void Animator::Update()
 			{
 				m_irectSpriteFrame.left = newLeftFrameCoord;
 				m_Mesh.setTextureRect(m_irectSpriteFrame);
+				SetOriginCenter(m_Mesh);
 			}
 		}
 	}

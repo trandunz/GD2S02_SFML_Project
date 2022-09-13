@@ -90,6 +90,9 @@ struct SpecialEffectProperties
 	sf::Vector2f StartPos{};
 	sf::Vector2f Scale{ 1,1 };
 	sf::Color Color{1,1,1};
+	unsigned NumberOfFrames{ 1 };
+	float AnimFrameInterval{};
+	sf::Vector2f Velocity{};
 };
 
 struct AnimStateProperties

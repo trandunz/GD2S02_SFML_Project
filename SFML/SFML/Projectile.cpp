@@ -16,7 +16,7 @@ Projectile::Projectile(ProjectileProperties _properties)
 	//SetOriginCenter(m_Mesh);
 	//m_Mesh.setScale(_properties.Scale);
 	//m_Mesh = m_AnimatedSprite.GetSprite();
-	m_AnimatedSprite.GetSprite().setPosition(_properties.StartPos);
+	m_AnimatedSprite.SetPosition(_properties.StartPos);
 	//m_AnimatedSprite.GetSprite().setColor(sf::Color::Green);
 	m_Properties.uDamage = _properties.uDamage;
 	m_Properties.bFriendly = _properties.bFriendly;

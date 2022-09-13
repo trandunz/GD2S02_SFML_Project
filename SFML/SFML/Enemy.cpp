@@ -34,10 +34,12 @@ Enemy::Enemy(EnemyProperties _properties)
 
 Enemy::~Enemy()
 {
-	VFX::GetInstance().CreateAndPlayEffect("Explosion",
-		{ &TextureLoader::LoadTexture("explosion.png"),
-		m_AnimatedSprite.GetPosition() }, 0.5f);
-
+	SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("explosion.png") };
+	explosionProperties.StartPos = m_AnimatedSprite.GetPosition();
+	explosionProperties.NumberOfFrames = 9;
+	explosionProperties.AnimFrameInterval = 0.5f / 9;
+	explosionProperties.Velocity = {0.0f, 160.0f };
+	VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
 }
 
 void Enemy::Update()

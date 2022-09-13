@@ -61,6 +61,12 @@ inline void Print(std::string _message, bool _newLine = true)
 	if (_newLine)
 		std::cout << std::endl;
 }
+inline void Print(size_t _size, bool _newLine = true)
+{
+	std::cout << _size;
+	if (_newLine)
+		std::cout << std::endl;
+}
 inline void Print(int _int, bool _newLine = true)
 {
 	std::cout << _int;
