@@ -103,7 +103,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 		m_fSpawnTimer = _rate;
 		CreateEnemy(
 			{
-				&TextureLoader::LoadTexture("GoblinBomb.png"),
+				&TextureLoader::LoadTexture("Goblin_Kamakazi_Running.png"),
 				{100.0f + (rand() % 600), 0},
 				{ENEMYTYPE::KAMIKAZE},
 				{2,2}

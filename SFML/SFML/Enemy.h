@@ -11,6 +11,7 @@
 #pragma once
 #include "ProjectileManager.h"
 #include "BoxCollider.h"
+#include "Animator.h"
 
 class Enemy : public sf::Drawable
 {
@@ -29,8 +30,6 @@ public:
 	void Heal(unsigned _amount);
 
 	int GetCurrentHealth() const;
-
-	//bool CheckCollision(sf::Sprite _entitySprite);
 
 	bool m_bDestroy = false;
 
@@ -51,4 +50,6 @@ private:
 	float m_fJumpSpeed{};
 
 	BoxCollider* m_BoxCollider;
+
+	Animator m_AnimatedSprite{};
 };

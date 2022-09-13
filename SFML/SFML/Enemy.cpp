@@ -8,10 +8,20 @@
 
 Enemy::Enemy(EnemyProperties _properties)
 {
-	m_Mesh.setTexture(*_properties.Texture, true);
-	SetOriginCenter(m_Mesh);
-	SetPosition(_properties.StartPos);
-	m_Mesh.setScale(_properties.Scale);
+	AnimStateProperties animProperties;
+	animProperties.StateTexture = _properties.Texture;
+	animProperties.NumberOfFrames = 4;
+	animProperties.FrameInterval = 0.1f;
+	animProperties.Loops = true;
+	animProperties.Scale = _properties.Scale;
+	m_AnimatedSprite.AddState("Moving", animProperties);
+	m_AnimatedSprite.SetDefaultState("Moving");
+	m_AnimatedSprite.GetSprite().setPosition(_properties.StartPos);
+	m_AnimatedSprite.StartState("Moving");
+	//m_Mesh.setTexture(*_properties.Texture, true);
+	//SetOriginCenter(m_Mesh);
+	//SetPosition(_properties.StartPos);
+	//m_Mesh.setScale(_properties.Scale);
 	m_Properties = _properties;
 	SetHPMax();
 	m_v2fSpriteJumpScale = _properties.Scale * 1.2f;
@@ -28,6 +38,7 @@ Enemy::~Enemy()
 void Enemy::Update()
 {
 	Movement();
+	m_AnimatedSprite.Update();
 }
 
 sf::Vector2f Enemy::GetPosition() const
@@ -70,7 +81,8 @@ int Enemy::GetCurrentHealth() const
 
 void Enemy::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
-	_target.draw(m_Mesh);
+	//_target.draw(m_Mesh);
+	_target.draw(m_AnimatedSprite);
 
 	// Draw box collider if debug mode turned on
 	m_BoxCollider->DrawDebug(_target);
@@ -99,13 +111,18 @@ void Enemy::Movement()
 
 			if (m_BoxCollider->bColliding)
 			{
-				m_Mesh.setScale(m_v2fSpriteJumpScale);
-				m_Mesh.move(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
+				//m_Mesh.setScale(m_v2fSpriteJumpScale);
+				//m_Mesh.move(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
+				m_AnimatedSprite.SetScale(m_v2fSpriteJumpScale);
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
+
 			}
 			else
 			{
-				m_Mesh.setScale(m_Properties.Scale);
-				m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
+				//m_Mesh.setScale(m_Properties.Scale);
+				//m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
+				m_AnimatedSprite.SetScale(m_Properties.Scale);
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 			}
 
 			// Checking collisions with players
