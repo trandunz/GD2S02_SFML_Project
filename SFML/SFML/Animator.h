@@ -61,13 +61,40 @@ public:
 	/// </summary>
 	void Update();
 
-	sf::Vector2f GetPosition() const { return m_Mesh.getPosition(); }
-
 	/// <summary>
 	/// Returns the current frame being displayed
 	/// </summary>
 	/// <returns></returns>
 	sf::Sprite& GetSprite() { return m_Mesh; };
+
+	/*=========================================
+	Functions to using sf::Sprite functions
+	=========================================*/
+	
+	/// <summary>
+	/// Passes arguments to sf::sprite GetLocalBounds function
+	/// </summary>
+	inline sf::FloatRect GetLocalBounds() { m_Mesh.getLocalBounds(); };
+	inline sf::FloatRect GetGlobalBounds() { m_Mesh.getGlobalBounds(); };
+
+
+	void SetScale(const sf::Vector2f& _factors);
+	void SetScale(float factorX, float _factorY);
+
+	void SetPosition(const sf::Vector2f& _position);
+	void SetPosition(float _ositionX, float _positionY);
+
+	void MoveSprite( const sf::Vector2f& _offset);
+	void MoveSprite( float _offsetX, float _offsetY);
+
+
+	/// <summary>
+	/// Get the current position of the sprite
+	/// </summary>
+	/// <returns></returns>
+	sf::Vector2f GetPosition() const { return m_Mesh.getPosition(); }
+
+
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 

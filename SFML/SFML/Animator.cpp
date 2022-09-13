@@ -136,6 +136,36 @@ void Animator::Update()
 	}
 }
 
+void Animator::SetScale(const sf::Vector2f& _factors)
+{
+	m_Mesh.setScale(_factors);
+}
+
+void Animator::SetScale(float _factorX, float _factorY)
+{
+	m_Mesh.setScale(_factorX, _factorY);
+}
+
+void Animator::SetPosition(const sf::Vector2f& _position)
+{
+	m_Mesh.setPosition(_position);
+}
+
+void Animator::SetPosition(float _positionX, float _positionY)
+{
+	m_Mesh.setPosition(_positionX, _positionY);
+}
+
+void Animator::MoveSprite(const sf::Vector2f& _offset)
+{
+	m_Mesh.move(_offset);
+}
+
+void Animator::MoveSprite(float _offsetX, float _offsetY)
+{
+	m_Mesh.move(_offsetX, _offsetY);
+}
+
 void Animator::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_Mesh);
