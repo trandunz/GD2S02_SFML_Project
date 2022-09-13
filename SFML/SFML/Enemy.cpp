@@ -1,14 +1,16 @@
+// Includes
 #include "Enemy.h"
+#include "Math.h"
 #include "ObjectManager.h"
 #include "Obstacle.h"
-#include "PlayerManager.h"
 #include "Player.h"
-#include "Math.h"
+#include "PlayerManager.h"
 #include "TextureLoader.h"
 #include "VFX.h"
 
 Enemy::Enemy(EnemyProperties _properties)
 {
+	// Set animation for enemy from sprite sheet
 	AnimStateProperties animProperties;
 	animProperties.StateTexture = _properties.Texture;
 	animProperties.NumberOfFrames = 4;
@@ -19,10 +21,8 @@ Enemy::Enemy(EnemyProperties _properties)
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.GetSprite().setPosition(_properties.StartPos);
 	m_AnimatedSprite.StartState("Moving");
-	//m_Mesh.setTexture(*_properties.Texture, true);
-	//SetOriginCenter(m_Mesh);
-	//SetPosition(_properties.StartPos);
-	//m_Mesh.setScale(_properties.Scale);
+	
+	// Set enemy properties
 	m_Properties = _properties;
 	SetHPMax();
 	m_v2fSpriteJumpScale = _properties.Scale * 1.2f;
@@ -34,7 +34,9 @@ Enemy::Enemy(EnemyProperties _properties)
 
 Enemy::~Enemy()
 {
+	// Play explosion VFX animation
 	SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("explosion.png") };
+	explosionProperties.Scale = { 2.0f, 2.0f };
 	explosionProperties.StartPos = m_AnimatedSprite.GetPosition();
 	explosionProperties.NumberOfFrames = 9;
 	explosionProperties.AnimFrameInterval = 0.5f / 9;
@@ -44,8 +46,8 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {
-	Movement();
-	m_AnimatedSprite.Update();
+	Movement(); // Update enemy movement
+	m_AnimatedSprite.Update(); // Update animated sprite
 }
 
 sf::Vector2f Enemy::GetPosition() const
@@ -65,8 +67,9 @@ sf::Sprite Enemy::GetSprite() const
 
 void Enemy::TakeDamage(unsigned _amount)
 {
-	m_iCurrentHealth -= _amount;
+	m_iCurrentHealth -= _amount; // Lower current health by provided parameter
 
+	// Destroy enemy if health is <= 0
 	if (m_iCurrentHealth <= 0)
 	{
 		m_bDestroy = true;
@@ -75,6 +78,7 @@ void Enemy::TakeDamage(unsigned _amount)
 
 void Enemy::Heal(unsigned _amount)
 {
+	// Increase enemy health by amount provided by parameter
 	for (short i = _amount; m_iCurrentHealth < m_Properties.iMaxHealth; i--)
 	{
 		m_iCurrentHealth++;
@@ -88,11 +92,10 @@ int Enemy::GetCurrentHealth() const
 
 void Enemy::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
-	//_target.draw(m_Mesh);
-	_target.draw(m_AnimatedSprite);
+	_target.draw(m_AnimatedSprite); // Draw sprite
 
 	// Draw box collider if debug mode turned on
-	m_BoxCollider->DrawDebug(_target);
+	m_BoxCollider->DrawDebug(_target); 
 }
 
 void Enemy::SetHPMax()
@@ -106,7 +109,9 @@ void Enemy::Movement()
 
 	switch (m_Properties.EnemyType)
 	{
-		case ENEMYTYPE::KAMIKAZE:
+		// Movement of Kamikaze enemy
+		// Runs straight down, and jumps over obstacles 
+		case ENEMYTYPE::KAMIKAZE: 
 		{
 			// Checking collisions with obstacles
 			m_BoxCollider->bColliding = false;
@@ -118,16 +123,12 @@ void Enemy::Movement()
 
 			if (m_BoxCollider->bColliding)
 			{
-				//m_Mesh.setScale(m_v2fSpriteJumpScale);
-				//m_Mesh.move(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
 				m_AnimatedSprite.SetScale(m_v2fSpriteJumpScale);
 				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
 
 			}
 			else
 			{
-				//m_Mesh.setScale(m_Properties.Scale);
-				//m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 				m_AnimatedSprite.SetScale(m_Properties.Scale);
 				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 			}
