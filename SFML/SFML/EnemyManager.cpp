@@ -53,7 +53,6 @@ void EnemyManager::Update()
 		}
 		else
 		{
-			
 			for (auto& player : PlayerManager::GetInstance().GetPlayers())
 			{
 				if (player != nullptr)

@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Math.h"
 #include "TextureLoader.h"
+#include "VFX.h"
 
 Enemy::Enemy(EnemyProperties _properties)
 {
@@ -28,11 +29,15 @@ Enemy::Enemy(EnemyProperties _properties)
 	m_fJumpSpeed = _properties.fMoveSpeed * 1.4f;
 
 	// Set box collider
-	m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f));
+	m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), sf::Vector2f(m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f));
 }
 
 Enemy::~Enemy()
 {
+	VFX::GetInstance().CreateAndPlayEffect("Explosion",
+		{ &TextureLoader::LoadTexture("explosion.png"),
+		m_AnimatedSprite.GetPosition() }, 0.5f);
+
 }
 
 void Enemy::Update()
@@ -136,7 +141,7 @@ void Enemy::Movement()
 			}
 
 			// Update collider position
-			m_BoxCollider->UpdatePosition({ m_Mesh.getPosition().x, m_Mesh.getPosition().y + 8.0f });
+			m_BoxCollider->UpdatePosition({ m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 		}
 	}
 }

@@ -54,9 +54,9 @@ void PollEvents()
 			{
 				Statics::bDebugMode = !Statics::bDebugMode;
 				if (Statics::bDebugMode)
-					printf("Debug mode turned on");
+					printf("Debug mode turned on \n");
 				else
-					printf("Debug mode turned off");
+					printf("Debug mode turned off \n");
 			}
 		}
 		if (Statics::EventHandle.type == sf::Event::Closed)
