@@ -54,6 +54,10 @@ public:
 	/// <returns></returns>
 	bool StartState(std::string _stateName);
 
+	void PauseAnim() { m_bPause = true; };
+
+	void ResumeAnim() { m_bPause = false; };
+
 	/// <summary>
 	/// Checks the time elapsed for the current frame.
 	/// If past the frame interval, starts the default
@@ -115,5 +119,6 @@ private:
 	float m_fAnimationProgress{};
 	int m_iMaxLeftFramePos{};
 	bool m_bError{ false };
+	bool m_bPause{ false };
 };
 
