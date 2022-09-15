@@ -109,6 +109,8 @@ void Enemy::Update()
 			// Reset movement and jump speed
 			m_fMoveSpeed = m_Properties.fMoveSpeed;
 			m_fJumpSpeed = m_Properties.fJumpSpeed;
+			// Resume animations
+			m_AnimatedSprite.ResumeAnim();
 		}
 	}
 
@@ -194,6 +196,9 @@ void Enemy::FreezeEnemy(float _seconds)
 	// Change sprite color
 	m_AnimatedSprite.SetSpriteColor(m_FrozenSpriteColor);
 
+	// Pause animations
+	m_AnimatedSprite.PauseAnim();
+
 	m_bSpriteColorChanged = true;
 	m_bFrozen = true;
 	m_fFreezeTime = _seconds;
@@ -202,10 +207,8 @@ void Enemy::FreezeEnemy(float _seconds)
 void Enemy::SlowEnemy(float _seconds, float _slowMovementPercentage)
 {
 	// Slow enemy movement by percentage
-	std::cout << m_fMoveSpeed << std::endl;
 	m_fMoveSpeed = m_fMoveSpeed * _slowMovementPercentage;
 	m_fJumpSpeed = m_fJumpSpeed * _slowMovementPercentage;
-	std::cout << m_fMoveSpeed << std::endl;
 
 	m_fSpriteChangeColorSpeed = 0.5f;
 	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
@@ -267,6 +270,7 @@ void Enemy::Movement()
 			{
 				if (m_BoxCollider->CheckCollision(PlayerManager::GetInstance().GetPlayers()[i]->GetCollisionBox()))
 				{
+					// --Testing--
 					//PlayerManager::GetInstance().GetPlayers()[i]->TakeDamage(100);
 					//DamageEnemyOverTime(1, 3.0f);
 					//FreezeEnemy(3.0f);
