@@ -66,7 +66,7 @@ void GameScene::Update()
 	GUI::GetInstance().Update();
 	VFX::GetInstance().Update();
 
-	ScrollBackground(160.0f);
+	ScrollBackground();
 	//GUI::GetInstance().SetText("Score", "Score: " + FloatToString(m_fDistanceTravelled, 0)); // Changing to on killing enemy
 	GUI::GetInstance().SetText("Score", "Score: " + FloatToString(Statics::fGameScore, 0));
 
@@ -101,12 +101,12 @@ void GameScene::CreateScrollingBackground()
 	m_Backgrounds[1].setPosition(400, 9600);
 }
 
-void GameScene::ScrollBackground(float _speed)
+void GameScene::ScrollBackground()
 {
-	m_fDistanceTravelled += _speed * Statics::fDeltaTime;
+	m_fDistanceTravelled += Statics::fBackgroundScrollSpeed * Statics::fDeltaTime;
 	for (auto& background : m_Backgrounds)
 	{
-		background.move({ 0,_speed * Statics::fDeltaTime });
+		background.move({ 0,Statics::fBackgroundScrollSpeed * Statics::fDeltaTime });
 		if (background.getPosition().y - Statics::RenderWindow.getView().getCenter().y
 			>= background.getGlobalBounds().height)
 		{

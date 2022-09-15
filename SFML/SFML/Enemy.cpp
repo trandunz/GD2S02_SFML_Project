@@ -1,3 +1,13 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Enemy.cpp 
+// Description : Enemy class
+// Author : Inman, Will; Frear, Stace
+// Mail : 
+
 // Includes
 #include "Enemy.h"
 #include "Math.h"
@@ -16,7 +26,7 @@ Enemy::Enemy(EnemyProperties _properties)
 	animProperties.NumberOfFrames = 4;
 	animProperties.FrameInterval = 0.1f;
 	animProperties.Loops = true;
-	animProperties.Scale = _properties.Scale;
+	animProperties.Scale = _properties.v2fMoveScale;
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.GetSprite().setPosition(_properties.StartPos);
@@ -25,11 +35,13 @@ Enemy::Enemy(EnemyProperties _properties)
 	// Set enemy properties
 	m_Properties = _properties;
 	SetHPMax();
-	m_v2fSpriteJumpScale = _properties.Scale * 1.2f;
-	m_fJumpSpeed = _properties.fMoveSpeed * 1.4f;
-
+	m_fMoveSpeed = _properties.fMoveSpeed;
+	m_fJumpSpeed = _properties.fJumpSpeed;
+	
+	//m_v2fSpriteJumpScale = _properties.v2fJumpScale;
+	
 	// Set box collider
-	m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), sf::Vector2f(m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f));
+	m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 }
 
 Enemy::~Enemy()
@@ -48,6 +60,84 @@ void Enemy::Update()
 {
 	Movement(); // Update enemy movement
 	m_AnimatedSprite.Update(); // Update animated sprite
+
+	if (m_bDamaged)
+	{
+		// Change sprite color
+		m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
+		if (m_fSpriteChangeColorCounter <= 0)
+		{
+			m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+			m_bSpriteColorChanged = !m_bSpriteColorChanged;
+		}
+
+		if (m_bSpriteColorChanged)
+			m_AnimatedSprite.SetSpriteColor(m_DamagedSpriteColor);
+		else
+			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255));
+
+		m_fOneSecond -= 1 * Statics::fDeltaTime; // Count down
+
+		if (m_fOneSecond <= 0) // Do below every second
+		{
+			// Destroy enemy if health is <= 0
+			if (m_iCurrentHealth <= 0)
+			{
+				m_bDestroy = true;
+			}
+
+			m_fOneSecond = 1.0f; // Reset OneSecond variable for counting
+			m_fDamageTime -= 1; // Countdown the damage time variable by one second
+
+			// Stop damage over time
+			if (m_fDamageTime <= 0)
+			{
+				m_bDamaged = false;
+				m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Reset sprite color
+			}
+		}
+	}
+	
+	if (m_bFrozen)
+	{
+		m_fFreezeTime -= 1 * Statics::fDeltaTime; // Count down
+
+		if (m_fFreezeTime <= 0)
+		{
+			m_bFrozen = false;
+			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+			// Reset movement and jump speed
+			m_fMoveSpeed = m_Properties.fMoveSpeed;
+			m_fJumpSpeed = m_Properties.fJumpSpeed;
+		}
+	}
+
+	if (m_bSlowed)
+	{
+		// Change sprite color
+		m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
+		if (m_fSpriteChangeColorCounter <= 0)
+		{
+			m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+			m_bSpriteColorChanged = !m_bSpriteColorChanged;
+		}
+
+		if (m_bSpriteColorChanged)
+			m_AnimatedSprite.SetSpriteColor(m_SlowedSpriteColor);
+		else
+			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255));
+
+		m_fSlowTime -= 1 * Statics::fDeltaTime; // Count down
+
+		if (m_fSlowTime <= 0)
+		{
+			m_bSlowed = false;
+			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+			// Reset movement and jump speed
+			m_fJumpSpeed = m_Properties.fJumpSpeed;
+			m_fMoveSpeed = m_Properties.fMoveSpeed;
+		}
+	}
 }
 
 sf::Vector2f Enemy::GetPosition() const
@@ -83,6 +173,45 @@ void Enemy::Heal(unsigned _amount)
 	{
 		m_iCurrentHealth++;
 	}
+}
+
+void Enemy::DamageEnemyOverTime(unsigned _damagePerSecond, float _seconds)
+{
+	m_fSpriteChangeColorSpeed = 0.2f;
+	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+	m_bSpriteColorChanged = true;
+	m_bDamaged = true;
+	m_uDamageOverTime = _damagePerSecond;
+	m_fDamageTime = _seconds;
+}
+
+void Enemy::FreezeEnemy(float _seconds)
+{
+	// Stop enemy movement
+	m_fMoveSpeed = Statics::fBackgroundScrollSpeed;
+	m_fJumpSpeed = Statics::fBackgroundScrollSpeed;
+
+	// Change sprite color
+	m_AnimatedSprite.SetSpriteColor(m_FrozenSpriteColor);
+
+	m_bSpriteColorChanged = true;
+	m_bFrozen = true;
+	m_fFreezeTime = _seconds;
+}
+
+void Enemy::SlowEnemy(float _seconds, float _slowMovementPercentage)
+{
+	// Slow enemy movement by percentage
+	std::cout << m_fMoveSpeed << std::endl;
+	m_fMoveSpeed = m_fMoveSpeed * _slowMovementPercentage;
+	m_fJumpSpeed = m_fJumpSpeed * _slowMovementPercentage;
+	std::cout << m_fMoveSpeed << std::endl;
+
+	m_fSpriteChangeColorSpeed = 0.5f;
+	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+	m_bSpriteColorChanged = true;
+	m_bSlowed = true;
+	m_fSlowTime = _seconds;
 }
 
 int Enemy::GetCurrentHealth() const
@@ -123,14 +252,14 @@ void Enemy::Movement()
 
 			if (m_BoxCollider->bColliding)
 			{
-				m_AnimatedSprite.SetScale(m_v2fSpriteJumpScale);
+				m_AnimatedSprite.SetScale(m_Properties.v2fJumpScale);
 				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
 
 			}
 			else
 			{
-				m_AnimatedSprite.SetScale(m_Properties.Scale);
-				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
+				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale);
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
 			}
 
 			// Checking collisions with players
@@ -138,8 +267,13 @@ void Enemy::Movement()
 			{
 				if (m_BoxCollider->CheckCollision(PlayerManager::GetInstance().GetPlayers()[i]->GetCollisionBox()))
 				{
-					m_iCurrentHealth = 0;
-					//PlayerManager::GetInstance().GetPlayers()[i]->TakeDamage(1);
+					//PlayerManager::GetInstance().GetPlayers()[i]->TakeDamage(100);
+					//DamageEnemyOverTime(1, 3.0f);
+					//FreezeEnemy(3.0f);
+					//SlowEnemy(3.0f, 0.75f);
+					
+					m_iCurrentHealth = 0; // Instantly kill enemy
+					PlayerManager::GetInstance().GetPlayers()[i]->TakeDamage(1);
 				}
 			}
 
@@ -165,3 +299,5 @@ void Enemy::Attack()
 		);
 	}
 }
+
+

@@ -173,6 +173,11 @@ void Animator::MoveSprite(float _offsetX, float _offsetY)
 	m_Mesh.move(_offsetX, _offsetY);
 }
 
+void Animator::SetSpriteColor(sf::Color _color)
+{
+	m_Mesh.setColor(_color);
+}
+
 void Animator::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_Mesh);

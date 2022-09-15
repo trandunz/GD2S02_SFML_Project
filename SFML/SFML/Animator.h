@@ -82,11 +82,12 @@ public:
 	void SetScale(float factorX, float _factorY);
 
 	void SetPosition(const sf::Vector2f& _position);
-	void SetPosition(float _ositionX, float _positionY);
+	void SetPosition(float _positionX, float _positionY);
 
 	void MoveSprite( const sf::Vector2f& _offset);
 	void MoveSprite( float _offsetX, float _offsetY);
 
+	void SetSpriteColor(sf::Color _color);
 
 	/// <summary>
 	/// Get the current position of the sprite

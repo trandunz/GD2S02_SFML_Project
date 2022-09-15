@@ -41,7 +41,7 @@ void Obstacle::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 void Obstacle::Movement()
 {
 	m_v2fVelocity = { 0,1 };
-	m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
+	m_Mesh.move(m_v2fVelocity * Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
 }
 
 sf::RectangleShape* Obstacle::GetCollisionBox()

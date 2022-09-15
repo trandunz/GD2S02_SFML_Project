@@ -55,8 +55,10 @@ struct EnemyProperties
 	sf::Texture* Texture{ nullptr };
 	sf::Vector2f StartPos{};
 	ENEMYTYPE EnemyType{ ENEMYTYPE::KAMIKAZE };
-	sf::Vector2f Scale{ 1,1 };
+	sf::Vector2f v2fMoveScale{ 1.0f,1.0f };
+	sf::Vector2f v2fJumpScale{ 1.2f,1.2f };
 	float fMoveSpeed{ 200.0f };
+	float fJumpSpeed{ 300.0f };
 	int iMaxHealth{ 3 };
 };
 
@@ -123,6 +125,8 @@ public:
 	static void CalculateDeltaTime();
 
 	static float fGameScore;
+
+	static float fBackgroundScrollSpeed;
 
 	static bool bDebugMode;
 private:

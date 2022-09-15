@@ -10,6 +10,7 @@ float Statics::fUnscaledDeltaTime{};
 float Statics::m_fLastTime{};
 float Statics::fGameScore{};
 bool Statics::bDebugMode{ false };
+float Statics::fBackgroundScrollSpeed{ 100 };
 
 void Statics::CalculateDeltaTime()
 {

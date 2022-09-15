@@ -105,7 +105,8 @@ void EnemyManager::SpawnEnemies(float _rate)
 				&TextureLoader::LoadTexture("Goblin_Kamakazi_Running.png"),
 				{100.0f + (rand() % 600), 0},
 				{ENEMYTYPE::KAMIKAZE},
-				{2,2}
+				{2.0f,2.0f},
+				{2.4f,2.4f}
 			});
 	}
 }
