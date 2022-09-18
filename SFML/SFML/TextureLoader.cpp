@@ -17,7 +17,7 @@ sf::Texture& TextureLoader::LoadTexture(std::string _fileName)
     }
 
     sf::Texture* texture = new sf::Texture();
-    texture->loadFromFile("Resources/Sprites/" + _fileName);
+    texture->loadFromFile("Resources/Textures/" + _fileName);
     m_LoadedTextures[_fileName] = texture;
     texture = nullptr;
 

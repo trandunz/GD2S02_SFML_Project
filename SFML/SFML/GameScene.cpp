@@ -12,7 +12,7 @@ GameScene::GameScene()
 {
 	PlayerManager::GetInstance().CreatePlayer(
 		{ 
-			&TextureLoader::LoadTexture("Earth_Mage.png"),
+			&TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png"),
 			{200, 600},
 			{32,32},
 			{16},
@@ -22,7 +22,7 @@ GameScene::GameScene()
 
 	PlayerManager::GetInstance().CreatePlayer(
 		{
-			&TextureLoader::LoadTexture("Fire_Mage.png"),
+			&TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png"),
 			{600, 600},
 			{32,32},
 			{16},
@@ -90,8 +90,8 @@ void GameScene::Draw()
 
 void GameScene::CreateScrollingBackground()
 {
-	m_Backgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("map.png")));
-	m_Backgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("map.png")));
+	m_Backgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
+	m_Backgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
 	for (auto& background : m_Backgrounds)
 	{
 		SetOriginCenter(background);

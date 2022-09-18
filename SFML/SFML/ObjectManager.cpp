@@ -15,7 +15,7 @@ void ObjectManager::CreateObstacle(ObstacleProperties _properties)
 
 void ObjectManager::Update()
 {
-	SpawnObstacles(0.8f);
+	SpawnObstacles(1.5f);
 	auto it = Obstacles.begin();
 	while (it != Obstacles.end())
 	{
@@ -59,7 +59,7 @@ void ObjectManager::SpawnObstacles(float _rate)
 		{
 			CreateObstacle(
 				{
-					&TextureLoader::LoadTexture("rock_obstacle.png"),
+					&TextureLoader::LoadTexture("Obstacles/rock_obstacle.png"),
 					{100.0f + (rand() % 600), -32.0f},
 					{2,2},
 					{40,40},
@@ -70,7 +70,7 @@ void ObjectManager::SpawnObstacles(float _rate)
 		{
 			CreateObstacle(
 				{
-					&TextureLoader::LoadTexture("hedge_obstacle.png"),
+					&TextureLoader::LoadTexture("Obstacles/hedge_obstacle.png"),
 					{100.0f + (rand() % 600), -32.0f},
 					{2,2},
 					{40,40},
@@ -81,7 +81,7 @@ void ObjectManager::SpawnObstacles(float _rate)
 		{
 			CreateObstacle(
 				{
-					&TextureLoader::LoadTexture("log_obstacle.png"),
+					&TextureLoader::LoadTexture("Obstacles/log_obstacle.png"),
 					{100.0f + (rand() % 600), -32.0f},
 					{2,2},
 					{54,20},

@@ -33,10 +33,10 @@ Player::Player(PlayerProperties _properties)
 		CreateHeartsUI("P2", { 704, 40 }, { 736,40 }, { 768,40 });
 		CreateManaUI("P2", { 704, 80 }, { 736, 80 }, { 768, 80 });
 
-		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Fire_Spell_Animated.png");// ("Fire_Spell.png");
+		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 		m_BasicAttackProperties.Scale = { 2.00f,2.00f };
 
-		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Fire_Spell_Animated.png");// ("Fire_Spell.png");
+		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 		m_SecondaryAttackProperties.Scale = { 2.00f,2.00f };
 	}
 	else
@@ -44,10 +44,10 @@ Player::Player(PlayerProperties _properties)
 		CreateHeartsUI("P1", { 16, 40 }, { 48,40 }, { 80,40 });
 		CreateManaUI("P1", { 16, 80 }, { 48, 80 }, { 80, 80 });
 
-		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Earth_Spell_Animated.png");//("Earth_Spell.png");
+		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
 		m_BasicAttackProperties.Scale = { 2.00f,2.00f };
 
-		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Earth_Spell_Animated.png");//("Earth_Spell.png");
+		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
 		m_SecondaryAttackProperties.Scale = { 2.00f,2.00f };
 	}
 

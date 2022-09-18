@@ -47,7 +47,7 @@ Enemy::Enemy(EnemyProperties _properties)
 Enemy::~Enemy()
 {
 	// Play explosion VFX animation
-	SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("explosion.png") };
+	SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/explosion.png") };
 	explosionProperties.Scale = { 2.0f, 2.0f };
 	explosionProperties.StartPos = m_AnimatedSprite.GetPosition();
 	explosionProperties.NumberOfFrames = 9;

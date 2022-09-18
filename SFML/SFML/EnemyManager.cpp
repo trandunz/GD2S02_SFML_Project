@@ -100,9 +100,33 @@ void EnemyManager::SpawnEnemies(float _rate)
 	if (m_fSpawnTimer <= 0)
 	{
 		m_fSpawnTimer = _rate;
+		
+		int iRandomNum = rand() % 5;
+		std::string sEnemyTextureLocation;
+		if (iRandomNum == 0)
+		{
+			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running1.png";
+		}
+		else if (iRandomNum == 1)
+		{
+			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running2.png";
+		}
+		else if (iRandomNum == 2)
+		{
+			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running3.png";
+		}
+		else if (iRandomNum == 3)
+		{
+			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running4.png";
+		}
+		else
+		{
+			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running5.png";
+		}
+
 		CreateEnemy(
 			{
-				&TextureLoader::LoadTexture("Goblin_Kamakazi_Running.png"),
+				&TextureLoader::LoadTexture(sEnemyTextureLocation),
 				{100.0f + (rand() % 600), 0},
 				{ENEMYTYPE::KAMIKAZE},
 				{2.0f,2.0f},
