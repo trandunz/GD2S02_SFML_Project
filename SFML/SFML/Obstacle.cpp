@@ -1,5 +1,6 @@
 #include "Obstacle.h"
 #include "Math.h"
+#include "BoxCollider.h"
 
 Obstacle::Obstacle(ObstacleProperties _properties)
 {
@@ -44,7 +45,7 @@ void Obstacle::Movement()
 	m_Mesh.move(m_v2fVelocity * Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
 }
 
-sf::RectangleShape* Obstacle::GetCollisionBox()
+BoxCollider* Obstacle::GetCollisionBox()
 {
-	return m_BoxCollider->GetCollider();
+	return m_BoxCollider;
 }

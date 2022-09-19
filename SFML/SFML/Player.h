@@ -1,7 +1,7 @@
 #pragma once
 #include "Statics.h"
-#include "BoxCollider.h"
 
+class BoxCollider;
 class Player : public sf::Drawable
 {
 public:
@@ -19,10 +19,9 @@ public:
 	void TakeDamage(unsigned _amount);
 	void Heal(unsigned _amount);
 
-	//bool CheckCollision(sf::Sprite _otherSprite);
-	int GetCurrentHealth() const;
+	bool CheckCollision(BoxCollider& _otherCollider);
 
-	bool Destroy = false;
+	bool Destroy{ false };
 	
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
@@ -52,6 +51,7 @@ private:
 	PlayerProperties m_Properties{};
 	float m_AttackSpeed{ 0.2f };
 	float m_SpecialDuration{ 10.0f };
+	float m_CombineSpecialDelay{ 0.5f };
 	float m_SpecialTimer{ };
 	float m_AttackTimer{ };
 	bool m_bCollided{ false };
@@ -61,8 +61,8 @@ private:
 	int m_iCurrentHealth{};
 	int m_iCurrentMana{};
 
-	BoxCollider* m_BoxCollider;
-	float fColliderOffset;
+	BoxCollider* m_BoxCollider{nullptr};
+	float fColliderOffset{};
 
 	sf::Keyboard::Key m_MoveUpKey {sf::Keyboard::W };
 	sf::Keyboard::Key m_MoveDownKey { sf::Keyboard::S};
@@ -73,6 +73,8 @@ private:
 	sf::Keyboard::Key m_SpecialAttackKey {sf::Keyboard::N };
 
 public:
-	sf::RectangleShape* GetCollisionBox();
+	BoxCollider* GetCollisionBox();
+
+	int GetCurrentHealth() const;
 };
 

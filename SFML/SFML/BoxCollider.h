@@ -9,7 +9,6 @@
 // Mail : 
 
 #pragma once
-
 #include "Statics.h"
 
 class BoxCollider
@@ -23,12 +22,13 @@ public:
 	void DrawDebug(sf::RenderTarget& _target);
 
 	bool CheckCollision(sf::RectangleShape* _otherCollider);
+	bool CheckCollision(sf::FloatRect _otherCollider);
+	bool CheckCollision(BoxCollider& _otherCollider);
 
-	bool bColliding = false;
+	bool bColliding{ false };
 
 private:
 	sf::RectangleShape* m_Collider{};
-	
 
 public:
 	// Getters

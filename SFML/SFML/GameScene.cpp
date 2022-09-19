@@ -23,7 +23,7 @@ GameScene::GameScene()
 	PlayerManager::GetInstance().CreatePlayer(
 		{
 			&TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png"),
-			{600, 600},
+			{Statics::RenderWindow.getSize().x - 200.0f, 600},
 			{32,32},
 			{16},
 			{300},
@@ -34,7 +34,7 @@ GameScene::GameScene()
 
 	GUI::GetInstance().CreateText("Score",
 		{
-			{400,20}
+			{Statics::RenderWindow.getView().getCenter().x,20}
 		}
 		);
 

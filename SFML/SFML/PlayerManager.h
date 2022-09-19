@@ -21,6 +21,8 @@ public:
 	std::vector<Player*>& GetPlayers();
 	Player* GetPlayerFromIndex(unsigned _index);
 
+	void WhipeScreenFromSpecial();
+
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 
@@ -29,5 +31,9 @@ private:
 	inline ~PlayerManager() {}
 
 	std::vector<Player*> m_Players{};
+
+	bool m_bIsWhipingScreen{ false };
+	float m_fScreenWhipeDuration{ 3.0f };
+	std::string m_sScreenWhipeVFXKey{};
 };
 

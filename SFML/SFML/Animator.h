@@ -19,7 +19,6 @@
 class Animator : public sf::Drawable
 {
 public:
-
 	Animator();
 	~Animator();
 
@@ -65,40 +64,14 @@ public:
 	/// </summary>
 	void Update();
 
-	/// <summary>
-	/// Returns the current frame being displayed
-	/// </summary>
-	/// <returns></returns>
-	sf::Sprite& GetSprite() { return m_Mesh; };
-
 	/*=========================================
 	Functions to using sf::Sprite functions
 	=========================================*/
-	
-	/// <summary>
-	/// Passes arguments to sf::sprite GetLocalBounds function
-	/// </summary>
-	inline sf::FloatRect GetLocalBounds() { m_Mesh.getLocalBounds(); };
-	inline sf::FloatRect GetGlobalBounds() { m_Mesh.getGlobalBounds(); };
-
-
-	void SetScale(const sf::Vector2f& _factors);
-	void SetScale(float factorX, float _factorY);
-
-	void SetPosition(const sf::Vector2f& _position);
-	void SetPosition(float _positionX, float _positionY);
 
 	void MoveSprite( const sf::Vector2f& _offset);
 	void MoveSprite( float _offsetX, float _offsetY);
 
 	void SetSpriteColor(sf::Color _color);
-
-	/// <summary>
-	/// Get the current position of the sprite
-	/// </summary>
-	/// <returns></returns>
-	sf::Vector2f GetPosition() const { return m_Mesh.getPosition(); }
-
 
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
@@ -120,5 +93,31 @@ private:
 	int m_iMaxLeftFramePos{};
 	bool m_bError{ false };
 	bool m_bPause{ false };
+
+public:
+
+	/// <summary>
+	/// Returns the current frame being displayed
+	/// </summary>
+	/// <returns></returns>
+	sf::Sprite& GetSprite() { return m_Mesh; };
+
+	/// <summary>
+	/// Passes arguments to sf::sprite GetLocalBounds function
+	/// </summary>
+	inline sf::FloatRect GetLocalBounds() { return m_Mesh.getLocalBounds(); };
+	inline sf::FloatRect GetGlobalBounds() { return m_Mesh.getGlobalBounds(); };
+
+	void SetScale(const sf::Vector2f& _factors);
+	void SetScale(float factorX, float _factorY);
+
+	void SetPosition(const sf::Vector2f& _position);
+	void SetPosition(float _positionX, float _positionY);
+
+	/// <summary>
+	/// Get the current position of the sprite
+	/// </summary>
+	/// <returns></returns>
+	sf::Vector2f GetPosition() const { return m_Mesh.getPosition(); }
 };
 

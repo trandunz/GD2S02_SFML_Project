@@ -23,6 +23,8 @@ public:
 	void PlayEffect(std::string _key, float _lifeTime);
 	void StopEffect(std::string _key);
 
+	float GetEffectLifetime(std::string _key);
+
 private:
 	struct SpecialEffect
 	{
@@ -38,5 +40,6 @@ private:
 	inline ~VFX() {}
 
 	std::map<std::string, SpecialEffect> m_Effects{};
+
 };
 

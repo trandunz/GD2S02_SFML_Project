@@ -55,15 +55,25 @@ void EnemyManager::Update()
 		{
 			for (auto& player : PlayerManager::GetInstance().GetPlayers())
 			{
-				if (player != nullptr)
+				if (player)
 				{
-					//if (enemy->CheckCollision(player->GetSprite()))
-					//{
-					//	player->TakeDamage(1);
-					//
-					//	enemy->m_bDestroy = true;
-					//	break;
-					//}
+					if (enemy->CheckCollision(*player->GetCollisionBox()))
+					{
+						switch (enemy->GetType())
+						{
+						case ENEMYTYPE::KAMIKAZE:
+						{
+							player->TakeDamage(1);
+							enemy->m_bDestroy = true;
+
+							break;
+						}
+						default:
+							break;
+						}
+
+						break;
+					}
 				}
 			}
 		}

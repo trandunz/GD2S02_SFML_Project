@@ -5,6 +5,7 @@
 #include "ProjectileManager.h"
 #include "Math.h"
 #include "TextureLoader.h"
+#include "BoxCollider.h"
 
 Player::Player(PlayerProperties _properties)
 {
@@ -30,8 +31,9 @@ Player::Player(PlayerProperties _properties)
 		m_SecondaryAttackKey = sf::Keyboard::Numpad2;
 		m_SpecialAttackKey = sf::Keyboard::Numpad3;
 
-		CreateHeartsUI("P2", { 704, 40 }, { 736,40 }, { 768,40 });
-		CreateManaUI("P2", { 704, 80 }, { 736, 80 }, { 768, 80 });
+		sf::Vector2u windowSize = Statics::RenderWindow.getSize();
+		CreateHeartsUI("P2", { windowSize.x - 80.0f, 40 }, { windowSize.x - 48.0f ,40 }, { windowSize.x - 16.0f,40 });
+		CreateManaUI("P2", { windowSize.x - 80.0f, 80 }, { windowSize.x - 48.0f, 80 }, { windowSize.x - 16.0f, 80 });
 
 		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 		m_BasicAttackProperties.Scale = { 2.00f,2.00f };
@@ -60,11 +62,11 @@ Player::~Player()
 	{
 
 		VFX::GetInstance().StopEffect("P1_P1Special");
-		VFX::GetInstance().StopEffect("P1_P2Special");
+		VFX::GetInstance().StopEffect("P2_P1Special");
 	}
 	else
 	{
-		VFX::GetInstance().StopEffect("P2_P1Special");
+		VFX::GetInstance().StopEffect("P1_P2Special");
 		VFX::GetInstance().StopEffect("P2_P2Special");
 	}
 }
@@ -121,7 +123,8 @@ void Player::Update()
 	UpdateGUI();
 
 	// Update position of collider
-	m_BoxCollider->UpdatePosition(sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset));
+	if (m_BoxCollider)
+		m_BoxCollider->UpdatePosition({ m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset });
 }
 	
 
@@ -130,7 +133,8 @@ void Player::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 	_target.draw(m_Mesh);
 
 	// Draw box collider if debug mode turned on
-	m_BoxCollider->DrawDebug(_target);
+	if (m_BoxCollider)
+		m_BoxCollider->DrawDebug(_target);
 }
 
 sf::Vector2f Player::GetMoveInput()
@@ -336,14 +340,22 @@ void Player::Special()
 		// Spawn Special Effect
 		if (m_Properties.bPlayerOne)
 		{
-			
 			VFX::GetInstance().PlayEffect("P1_P1Special", m_SpecialDuration);
 			VFX::GetInstance().PlayEffect("P1_P2Special", m_SpecialDuration);
+			if (VFX::GetInstance().GetEffectLifetime("P2_P1Special") >= m_SpecialDuration - m_CombineSpecialDelay)
+			{
+				PlayerManager::GetInstance().WhipeScreenFromSpecial();
+			}
 		}
 		else
 		{
 			VFX::GetInstance().PlayEffect("P2_P1Special", m_SpecialDuration);
 			VFX::GetInstance().PlayEffect("P2_P2Special", m_SpecialDuration);
+
+			if (VFX::GetInstance().GetEffectLifetime("P1_P1Special") >= m_SpecialDuration - m_CombineSpecialDelay)
+			{
+				PlayerManager::GetInstance().WhipeScreenFromSpecial();
+			}
 		}
 	}
 }
@@ -401,6 +413,18 @@ void Player::Heal(unsigned _amount)
 //	return false;
 //}
 
+bool Player::CheckCollision(BoxCollider& _otherCollider)
+{
+	if (m_BoxCollider)
+	{
+		return m_BoxCollider->CheckCollision(_otherCollider);
+	}
+	else
+	{
+		return false;
+	}
+}
+
 int Player::GetCurrentHealth() const
 {
 	return m_iCurrentHealth;
@@ -431,9 +455,9 @@ void Player::RestrictToScreen()
 	}
 }
 
-sf::RectangleShape* Player::GetCollisionBox()
+BoxCollider* Player::GetCollisionBox()
 {
-	return m_BoxCollider->GetCollider();
+	return m_BoxCollider;
 }
 
 

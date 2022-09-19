@@ -35,6 +35,30 @@ bool BoxCollider::CheckCollision(sf::RectangleShape* _otherCollider)
 	return m_Collider->getGlobalBounds().intersects(_otherCollider->getGlobalBounds());
 }
 
+bool BoxCollider::CheckCollision(sf::FloatRect _otherCollider)
+{
+	if (m_Collider)
+	{
+		return m_Collider->getGlobalBounds().intersects(_otherCollider);
+	}
+	else
+	{
+		return false;
+	}
+}
+
+bool BoxCollider::CheckCollision(BoxCollider& _otherCollider)
+{
+	if (m_Collider)
+	{
+		return m_Collider->getGlobalBounds().intersects(_otherCollider.GetCollider()->getGlobalBounds());
+	}
+	else
+	{
+		return false;
+	}
+}
+
 sf::RectangleShape* BoxCollider::GetCollider()
 {
 	return m_Collider;

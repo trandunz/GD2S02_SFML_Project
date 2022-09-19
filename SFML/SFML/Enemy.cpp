@@ -17,6 +17,8 @@
 #include "PlayerManager.h"
 #include "TextureLoader.h"
 #include "VFX.h"
+#include "BoxCollider.h"
+#include "ProjectileManager.h"
 
 Enemy::Enemy(EnemyProperties _properties)
 {
@@ -140,6 +142,14 @@ void Enemy::Update()
 			m_fMoveSpeed = m_Properties.fMoveSpeed;
 		}
 	}
+
+	// Update collider position
+	m_BoxCollider->UpdatePosition({ m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
+}
+
+ENEMYTYPE Enemy::GetType()
+{
+	return m_Properties.EnemyType;
 }
 
 sf::Vector2f Enemy::GetPosition() const
@@ -217,6 +227,30 @@ void Enemy::SlowEnemy(float _seconds, float _slowMovementPercentage)
 	m_fSlowTime = _seconds;
 }
 
+BoxCollider* Enemy::GetCollider()
+{
+	if (m_BoxCollider)
+	{
+		return m_BoxCollider;
+	}
+	else
+	{
+		return nullptr;
+	}
+}
+
+bool Enemy::CheckCollision(BoxCollider& _otherCollider)
+{
+	if (m_BoxCollider)
+	{
+		return m_BoxCollider->CheckCollision(_otherCollider);
+	}
+	else
+	{
+		return false;
+	}
+}
+
 int Enemy::GetCurrentHealth() const
 {
 	return m_iCurrentHealth;
@@ -247,10 +281,10 @@ void Enemy::Movement()
 		{
 			// Checking collisions with obstacles
 			m_BoxCollider->bColliding = false;
-			for (unsigned i = 0; i < ObjectManager::GetInstance().GetObstacles().size(); i++)
+			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
 			{
-				if (m_BoxCollider->CheckCollision(ObjectManager::GetInstance().GetObstacles()[i]->GetCollisionBox()))
-				m_BoxCollider->bColliding = true;
+				if (m_BoxCollider->CheckCollision(*obstacle->GetCollisionBox()))
+					m_BoxCollider->bColliding = true;
 			}
 
 			if (m_BoxCollider->bColliding)
@@ -264,26 +298,9 @@ void Enemy::Movement()
 				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale);
 				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
 			}
-
-			// Checking collisions with players
-			for (unsigned i = 0; i < PlayerManager::GetInstance().GetPlayers().size(); i++)
-			{
-				if (m_BoxCollider->CheckCollision(PlayerManager::GetInstance().GetPlayers()[i]->GetCollisionBox()))
-				{
-					// --Testing--
-					//PlayerManager::GetInstance().GetPlayers()[i]->TakeDamage(100);
-					//DamageEnemyOverTime(1, 3.0f);
-					//FreezeEnemy(3.0f);
-					//SlowEnemy(3.0f, 0.75f);
-					
-					m_iCurrentHealth = 0; // Instantly kill enemy
-					PlayerManager::GetInstance().GetPlayers()[i]->TakeDamage(1);
-				}
-			}
-
-			// Update collider position
-			m_BoxCollider->UpdatePosition({ m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 		}
+		default:
+			break;
 	}
 }
 

@@ -2,6 +2,11 @@
 #include "Player.h"
 #include "ObjectManager.h"
 #include "Helper.h"
+#include "EnemyManager.h"
+#include "VFX.h"
+#include "TextureLoader.h"
+#include "Enemy.h"
+#include "BoxCollider.h"
 
 void PlayerManager::CleanupDestroyed()
 {
@@ -42,6 +47,24 @@ void PlayerManager::HandleEvents()
 
 void PlayerManager::Update()
 {
+	if (m_bIsWhipingScreen)
+	{
+		if (VFX::GetInstance().GetEffectLifetime(m_sScreenWhipeVFXKey) > 0)
+		{
+			for (auto& enemy : EnemyManager::GetInstance().GetEnemies())
+			{
+				if (enemy->GetCollider()->CheckCollision(VFX::GetInstance().GetEffect(m_sScreenWhipeVFXKey).GetGlobalBounds()))
+				{
+					enemy->m_bDestroy = true;
+				}
+			}
+		}
+		else
+		{
+			m_bIsWhipingScreen = false;
+		}
+	}
+
 	for(auto& player : m_Players)
 	{
 		if (player->GetCurrentHealth() <= 0)
@@ -50,10 +73,10 @@ void PlayerManager::Update()
 		}
 		else
 		{
-			for (auto& obstacle : ObjectManager::GetInstance().GetObstacleSprites())
-			{
-				//player->CheckCollision(obstacle);
-			}
+			//for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
+			//{
+			//	player->CheckCollision(*obstacle);
+			//}
 		}
 		player->Update();
 	}
@@ -80,6 +103,18 @@ Player* PlayerManager::GetPlayerFromIndex(unsigned _index)
 		return m_Players[_index];
 	else
 		return nullptr;
+}
+
+void PlayerManager::WhipeScreenFromSpecial()
+{
+	SpecialEffectProperties whipeEffectProperties{ &TextureLoader::LoadTexture("VFX/FireWall.png") };
+
+	whipeEffectProperties.StartPos = Statics::RenderWindow.getView().getCenter();
+	whipeEffectProperties.StartPos.y += Statics::RenderWindow.getSize().y / 2.0f + whipeEffectProperties.Texture->getSize().y / 2;
+	whipeEffectProperties.Velocity = { 0, -Statics::fBackgroundScrollSpeed * 4.0f};
+
+	m_sScreenWhipeVFXKey = VFX::GetInstance().CreateAndPlayEffect(whipeEffectProperties, m_fScreenWhipeDuration);
+	m_bIsWhipingScreen = true;
 }
 
 void PlayerManager::draw(sf::RenderTarget& _target, sf::RenderStates _states) const

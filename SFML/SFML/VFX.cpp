@@ -70,7 +70,8 @@ std::string VFX::CreateAndPlayEffect(SpecialEffectProperties _properties, float 
 	m_Effects[uniqueKeyAsString].Animator.StartState("Default");
 	m_Effects[uniqueKeyAsString].LifeTime = _lifeTime;
 
-	Print(m_Effects.size());
+	if (Statics::bDebugMode)
+		Print(m_Effects.size());
 
 	return uniqueKeyAsString;
 }
@@ -98,7 +99,8 @@ std::string VFX::CreateEffect(SpecialEffectProperties _properties)
 	m_Effects[uniqueKeyAsString].Animator.SetPosition(_properties.StartPos);
 	m_Effects[uniqueKeyAsString].Animator.StartState("Default");
 
-	Print(m_Effects.size());
+	if (Statics::bDebugMode)
+		Print(m_Effects.size());
 
 	return uniqueKeyAsString;
 }
@@ -116,6 +118,19 @@ void VFX::PlayEffect(std::string _key, float _lifeTime)
 void VFX::StopEffect(std::string _key)
 {
 	m_Effects[_key].LifeTime = 0.0f;
+}
+
+float VFX::GetEffectLifetime(std::string _key)
+{
+	auto it = m_Effects.find(_key);
+	if (it != m_Effects.end())
+	{
+		return it->second.LifeTime;
+	}
+	else
+	{
+		return 0.0f;
+	}
 }
 
 void VFX::draw(sf::RenderTarget& _target, sf::RenderStates _states) const

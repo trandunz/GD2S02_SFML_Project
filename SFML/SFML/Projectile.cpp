@@ -1,5 +1,6 @@
 #include "Projectile.h"
 #include "Player.h"
+#include "BoxCollider.h"
 
 Projectile::Projectile(ProjectileProperties _properties)
 {
@@ -23,10 +24,20 @@ Projectile::Projectile(ProjectileProperties _properties)
 	m_Properties.fMoveSpeed = _properties.fMoveSpeed;
 
 	m_AnimatedSprite.StartState("Moving");
+
+	sf::Vector2f colliderSize{ 32,32 };
+	colliderSize.x *= _properties.Scale.x;
+	colliderSize.y *= _properties.Scale.y;
+	m_BoxCollider = new BoxCollider(colliderSize, _properties.StartPos);
 }
 
 Projectile::~Projectile()
 {
+	if (m_BoxCollider)
+	{
+		delete m_BoxCollider;
+		m_BoxCollider = nullptr;
+	}
 }
 
 void Projectile::Update()
@@ -41,11 +52,23 @@ void Projectile::Update()
 	}
 
 	m_AnimatedSprite.Update();
+
+	// Update position of collider
+	if (m_BoxCollider)
+		m_BoxCollider->UpdatePosition(m_AnimatedSprite.GetPosition());
 }
 
-bool Projectile::CheckCollision(sf::Sprite _entitySprite)
+bool Projectile::CheckCollision(BoxCollider& _otherCollider)
 {
-	return m_AnimatedSprite.GetSprite().getGlobalBounds().intersects(_entitySprite.getGlobalBounds());
+	if (m_BoxCollider)
+	{
+		return m_BoxCollider->CheckCollision(_otherCollider);
+	}
+	else
+	{
+		return false;
+	}
+	
 }
 
 sf::Vector2f Projectile::GetPosition() const
@@ -61,4 +84,8 @@ bool Projectile::IsFriendly() const
 void Projectile::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_AnimatedSprite);
+
+	// Draw box collider if debug mode turned on
+	if (m_BoxCollider)
+		m_BoxCollider->DrawDebug(_target);
 }

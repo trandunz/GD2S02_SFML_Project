@@ -6,6 +6,7 @@
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "Helper.h"
+#include "Obstacle.h"
 
 void ProjectileManager::CleanupDestroyed()
 {
@@ -53,9 +54,9 @@ void ProjectileManager::Update()
 		}
 		else
 		{
-			for (auto& obstacle : ObjectManager::GetInstance().GetObstacleSprites())
+			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
 			{
-				if (projectile->CheckCollision(obstacle))
+				if (projectile->CheckCollision(*obstacle->GetCollisionBox()))
 				{
 					projectile->Destroy = true;
 					break;
@@ -67,7 +68,7 @@ void ProjectileManager::Update()
 				{
 					if (enemy != nullptr)
 					{
-						if (projectile->CheckCollision(enemy->GetSprite()))
+						if (projectile->CheckCollision(*enemy->GetCollider()))
 						{
 							enemy->TakeDamage(1);
 							projectile->Destroy = true;
@@ -83,7 +84,7 @@ void ProjectileManager::Update()
 				{
 					if (player != nullptr)
 					{
-						if (projectile->CheckCollision(player->GetSprite()))
+						if (projectile->CheckCollision(*player->GetCollisionBox()))
 						{
 							player->TakeDamage(1);
 

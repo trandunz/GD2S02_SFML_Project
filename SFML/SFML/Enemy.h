@@ -12,9 +12,8 @@
 
 // Includes
 #include "Animator.h"
-#include "BoxCollider.h"
-#include "ProjectileManager.h"
 
+class BoxCollider;
 class Enemy : public sf::Drawable
 {
 public:
@@ -58,6 +57,8 @@ public:
 	void FreezeEnemy(float _seconds);
 
 	void SlowEnemy(float _seconds, float _slowMovementPercentage);
+
+	bool CheckCollision(BoxCollider& _otherCollider);
 
 	bool m_bDestroy = false;
 
@@ -119,6 +120,7 @@ private:
 
 public:
 	// Getters and Setters
+	ENEMYTYPE GetType();
 
 	sf::Vector2f GetPosition() const;
 	void SetPosition(sf::Vector2f _newPosition);
@@ -126,4 +128,6 @@ public:
 	sf::Sprite GetSprite() const;
 
 	int GetCurrentHealth() const;
+
+	BoxCollider* GetCollider();
 };

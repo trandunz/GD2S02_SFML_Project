@@ -1,6 +1,7 @@
 #pragma once
 #include "Animator.h"
 
+class BoxCollider;
 class Projectile : public sf::Drawable
 {
 public:
@@ -9,10 +10,7 @@ public:
 
 	void Update();
 
-	bool CheckCollision(sf::Sprite _entitySprite);
-	sf::Vector2f GetPosition() const;
-
-	bool IsFriendly() const;
+	bool CheckCollision(BoxCollider& _otherCollider);
 
 	bool Destroy = false;
 private:
@@ -20,6 +18,12 @@ private:
 	
 	ProjectileProperties m_Properties{};
 	Animator m_AnimatedSprite{};
+	BoxCollider* m_BoxCollider{ nullptr };
 	//sf::Sprite m_Mesh{};
+
+public:
+	sf::Vector2f GetPosition() const;
+
+	bool IsFriendly() const;
 };
 

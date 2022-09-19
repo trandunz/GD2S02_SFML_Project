@@ -1,7 +1,7 @@
 #pragma once
 #include "Statics.h"
-#include "BoxCollider.h"
 
+class BoxCollider;
 class Obstacle : public sf::Drawable
 {
 public:
@@ -25,6 +25,6 @@ private:
 public:
 	// Getters
 	sf::Sprite GetSprite() const;
-	sf::RectangleShape* GetCollisionBox();
+	BoxCollider* GetCollisionBox();
 };
 
