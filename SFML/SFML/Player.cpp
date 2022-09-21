@@ -37,9 +37,11 @@ Player::Player(PlayerProperties _properties)
 
 		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 		m_BasicAttackProperties.Scale = { 2.00f,2.00f };
+		m_BasicAttackProperties.uNumberOfFrames = 3;
 
 		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 		m_SecondaryAttackProperties.Scale = { 2.00f,2.00f };
+		m_SecondaryAttackProperties.uNumberOfFrames = 3;
 	}
 	else
 	{
@@ -48,9 +50,11 @@ Player::Player(PlayerProperties _properties)
 
 		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
 		m_BasicAttackProperties.Scale = { 2.00f,2.00f };
+		m_BasicAttackProperties.uNumberOfFrames = 3;
 
 		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
 		m_SecondaryAttackProperties.Scale = { 2.00f,2.00f };
+		m_SecondaryAttackProperties.uNumberOfFrames = 3;
 	}
 
 	CreateSpecialVFX();

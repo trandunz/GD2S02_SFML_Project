@@ -113,6 +113,10 @@ private:
 	bool m_bSpriteColorChanged = false;
 	float m_fSpriteChangeColorSpeed = 0.2f; // Color changing speed
 	float m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed; // Color changing timer
+
+	// Movement
+	float m_fArcherYPos = 0;
+	bool m_bFirstMoveComplete = false;
 	
 	BoxCollider* m_BoxCollider;
 

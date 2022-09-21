@@ -22,23 +22,43 @@
 
 Enemy::Enemy(EnemyProperties _properties)
 {
+	// Set enemy properties
+	m_Properties = _properties;
+	SetHPMax();
+	m_fMoveSpeed = _properties.fMoveSpeed;
+	m_fJumpSpeed = _properties.fJumpSpeed;
+
 	// Set animation for enemy from sprite sheet
 	AnimStateProperties animProperties;
 	animProperties.StateTexture = _properties.Texture;
-	animProperties.NumberOfFrames = 4;
-	animProperties.FrameInterval = 0.1f;
+
+	switch (m_Properties.EnemyType)
+	{
+		case ENEMYTYPE::KAMIKAZE:
+		{
+			animProperties.NumberOfFrames = 4;
+			animProperties.FrameInterval = 0.1f;
+			break;
+		}
+		case ENEMYTYPE::ARCHER:
+		{
+			animProperties.NumberOfFrames = 4;
+			animProperties.FrameInterval = 0.1f;
+
+			m_fArcherYPos = (rand() % 261) + 70;
+			std::cout << m_fArcherYPos << std::endl;
+			break;
+		}
+		default:
+			break;
+	}
+
 	animProperties.Loops = true;
 	animProperties.Scale = _properties.v2fMoveScale;
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.GetSprite().setPosition(_properties.StartPos);
 	m_AnimatedSprite.StartState("Moving");
-	
-	// Set enemy properties
-	m_Properties = _properties;
-	SetHPMax();
-	m_fMoveSpeed = _properties.fMoveSpeed;
-	m_fJumpSpeed = _properties.fJumpSpeed;
 	
 	//m_v2fSpriteJumpScale = _properties.v2fJumpScale;
 	
@@ -61,6 +81,10 @@ Enemy::~Enemy()
 void Enemy::Update()
 {
 	Movement(); // Update enemy movement
+
+	if (m_Properties.EnemyType == ENEMYTYPE::ARCHER)
+		Attack();
+
 	m_AnimatedSprite.Update(); // Update animated sprite
 
 	if (m_bDamaged)
@@ -154,12 +178,12 @@ ENEMYTYPE Enemy::GetType()
 
 sf::Vector2f Enemy::GetPosition() const
 {
-	return m_Mesh.getPosition();
+	return m_AnimatedSprite.GetPosition();
 }
 
 void Enemy::SetPosition(sf::Vector2f _newPosition)
 {
-	m_Mesh.setPosition(_newPosition);
+	m_AnimatedSprite.SetPosition(_newPosition);
 }
 
 sf::Sprite Enemy::GetSprite() const
@@ -271,14 +295,14 @@ void Enemy::SetHPMax()
 
 void Enemy::Movement()
 {
-	m_v2fVelocity = { 0,1 };
-
 	switch (m_Properties.EnemyType)
 	{
 		// Movement of Kamikaze enemy
 		// Runs straight down, and jumps over obstacles 
 		case ENEMYTYPE::KAMIKAZE: 
 		{
+			m_v2fVelocity = { 0,1 };
+
 			// Checking collisions with obstacles
 			m_BoxCollider->bColliding = false;
 			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
@@ -291,15 +315,64 @@ void Enemy::Movement()
 			{
 				m_AnimatedSprite.SetScale(m_Properties.v2fJumpScale);
 				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
-
 			}
 			else
 			{
 				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale);
 				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
 			}
+			break;
+		}
+		// Movement of Archer enemy
+		// Runs down until it reaches m_fArcherYPos, then starts moving left and right
+		case ENEMYTYPE::ARCHER:
+		{
+			// Move enemy object down to therandom Y position determined in the constructor
+			if (m_AnimatedSprite.GetPosition().y <= m_fArcherYPos)
+			{
+				m_v2fVelocity = { 0,1 };
+			}
+			// If enemy object reaches its Y value, then start moving left or right
+			else if (m_bFirstMoveComplete == false)
+			{
+				m_v2fVelocity = { 1,0 }; // Move right
+			}
+
+			// If enemy object moves to the right side of the screen, then switch its velocity to move left
+			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			{
+				m_v2fVelocity = { -1,0 };
+				m_bFirstMoveComplete = true;
+			}
+			
+			// If enemy object moves to the left side of the screen, then switch its velocity to move right
+			if (m_AnimatedSprite.GetPosition().x <= 0 + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			{
+				m_v2fVelocity = { 1,0 };
+			}
+
+			// Checking collisions with obstacles
+			m_BoxCollider->bColliding = false;
+			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
+			{
+				if (m_BoxCollider->CheckCollision(*obstacle->GetCollisionBox()))
+					m_BoxCollider->bColliding = true;
+			}
+
+			if (m_BoxCollider->bColliding)
+			{
+				m_AnimatedSprite.SetScale(m_Properties.v2fJumpScale);
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
+			}
+			else
+			{
+				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale);
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
+			}
+			break;
 		}
 		default:
+			m_v2fVelocity = { 0,1 };
 			break;
 	}
 }
@@ -309,16 +382,29 @@ void Enemy::Attack()
 	m_fAttackTimer -= Statics::fDeltaTime;
 	if (m_fAttackTimer <= 0)
 	{
-		m_fAttackTimer = m_fAttackSpeed;
+		// Pick a random attack speed based on the speed provided in the enemy creation
+		// The reason for is, is to give the enemy shooting some randomness, as otherwise all enemies shoot
+		// at the exact same time, which does not look right
+		unsigned uRandomNumber = rand() % 3; // Random number out of 3
+		float fAttackSpeed;
+		if (uRandomNumber == 0)
+			fAttackSpeed = m_fAttackSpeed;
+		else if (uRandomNumber == 1)
+			fAttackSpeed = m_fAttackSpeed - 0.1f;
+		else
+			fAttackSpeed = m_fAttackSpeed + 0.1f;
+
+		m_fAttackTimer = fAttackSpeed; // Reset timer
+		// Create projectile
 		ProjectileManager::GetInstance().CreateProjectile(
 			{
-				&TextureLoader::LoadTexture("Projectile.png"),
-				GetPosition(),
-				{0.25f,0.25f},
-				false
+				&TextureLoader::LoadTexture("Projectiles/Goblin_Archer_Arrow.png"),
+				{GetPosition().x + 16.0f,GetPosition().y + 8.0f},
+				{2.0f,2.0f},
+				false,
+				{1},
+				500.0f
 			}
 		);
 	}
 }
-
-

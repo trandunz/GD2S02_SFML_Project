@@ -6,7 +6,7 @@ Projectile::Projectile(ProjectileProperties _properties)
 {
 	AnimStateProperties animProperties;
 	animProperties.StateTexture = _properties.Texture;
-	animProperties.NumberOfFrames = 3;
+	animProperties.NumberOfFrames = _properties.uNumberOfFrames;
 	animProperties.FrameInterval = 0.1f;
 	animProperties.Loops = true;
 	animProperties.Scale = _properties.Scale;

@@ -110,37 +110,54 @@ void EnemyManager::SpawnEnemies(float _rate)
 	if (m_fSpawnTimer <= 0)
 	{
 		m_fSpawnTimer = _rate;
-		
-		int iRandomNum = rand() % 5;
-		std::string sEnemyTextureLocation;
-		if (iRandomNum == 0)
+
+		int iRandomEnemy = rand() % 6;
+		if (iRandomEnemy == 0)
 		{
-			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running1.png";
-		}
-		else if (iRandomNum == 1)
-		{
-			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running2.png";
-		}
-		else if (iRandomNum == 2)
-		{
-			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running3.png";
-		}
-		else if (iRandomNum == 3)
-		{
-			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running4.png";
+			CreateEnemy(
+				{
+					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Archer_Running.png"),
+					{100.0f + (rand() % 600), 0},
+					{ENEMYTYPE::ARCHER},
+					{2.0f,2.0f},
+					{2.4f,2.4f},
+					{150.0f},
+					{250.0f}
+				});
 		}
 		else
 		{
-			sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running5.png";
-		}
-
-		CreateEnemy(
+			int iRandomKamakazi = rand() % 5;
+			std::string sEnemyTextureLocation;
+			if (iRandomKamakazi == 0)
 			{
-				&TextureLoader::LoadTexture(sEnemyTextureLocation),
-				{100.0f + (rand() % 600), 0},
-				{ENEMYTYPE::KAMIKAZE},
-				{2.0f,2.0f},
-				{2.4f,2.4f}
-			});
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running1.png";
+			}
+			else if (iRandomKamakazi == 1)
+			{
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running2.png";
+			}
+			else if (iRandomKamakazi == 2)
+			{
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running3.png";
+			}
+			else if (iRandomKamakazi == 3)
+			{
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running4.png";
+			}
+			else
+			{
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running5.png";
+			}
+
+			CreateEnemy(
+				{
+					&TextureLoader::LoadTexture(sEnemyTextureLocation),
+					{100.0f + (rand() % 600), 0},
+					{ENEMYTYPE::KAMIKAZE},
+					{2.0f,2.0f},
+					{2.4f,2.4f}
+				});
+		}
 	}
 }

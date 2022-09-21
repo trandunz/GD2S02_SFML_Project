@@ -25,6 +25,7 @@ struct ProjectileProperties
 	bool bFriendly{ true };
 	unsigned uDamage{ 0 };
 	float fMoveSpeed{ 1000.0f };
+	unsigned uNumberOfFrames{ 1 };
 };
 
 struct ObstacleProperties
