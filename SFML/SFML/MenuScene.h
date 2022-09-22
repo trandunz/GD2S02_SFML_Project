@@ -4,13 +4,7 @@
 // New Zealand 
 // (c) Media Design School
 // File Name : MenuScene.h
-// 
-// Description :
-//  
-//	
-//  
-//	
-//  
+// Description : MenuScene Header File
 // Author : Bartlett, Benjamin
 
 #pragma once

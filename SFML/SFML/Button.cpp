@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Button.cpp 
+// Description : Button Implementation File		
+// Author : Inman, Will
+
 #include "Button.h"
 #include "TextureLoader.h"
 #include "Math.h"

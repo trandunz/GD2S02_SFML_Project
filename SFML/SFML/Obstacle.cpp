@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Obstacle.cpp 
+// Description : Obstacle Implementation File		
+// Author : Inman, Will
+
 #include "Obstacle.h"
 #include "Math.h"
 #include "BoxCollider.h"

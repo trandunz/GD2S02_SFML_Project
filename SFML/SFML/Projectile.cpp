@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Projectile.cpp 
+// Description : Projectile Implementation File		
+// Author : Inman, Will
+
 #include "Projectile.h"
 #include "Player.h"
 #include "BoxCollider.h"

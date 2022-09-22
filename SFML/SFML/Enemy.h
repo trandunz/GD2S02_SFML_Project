@@ -4,9 +4,8 @@
 // New Zealand 
 // (c) Media Design School
 // File Name : Enemy.h 
-// Description : Enemy class
+// Description : Enemy Header File
 // Author : Inman, Will; Frear, Stace
-// Mail : 
 
 #pragma once
 

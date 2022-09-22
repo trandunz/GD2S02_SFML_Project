@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : ProjectileManager.cpp 
+// Description : ProjectileManager Implementation File		
+// Author : Inman, Will
+
 #include "ProjectileManager.h"
 #include "Projectile.h"
 #include "ObjectManager.h"

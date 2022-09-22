@@ -4,9 +4,8 @@
 // New Zealand 
 // (c) Media Design School
 // File Name : BoxCollider.h 
-// Description : 
+// Description : BoxCollider Header File
 // Author : 
-// Mail : 
 
 #pragma once
 #include "Statics.h"

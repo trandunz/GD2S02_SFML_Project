@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Main.cpp 
+// Description : Main Implementation File		
+// Author : Inman, Will
+
 #include "Statics.h"
 #include "LevelLoader.h"
 #include "TextureLoader.h"

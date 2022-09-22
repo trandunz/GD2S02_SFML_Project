@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Player.cpp 
+// Description : Player Implementation File		
+// Author : Inman, Will
+
 #include "Player.h"
 #include "GUI.h"
 #include "PlayerManager.h"

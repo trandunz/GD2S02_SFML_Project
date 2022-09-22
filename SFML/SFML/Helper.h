@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Helper.h 
+// Description : Helper Header File
+// Author : Inman, Will
+
 #pragma once
 #include "Statics.h"
 
