@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : VFX.cpp 
+// Description : VFX Implementation File		
+// Author : Inman, Will
+
 #include "VFX.h"
 #include "Math.h"
 

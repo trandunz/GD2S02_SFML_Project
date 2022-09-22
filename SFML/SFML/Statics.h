@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Statics.h 
+// Description : Statics Header File
+// Author : Inman, Will
+
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <cstdlib>

@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : ObjectManager.cpp 
+// Description : ObjectManager Implementation File		
+// Author : Inman, Will
+
 #include "ObjectManager.h"
 #include "Obstacle.h"
 #include "TextureLoader.h"

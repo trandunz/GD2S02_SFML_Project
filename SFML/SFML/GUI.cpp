@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : GUI.cpp 
+// Description : GUI Implementation File		
+// Author : Inman, Will
+
 #include "GUI.h"
 #include "Math.h"
 #include "Button.h"

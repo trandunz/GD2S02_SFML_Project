@@ -4,9 +4,8 @@
 // New Zealand 
 // (c) Media Design School
 // File Name : Enemy.cpp 
-// Description : Enemy class
+// Description : Enemy Implementation File
 // Author : Inman, Will; Frear, Stace
-// Mail : 
 
 // Includes
 #include "Enemy.h"

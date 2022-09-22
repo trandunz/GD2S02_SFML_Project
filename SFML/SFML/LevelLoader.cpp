@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : LevelLoader.cpp 
+// Description : LevelLoader Implementation File		
+// Author : Inman, Will
+
 #include "LevelLoader.h"
 #include "MenuScene.h"
 #include "GameScene.h"

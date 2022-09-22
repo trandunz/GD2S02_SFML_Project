@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : GameScene.cpp 
+// Description : GameScene Implementation File		
+// Author : Inman, Will
+
 #include "GameScene.h"
 #include "PlayerManager.h"
 #include "ObjectManager.h"

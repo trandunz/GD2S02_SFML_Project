@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : EnemyManager.cpp 
+// Description : EnemyManager Implementation File		
+// Author : Inman, Will
+
 #include "EnemyManager.h"
 #include "Enemy.h"
 #include "PlayerManager.h"

@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : MenuScene.cpp 
+// Description : MenuScene Implementation File		
+// Author :
+
 #include "MenuScene.h"
 #include "LevelLoader.h"
 #include "GUI.h"

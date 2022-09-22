@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : BoxCollider.cpp 
+// Description : BoxCollider Implementation File		
+// Author : 
+
 #include "BoxCollider.h"
 
 BoxCollider::BoxCollider(sf::Vector2f _size, sf::Vector2f _position)
