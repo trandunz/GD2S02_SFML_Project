@@ -53,9 +53,17 @@ public:
 	/// <returns></returns>
 	bool StartState(std::string _stateName);
 
-	void PauseAnim() { m_bPause = true; };
+	/// <summary>
+	/// Set to skip the animation update, essentially
+	/// pausing the animation
+	/// </summary>
+	void PauseAnim();
 
-	void ResumeAnim() { m_bPause = false; };
+	/// <summary>
+	/// Set to not skip the animation update, to resume
+	/// animations
+	/// </summary>
+	void ResumeAnim();
 
 	/// <summary>
 	/// Checks the time elapsed for the current frame.
@@ -64,13 +72,27 @@ public:
 	/// </summary>
 	void Update();
 
-	/*=========================================
-	Functions to using sf::Sprite functions
-	=========================================*/
+	//=========================================
+	//Functions to using sf::Sprite functions
+	//=========================================
 
+	/// <summary>
+	/// Uses sf::Sprite move function to 
+	/// move the sprite.
+	/// </summary>
+	/// <param name="_offset"></param>
 	void MoveSprite( const sf::Vector2f& _offset);
+	/// <summary>
+	/// Uses sf::Sprite move function to 
+	/// move the sprite.
+	/// </summary>
+	/// <param name="_offset"></param>
 	void MoveSprite( float _offsetX, float _offsetY);
-
+	/// <summary>
+	/// Uses sf::Sprite setColor function to 
+	/// change the colour of the sprite.
+	/// </summary>
+	/// <param name="_offset"></param>
 	void SetSpriteColor(sf::Color _color);
 
 private:

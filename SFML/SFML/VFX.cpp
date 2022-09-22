@@ -25,10 +25,10 @@ void VFX::CreateAndPlayEffect(std::string _key, SpecialEffectProperties _propert
 	AnimStateProperties animatorProperties{ _properties.Texture };
 	animatorProperties.NumberOfFrames = _properties.NumberOfFrames;
 	animatorProperties.FrameInterval = _properties.AnimFrameInterval;
-	animatorProperties.Scale = _properties.Scale;
+	animatorProperties.v2fScale = _properties.v2fScale;
 	m_Effects[_key].Properties = _properties;
 	m_Effects[_key].Animator.AddState("Default", animatorProperties);
-	m_Effects[_key].Animator.SetPosition(_properties.StartPos);
+	m_Effects[_key].Animator.SetPosition(_properties.v2fStartPos);
 	m_Effects[_key].Animator.StartState("Default");
 	m_Effects[_key].LifeTime = _lifeTime;
 }
@@ -39,10 +39,10 @@ void VFX::CreateEffect(std::string _key, SpecialEffectProperties _properties)
 	AnimStateProperties animatorProperties{ _properties.Texture };
 	animatorProperties.NumberOfFrames = _properties.NumberOfFrames;
 	animatorProperties.FrameInterval = _properties.AnimFrameInterval;
-	animatorProperties.Scale = _properties.Scale;
+	animatorProperties.v2fScale = _properties.v2fScale;
 	m_Effects[_key].Properties = _properties;
 	m_Effects[_key].Animator.AddState("Default", animatorProperties);
-	m_Effects[_key].Animator.SetPosition(_properties.StartPos);
+	m_Effects[_key].Animator.SetPosition(_properties.v2fStartPos);
 	m_Effects[_key].Animator.StartState("Default");
 }
 
@@ -63,10 +63,10 @@ std::string VFX::CreateAndPlayEffect(SpecialEffectProperties _properties, float 
 	AnimStateProperties animatorProperties{ _properties.Texture };
 	animatorProperties.NumberOfFrames = _properties.NumberOfFrames;
 	animatorProperties.FrameInterval = _properties.AnimFrameInterval;
-	animatorProperties.Scale = _properties.Scale;
+	animatorProperties.v2fScale = _properties.v2fScale;
 	m_Effects[uniqueKeyAsString].Properties = _properties;
 	m_Effects[uniqueKeyAsString].Animator.AddState("Default", animatorProperties);
-	m_Effects[uniqueKeyAsString].Animator.SetPosition(_properties.StartPos);
+	m_Effects[uniqueKeyAsString].Animator.SetPosition(_properties.v2fStartPos);
 	m_Effects[uniqueKeyAsString].Animator.StartState("Default");
 	m_Effects[uniqueKeyAsString].LifeTime = _lifeTime;
 
@@ -93,10 +93,10 @@ std::string VFX::CreateEffect(SpecialEffectProperties _properties)
 	AnimStateProperties animatorProperties{ _properties.Texture };
 	animatorProperties.NumberOfFrames = _properties.NumberOfFrames;
 	animatorProperties.FrameInterval = _properties.AnimFrameInterval;
-	animatorProperties.Scale = _properties.Scale;
+	animatorProperties.v2fScale = _properties.v2fScale;
 	m_Effects[uniqueKeyAsString].Properties = _properties;
 	m_Effects[uniqueKeyAsString].Animator.AddState("Default", animatorProperties);
-	m_Effects[uniqueKeyAsString].Animator.SetPosition(_properties.StartPos);
+	m_Effects[uniqueKeyAsString].Animator.SetPosition(_properties.v2fStartPos);
 	m_Effects[uniqueKeyAsString].Animator.StartState("Default");
 
 	if (Statics::bDebugMode)

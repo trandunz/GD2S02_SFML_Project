@@ -28,8 +28,8 @@ enum class ELEMENTTYPE
 struct ProjectileProperties
 {
 	sf::Texture* Texture{ nullptr };
-	sf::Vector2f StartPos{};
-	sf::Vector2f Scale{ 1,1 };
+	sf::Vector2f v2fStartPos{};
+	sf::Vector2f v2fScale{ 1,1 };
 	bool bFriendly{ true };
 	unsigned uDamage{ 0 };
 	float fMoveSpeed{ 1000.0f };
@@ -41,8 +41,8 @@ struct ProjectileProperties
 struct ObstacleProperties
 {
 	sf::Texture* Texture{ nullptr };
-	sf::Vector2f StartPos{};
-	sf::Vector2f Scale{ 1,1 };
+	sf::Vector2f v2fStartPos{};
+	sf::Vector2f v2fScale{ 1,1 };
 	sf::Vector2f BoxColliderSize{ 10,10 };
 	float fBoxColliderOffsetY{};	
 	float fMoveSpeed{ 160.0f };
@@ -51,20 +51,20 @@ struct ObstacleProperties
 struct PlayerProperties
 {
 	sf::Texture* Texture{ nullptr };
-	sf::Vector2f StartPos{};
+	sf::Vector2f v2fStartPos{};
 	sf::Vector2f BoxColliderSize{ 10,10 };
 	float fBoxColliderOffsetY{};
 	float fMoveSpeed{ 1000.0f };
 	int iMaxHealth{ 3 };
 	int iMaxMana{ 3 };
 	bool bPlayerOne{true};
-	sf::Vector2f Scale{ 1,1 };
+	sf::Vector2f v2fScale{ 1,1 };
 };
 
 struct EnemyProperties
 {
 	sf::Texture* Texture{ nullptr };
-	sf::Vector2f StartPos{};
+	sf::Vector2f v2fStartPos{};
 	ENEMYTYPE EnemyType{ ENEMYTYPE::KAMIKAZE };
 	sf::Vector2f v2fMoveScale{ 1.0f,1.0f };
 	sf::Vector2f v2fJumpScale{ 1.2f,1.2f };
@@ -76,15 +76,15 @@ struct EnemyProperties
 struct ButtonProperties
 {
 	std::string Label{};
-	sf::Vector2f StartPos{};
+	sf::Vector2f v2fStartPos{};
 	std::function<void()> OnPressFunction{nullptr};
 	sf::Texture* Texture{ nullptr };
-	sf::Vector2f Scale{ 1,1 };
+	sf::Vector2f v2fScale{ 1,1 };
 };
 
 struct TextProperties
 {
-	sf::Vector2f StartPos{};
+	sf::Vector2f v2fStartPos{};
 	std::string String{};
 	sf::Color Color{};
 	int iCharacterSize{36};
@@ -93,15 +93,15 @@ struct TextProperties
 struct ImageProperties
 {
 	sf::Texture* Texture{ nullptr };
-	sf::Vector2f StartPos{};
-	sf::Vector2f Scale{ 1,1 };
+	sf::Vector2f v2fStartPos{};
+	sf::Vector2f v2fScale{ 1,1 };
 };
 
 struct SpecialEffectProperties
 {
 	sf::Texture* Texture{ nullptr };
-	sf::Vector2f StartPos{};
-	sf::Vector2f Scale{ 1,1 };
+	sf::Vector2f v2fStartPos{};
+	sf::Vector2f v2fScale{ 1,1 };
 	sf::Color Color{1,1,1};
 	unsigned NumberOfFrames{ 1 };
 	float AnimFrameInterval{};
@@ -116,7 +116,7 @@ struct AnimStateProperties
 	int FrameWidth{ 32 };
 	unsigned NumberOfFrames{ 1 };
 	float FrameInterval{};
-	sf::Vector2f Scale{ 1.0f,1.0f };
+	sf::Vector2f v2fScale{ 1.0f,1.0f };
 	bool Loops{ false };
 };
 

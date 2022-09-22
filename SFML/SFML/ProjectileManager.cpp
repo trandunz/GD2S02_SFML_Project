@@ -13,7 +13,7 @@ void ProjectileManager::CleanupDestroyed()
 	auto it = m_Projectiles.begin();
 	while (it != m_Projectiles.end())
 	{
-		if ((*it)->Destroy == true)
+		if ((*it)->bDestroy == true)
 		{
 			if ((*it) != nullptr)
 			{
@@ -50,7 +50,7 @@ void ProjectileManager::Update()
 			|| pos.y < 0
 			|| pos.y > screenSize.y)
 		{
-			projectile->Destroy = true;
+			projectile->bDestroy = true;
 		}
 		else
 		{
@@ -58,7 +58,7 @@ void ProjectileManager::Update()
 			{
 				if (projectile->CheckCollision(*obstacle->GetCollisionBox()))
 				{
-					projectile->Destroy = true;
+					projectile->bDestroy = true;
 					break;
 				}
 			}
@@ -76,36 +76,12 @@ void ProjectileManager::Update()
 							//no damage but will inflict debuffs
 							if(projectile->IsDestroyedOnCollision())
 							{
-								projectile->Destroy = true;
+								projectile->bDestroy = true;
 							}
 							else
 							{
 								ELEMENTTYPE projElement = projectile->GetElement();
-								switch (projElement)
-								{
-								case ELEMENTTYPE::NONE:
-								{
-									Print("WARN: Secondary projectile has no element");
-									break;
-								}
-								case ELEMENTTYPE::FIRE:
-								{
-									enemy->DamageEnemyOverTime(DEBUFF_BURNAMOUNT, DEBUFF_BURNTIME);
-									break;
-								}
-								case ELEMENTTYPE::WATER:
-								{
-									enemy->SlowEnemy(DEBUFF_SLOWTIME, DEBUFF_SLOWAMOUNT);
-									break;
-								}
-								case ELEMENTTYPE::EARTH:
-								{
-									enemy->FreezeEnemy(DEBUFF_FREEZETIME);
-									break;
-								}
-								default:
-									break;
-								}
+								ApplyDebuff_Enemy(enemy, projElement);
 							}
 							break;
 						}
@@ -124,7 +100,7 @@ void ProjectileManager::Update()
 							player->TakeDamage( projectile->GetDamagedDealt() );
 							if (projectile->IsDestroyedOnCollision())
 							{
-								projectile->Destroy = true;
+								projectile->bDestroy = true;
 							}
 							break;
 						}
@@ -142,5 +118,34 @@ void ProjectileManager::draw(sf::RenderTarget& _target, sf::RenderStates _states
 	for (auto& projectile : m_Projectiles)
 	{
 		_target.draw(*projectile);
+	}
+}
+
+void ProjectileManager::ApplyDebuff_Enemy(Enemy* _target, ELEMENTTYPE _element)
+{
+	switch (_element)
+	{
+		case ELEMENTTYPE::NONE:
+		{
+			Print("WARN: Secondary projectile has no element");
+			break;
+		}
+		case ELEMENTTYPE::FIRE:
+		{
+			_target->DamageEnemyOverTime(DEBUFF_BURNAMOUNT, DEBUFF_BURNTIME);
+			break;
+		}
+		case ELEMENTTYPE::WATER:
+		{
+			_target->SlowEnemy(DEBUFF_SLOWTIME, DEBUFF_SLOWAMOUNT);
+			break;
+		}
+		case ELEMENTTYPE::EARTH:
+		{
+			_target->FreezeEnemy(DEBUFF_FREEZETIME);
+			break;
+		}
+		default:
+			break;
 	}
 }

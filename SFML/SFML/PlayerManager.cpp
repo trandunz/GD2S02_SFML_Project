@@ -13,7 +13,7 @@ void PlayerManager::CleanupDestroyed()
 	auto it = m_Players.begin();
 	while (it != m_Players.end())
 	{
-		if ((*it)->Destroy == true)
+		if ((*it)->bDestroy == true)
 		{
 			if ((*it) != nullptr)
 			{
@@ -69,7 +69,7 @@ void PlayerManager::Update()
 	{
 		if (player->GetCurrentHealth() <= 0)
 		{
-			player->Destroy = true;
+			player->bDestroy = true;
 		}
 		else
 		{
@@ -109,8 +109,8 @@ void PlayerManager::WhipeScreenFromSpecial()
 {
 	SpecialEffectProperties whipeEffectProperties{ &TextureLoader::LoadTexture("VFX/FireWall.png") };
 
-	whipeEffectProperties.StartPos = Statics::RenderWindow.getView().getCenter();
-	whipeEffectProperties.StartPos.y += Statics::RenderWindow.getSize().y / 2.0f + whipeEffectProperties.Texture->getSize().y / 2;
+	whipeEffectProperties.v2fStartPos = Statics::RenderWindow.getView().getCenter();
+	whipeEffectProperties.v2fStartPos.y += Statics::RenderWindow.getSize().y / 2.0f + whipeEffectProperties.Texture->getSize().y / 2;
 	whipeEffectProperties.Velocity = { 0, -Statics::fBackgroundScrollSpeed * 4.0f};
 
 	m_sScreenWhipeVFXKey = VFX::GetInstance().CreateAndPlayEffect(whipeEffectProperties, m_fScreenWhipeDuration);

@@ -10,8 +10,8 @@
 Player::Player(PlayerProperties _properties)
 {
 	m_Mesh.setTexture(*_properties.Texture, true);
-	SetPosition(_properties.StartPos);
-	m_Mesh.setScale(_properties.Scale);
+	SetPosition(_properties.v2fStartPos);
+	m_Mesh.setScale(_properties.v2fScale);
 	SetOriginCenter(m_Mesh);
 	m_Properties = _properties;
 	SetHPMax();
@@ -41,11 +41,11 @@ Player::Player(PlayerProperties _properties)
 		CreateManaUI("P2", { windowSize.x - 80.0f, 80 }, { windowSize.x - 48.0f, 80 }, { windowSize.x - 16.0f, 80 });
 
 		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
-		m_BasicAttackProperties.Scale = { 2.00f,2.00f };
+		m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 		m_BasicAttackProperties.uNumberOfFrames = 3;
 
 		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
-		m_SecondaryAttackProperties.Scale = { 2.00f,2.00f };
+		m_SecondaryAttackProperties.v2fScale = { 2.00f,2.00f };
 		m_SecondaryAttackProperties.uNumberOfFrames = 3;
 		m_SecondaryAttackProperties.eElement = ELEMENTTYPE::FIRE;
 	}
@@ -55,11 +55,11 @@ Player::Player(PlayerProperties _properties)
 		CreateManaUI("P1", { 16, 80 }, { 48, 80 }, { 80, 80 });
 
 		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
-		m_BasicAttackProperties.Scale = { 2.00f,2.00f };
+		m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 		m_BasicAttackProperties.uNumberOfFrames = 3;
 
 		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/SecondaryDefault_Green.png");//("Earth_Spell.png");
-		m_SecondaryAttackProperties.Scale = { 1.5f,1.5f };
+		m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
 		m_SecondaryAttackProperties.uNumberOfFrames = 1;
 		m_SecondaryAttackProperties.eElement = ELEMENTTYPE::EARTH;
 	}
@@ -316,7 +316,7 @@ void Player::CreateSpecialVFX()
 
 void Player::SetP1SpecialVFXPosition(sf::Vector2f _position)
 {
-	VFX::GetInstance().GetEffect("P1_P1Special").SetPosition(_position + sf::Vector2f{10, -40 });
+	VFX::GetInstance().GetEffect("P1_P1Special").SetPosition(_position + sf::Vector2f{ 10, -40 });
 	VFX::GetInstance().GetEffect("P2_P1Special").SetPosition(_position - sf::Vector2f{ 10, 40 });
 }
 
@@ -328,7 +328,7 @@ void Player::SetP2SpecialVFXPosition(sf::Vector2f _position)
 
 void Player::BasicAttack()
 {
-	m_BasicAttackProperties.StartPos = GetPosition(); // Get player position
+	m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
 	ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
 }
 
@@ -338,7 +338,7 @@ void Player::SecondaryAttack()
 	{
 		m_iCurrentMana--;
 		// Spawn Secondary Projectile
-		m_SecondaryAttackProperties.StartPos = GetPosition(); // Get player position
+		m_SecondaryAttackProperties.v2fStartPos = GetPosition(); // Get player position
 		ProjectileManager::GetInstance().CreateProjectile(m_SecondaryAttackProperties);
 	}
 }
@@ -392,7 +392,7 @@ void Player::TakeDamage(unsigned _amount)
 
 	if (m_iCurrentHealth <= 0)
 	{
-		Destroy = true;
+		bDestroy = true;
 	}
 }
 

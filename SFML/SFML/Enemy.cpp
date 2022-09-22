@@ -54,10 +54,10 @@ Enemy::Enemy(EnemyProperties _properties)
 	}
 
 	animProperties.Loops = true;
-	animProperties.Scale = _properties.v2fMoveScale;
+	animProperties.v2fScale = _properties.v2fMoveScale;
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
-	m_AnimatedSprite.GetSprite().setPosition(_properties.StartPos);
+	m_AnimatedSprite.GetSprite().setPosition(_properties.v2fStartPos);
 	m_AnimatedSprite.StartState("Moving");
 	
 	//m_v2fSpriteJumpScale = _properties.v2fJumpScale;
@@ -70,8 +70,8 @@ Enemy::~Enemy()
 {
 	// Play explosion VFX animation
 	SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/explosion.png") };
-	explosionProperties.Scale = { 2.0f, 2.0f };
-	explosionProperties.StartPos = m_AnimatedSprite.GetPosition();
+	explosionProperties.v2fScale = { 2.0f, 2.0f };
+	explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
 	explosionProperties.NumberOfFrames = 9;
 	explosionProperties.AnimFrameInterval = 0.5f / 9;
 	explosionProperties.Velocity = {0.0f, 160.0f };
@@ -106,7 +106,7 @@ void Enemy::Update()
 
 		if (m_fOneSecond <= 0) // Do below every second
 		{
-			// Destroy enemy if health is <= 0
+			// bDestroy enemy if health is <= 0
 			if (m_iCurrentHealth <= 0)
 			{
 				m_bDestroy = true;
@@ -195,7 +195,7 @@ void Enemy::TakeDamage(unsigned _amount)
 {
 	m_iCurrentHealth -= _amount; // Lower current health by provided parameter
 
-	// Destroy enemy if health is <= 0
+	// bDestroy enemy if health is <= 0
 	if (m_iCurrentHealth <= 0)
 	{
 		m_bDestroy = true;

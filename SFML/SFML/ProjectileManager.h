@@ -1,14 +1,14 @@
 #pragma once
 #include "Statics.h"
 
-
-#define DEBUFF_FREEZETIME 1.5f
-#define DEBUFF_SLOWTIME 1.5f
-#define DEBUFF_SLOWAMOUNT 0.5f
-#define DEBUFF_BURNTIME 2.0f
-#define DEBUFF_BURNAMOUNT 1
+constexpr float DEBUFF_FREEZETIME	{ 1.5f };
+constexpr float DEBUFF_SLOWTIME		{ 1.5f };
+constexpr float DEBUFF_SLOWAMOUNT	{ 0.5f };
+constexpr float DEBUFF_BURNTIME		{ 2.0f };
+constexpr unsigned DEBUFF_BURNAMOUNT{ 1 };
 
 class Projectile;
+class Enemy;
 class ProjectileManager : public sf::Drawable
 {
 public:
@@ -28,6 +28,8 @@ private:
 	inline ProjectileManager() {}
 	inline ProjectileManager(const ProjectileManager&) {};
 	inline ~ProjectileManager() {}
+
+	void ApplyDebuff_Enemy(Enemy* _target, ELEMENTTYPE _element);
 
 	std::vector<Projectile*> m_Projectiles{};
 };

@@ -40,13 +40,13 @@ void EnemyManager::Update()
 
 	for(auto& enemy : m_Enemies)
 	{
-		// Destroy enemy if its health is equal or less than 0
+		// bDestroy enemy if its health is equal or less than 0
 		if (enemy->GetCurrentHealth() <= 0)
 		{
 			Statics::fGameScore += 20.0f; // Increase game score
 			enemy->m_bDestroy = true;
 		}
-		// Destroy enemies if they below the screen
+		// bDestroy enemies if they below the screen
 		else if (enemy->GetPosition().y >= Statics::RenderWindow.getSize().y + m_fDestroyDistanceY)
 		{
 			enemy->m_bDestroy = true;

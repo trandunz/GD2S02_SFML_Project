@@ -70,7 +70,7 @@ bool Animator::StartState(std::string _stateName)
 		m_iMaxLeftFramePos = (currentStateProp->NumberOfFrames - 1) * currentStateProp->FrameWidth;
 		m_irectSpriteFrame = { 0,0,currentStateProp->FrameWidth,currentStateProp->FrameHeight };
 		m_Mesh.setTextureRect(m_irectSpriteFrame);
-		m_Mesh.setScale(currentStateProp->Scale);
+		m_Mesh.setScale(currentStateProp->v2fScale);
 		SetOriginCenter(m_Mesh);
 	
 		currentStateProp = nullptr;
@@ -81,6 +81,16 @@ bool Animator::StartState(std::string _stateName)
 		Print("WARN [Animator]: Unable to change state");
 		return false;
 	}
+}
+
+void Animator::PauseAnim()
+{
+	m_bPause = true;
+}
+
+void Animator::ResumeAnim()
+{
+	m_bPause = false;
 }
 
 void Animator::Update()

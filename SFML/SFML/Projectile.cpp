@@ -9,10 +9,10 @@ Projectile::Projectile(ProjectileProperties _properties)
 	animProperties.NumberOfFrames = _properties.uNumberOfFrames;
 	animProperties.FrameInterval = 0.1f;
 	animProperties.Loops = true;
-	animProperties.Scale = _properties.Scale;
+	animProperties.v2fScale = _properties.v2fScale;
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
-	m_AnimatedSprite.SetPosition(_properties.StartPos);
+	m_AnimatedSprite.SetPosition(_properties.v2fStartPos);
 
 	//m_Properties.uDamage = _properties.uDamage;
 	//m_Properties.bFriendly = _properties.bFriendly;
@@ -22,9 +22,9 @@ Projectile::Projectile(ProjectileProperties _properties)
 	m_AnimatedSprite.StartState("Moving");
 
 	sf::Vector2f colliderSize{ 32,32 };
-	colliderSize.x *= _properties.Scale.x;
-	colliderSize.y *= _properties.Scale.y;
-	m_BoxCollider = new BoxCollider(colliderSize, _properties.StartPos);
+	colliderSize.x *= _properties.v2fScale.x;
+	colliderSize.y *= _properties.v2fScale.y;
+	m_BoxCollider = new BoxCollider(colliderSize, _properties.v2fStartPos);
 }
 
 Projectile::~Projectile()
