@@ -30,8 +30,8 @@ Button::Button(ButtonProperties _properties)
 	{
 		SetTexture(*_properties.Texture);
 	}
-	SetScale(_properties.Scale);
-	SetPosition(_properties.StartPos);
+	SetScale(_properties.v2fScale);
+	SetPosition(_properties.v2fStartPos);
 }
 
 Button::~Button()
@@ -79,7 +79,7 @@ void Button::SetScale(sf::Vector2f _scale)
 
 void Button::ResetScale()
 {
-	SetScale(m_Properties.Scale);
+	SetScale(m_Properties.v2fScale);
 }
 
 void Button::draw(sf::RenderTarget& _target, sf::RenderStates _states) const

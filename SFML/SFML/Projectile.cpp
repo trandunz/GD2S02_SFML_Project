@@ -18,26 +18,22 @@ Projectile::Projectile(ProjectileProperties _properties)
 	animProperties.NumberOfFrames = _properties.uNumberOfFrames;
 	animProperties.FrameInterval = 0.1f;
 	animProperties.Loops = true;
-	animProperties.Scale = _properties.Scale;
+	animProperties.v2fScale = _properties.v2fScale;
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
+	m_AnimatedSprite.SetPosition(_properties.v2fStartPos);
 
-	//m_Mesh.setTexture(*_properties.Texture, true);
-	//SetOriginCenter(m_Mesh);
-	//m_Mesh.setScale(_properties.Scale);
-	//m_Mesh = m_AnimatedSprite.GetSprite();
-	m_AnimatedSprite.SetPosition(_properties.StartPos);
-	//m_AnimatedSprite.GetSprite().setColor(sf::Color::Green);
-	m_Properties.uDamage = _properties.uDamage;
-	m_Properties.bFriendly = _properties.bFriendly;
-	m_Properties.fMoveSpeed = _properties.fMoveSpeed;
+	//m_Properties.uDamage = _properties.uDamage;
+	//m_Properties.bFriendly = _properties.bFriendly;
+	//m_Properties.fMoveSpeed = _properties.fMoveSpeed;
+	m_Properties = _properties;
 
 	m_AnimatedSprite.StartState("Moving");
 
 	sf::Vector2f colliderSize{ 32,32 };
-	colliderSize.x *= _properties.Scale.x;
-	colliderSize.y *= _properties.Scale.y;
-	m_BoxCollider = new BoxCollider(colliderSize, _properties.StartPos);
+	colliderSize.x *= _properties.v2fScale.x;
+	colliderSize.y *= _properties.v2fScale.y;
+	m_BoxCollider = new BoxCollider(colliderSize, _properties.v2fStartPos);
 }
 
 Projectile::~Projectile()
@@ -77,7 +73,6 @@ bool Projectile::CheckCollision(BoxCollider& _otherCollider)
 	{
 		return false;
 	}
-	
 }
 
 sf::Vector2f Projectile::GetPosition() const
@@ -85,9 +80,24 @@ sf::Vector2f Projectile::GetPosition() const
 	return m_AnimatedSprite.GetPosition();//m_Mesh.getPosition();
 }
 
+unsigned Projectile::GetDamagedDealt() const
+{
+	return m_Properties.uDamage;
+}
+
+ELEMENTTYPE Projectile::GetElement() const
+{
+	return m_Properties.eElement;
+}
+
 bool Projectile::IsFriendly() const
 {
 	return m_Properties.bFriendly;
+}
+
+bool Projectile::IsDestroyedOnCollision() const
+{
+	return m_Properties.bDestroyOnCollision;
 }
 
 void Projectile::draw(sf::RenderTarget& _target, sf::RenderStates _states) const

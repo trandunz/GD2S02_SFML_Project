@@ -48,7 +48,7 @@ void GUI::CreateText(std::string _key, TextProperties _properties)
 	m_vecTexts[_key].setFillColor(_properties.Color);
 	m_vecTexts[_key].setString(_properties.String);
 	SetOriginCenter(m_vecTexts[_key]);
-	m_vecTexts[_key].setPosition(_properties.StartPos);
+	m_vecTexts[_key].setPosition(_properties.v2fStartPos);
 }
 
 sf::Text& GUI::GetText(std::string _key)
@@ -72,9 +72,9 @@ void GUI::CreateImage(std::string _key, ImageProperties _properties)
 {
 	m_vecImages.insert_or_assign(_key, sf::Sprite());
 	m_vecImages[_key].setTexture(*_properties.Texture, true);
-	m_vecImages[_key].setScale(_properties.Scale);
+	m_vecImages[_key].setScale(_properties.v2fScale);
 	SetOriginCenter(m_vecImages[_key]);
-	m_vecImages[_key].setPosition(_properties.StartPos);
+	m_vecImages[_key].setPosition(_properties.v2fStartPos);
 }
 
 sf::Sprite& GUI::GetImage(std::string _key)

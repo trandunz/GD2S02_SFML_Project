@@ -30,7 +30,7 @@ public:
 
 	bool CheckCollision(BoxCollider& _otherCollider);
 
-	bool Destroy{ false };
+	bool bDestroy{ false };
 	
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;

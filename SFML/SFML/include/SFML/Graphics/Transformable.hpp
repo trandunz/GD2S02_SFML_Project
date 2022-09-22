@@ -255,7 +255,7 @@ public:
     void rotate(float angle);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Scale the object
+    /// \brief v2fScale the object
     ///
     /// This function multiplies the current scale of the object,
     /// unlike setScale which overwrites it.
@@ -274,7 +274,7 @@ public:
     void scale(float factorX, float factorY);
 
     ////////////////////////////////////////////////////////////
-    /// \brief Scale the object
+    /// \brief v2fScale the object
     ///
     /// This function multiplies the current scale of the object,
     /// unlike setScale which overwrites it.
@@ -284,7 +284,7 @@ public:
     /// object.setScale(scale.x * factor.x, scale.y * factor.y);
     /// \endcode
     ///
-    /// \param factor Scale factors
+    /// \param factor v2fScale factors
     ///
     /// \see setScale
     ///
@@ -319,7 +319,7 @@ private:
     Vector2f          m_origin;                     ///< Origin of translation/rotation/scaling of the object
     Vector2f          m_position;                   ///< Position of the object in the 2D world
     float             m_rotation;                   ///< Orientation of the object, in degrees
-    Vector2f          m_scale;                      ///< Scale of the object
+    Vector2f          m_scale;                      ///< v2fScale of the object
     mutable Transform m_transform;                  ///< Combined transformation of the object
     mutable bool      m_transformNeedUpdate;        ///< Does the transform need to be recomputed?
     mutable Transform m_inverseTransform;           ///< Combined transformation of the object

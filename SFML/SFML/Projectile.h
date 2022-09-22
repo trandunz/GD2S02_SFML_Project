@@ -19,20 +19,28 @@ public:
 
 	void Update();
 
+	/// <summary>
+	/// Bool to indicate if collides with player
+	/// </summary>
+	/// <returns></returns>
+	bool IsFriendly() const;
+
 	bool CheckCollision(BoxCollider& _otherCollider);
 
-	bool Destroy = false;
+	bool bDestroy{ false };
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 	
 	ProjectileProperties m_Properties{};
 	Animator m_AnimatedSprite{};
 	BoxCollider* m_BoxCollider{ nullptr };
-	//sf::Sprite m_Mesh{};
 
 public:
 	sf::Vector2f GetPosition() const;
 
-	bool IsFriendly() const;
+	unsigned GetDamagedDealt() const;
+	ELEMENTTYPE GetElement() const;
+
+	bool IsDestroyedOnCollision() const;
 };
 

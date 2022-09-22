@@ -15,8 +15,8 @@ Obstacle::Obstacle(ObstacleProperties _properties)
 {
 	m_Mesh.setTexture(*_properties.Texture, true);
 	SetOriginCenter(m_Mesh);
-	m_Mesh.setScale(_properties.Scale);
-	m_Mesh.setPosition(_properties.StartPos);
+	m_Mesh.setScale(_properties.v2fScale);
+	m_Mesh.setPosition(_properties.v2fStartPos);
 
 	// Set box collider
 	fColliderOffset = _properties.fBoxColliderOffsetY;
