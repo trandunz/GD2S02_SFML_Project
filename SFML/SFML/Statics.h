@@ -17,6 +17,14 @@ enum class ENEMYTYPE
 	SHAMAN
 };
 
+enum class ELEMENTTYPE
+{
+	NONE,
+	FIRE,
+	WATER,
+	EARTH,
+};
+
 struct ProjectileProperties
 {
 	sf::Texture* Texture{ nullptr };
@@ -26,6 +34,8 @@ struct ProjectileProperties
 	unsigned uDamage{ 0 };
 	float fMoveSpeed{ 1000.0f };
 	unsigned uNumberOfFrames{ 1 };
+	ELEMENTTYPE eElement{ ELEMENTTYPE::NONE };
+	bool bDestroyOnCollision{ true };
 };
 
 struct ObstacleProperties

@@ -70,8 +70,43 @@ void ProjectileManager::Update()
 					{
 						if (projectile->CheckCollision(*enemy->GetCollider()))
 						{
-							enemy->TakeDamage(1);
-							projectile->Destroy = true;
+							enemy->TakeDamage(projectile->GetDamagedDealt());
+							//Assume that if it is not marked to be destroyed
+							//then it is a secondary attack projectile that dealt
+							//no damage but will inflict debuffs
+							if(projectile->IsDestroyedOnCollision())
+							{
+								projectile->Destroy = true;
+							}
+							else
+							{
+								ELEMENTTYPE projElement = projectile->GetElement();
+								switch (projElement)
+								{
+								case ELEMENTTYPE::NONE:
+								{
+									Print("WARN: Secondary projectile has no element");
+									break;
+								}
+								case ELEMENTTYPE::FIRE:
+								{
+									enemy->DamageEnemyOverTime(DEBUFF_BURNAMOUNT, DEBUFF_BURNTIME);
+									break;
+								}
+								case ELEMENTTYPE::WATER:
+								{
+									enemy->SlowEnemy(DEBUFF_SLOWTIME, DEBUFF_SLOWAMOUNT);
+									break;
+								}
+								case ELEMENTTYPE::EARTH:
+								{
+									enemy->FreezeEnemy(DEBUFF_FREEZETIME);
+									break;
+								}
+								default:
+									break;
+								}
+							}
 							break;
 						}
 					}
@@ -86,9 +121,11 @@ void ProjectileManager::Update()
 					{
 						if (projectile->CheckCollision(*player->GetCollisionBox()))
 						{
-							player->TakeDamage(1);
-
-							projectile->Destroy = true;
+							player->TakeDamage( projectile->GetDamagedDealt() );
+							if (projectile->IsDestroyedOnCollision())
+							{
+								projectile->Destroy = true;
+							}
 							break;
 						}
 					}

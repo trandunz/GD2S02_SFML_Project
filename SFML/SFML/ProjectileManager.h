@@ -1,6 +1,13 @@
 #pragma once
 #include "Statics.h"
 
+
+#define DEBUFF_FREEZETIME 1.5f
+#define DEBUFF_SLOWTIME 1.5f
+#define DEBUFF_SLOWAMOUNT 0.5f
+#define DEBUFF_BURNTIME 2.0f
+#define DEBUFF_BURNAMOUNT 1
+
 class Projectile;
 class ProjectileManager : public sf::Drawable
 {
@@ -24,4 +31,3 @@ private:
 
 	std::vector<Projectile*> m_Projectiles{};
 };
-

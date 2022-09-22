@@ -21,6 +21,11 @@ Player::Player(PlayerProperties _properties)
 	fColliderOffset = _properties.fBoxColliderOffsetY;
 	m_BoxCollider = new BoxCollider(_properties.BoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset));
 
+	//Set up properties that are the same for both players
+	m_BasicAttackProperties.uDamage = 1;
+	m_SecondaryAttackProperties.bDestroyOnCollision = false;
+	m_SecondaryAttackProperties.fMoveSpeed = 500.0f;
+
 	if (m_Properties.bPlayerOne == false)
 	{
 		m_MoveUpKey = sf::Keyboard::Up;
@@ -42,6 +47,7 @@ Player::Player(PlayerProperties _properties)
 		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 		m_SecondaryAttackProperties.Scale = { 2.00f,2.00f };
 		m_SecondaryAttackProperties.uNumberOfFrames = 3;
+		m_SecondaryAttackProperties.eElement = ELEMENTTYPE::FIRE;
 	}
 	else
 	{
@@ -52,9 +58,10 @@ Player::Player(PlayerProperties _properties)
 		m_BasicAttackProperties.Scale = { 2.00f,2.00f };
 		m_BasicAttackProperties.uNumberOfFrames = 3;
 
-		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
-		m_SecondaryAttackProperties.Scale = { 2.00f,2.00f };
-		m_SecondaryAttackProperties.uNumberOfFrames = 3;
+		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/SecondaryDefault_Green.png");//("Earth_Spell.png");
+		m_SecondaryAttackProperties.Scale = { 1.5f,1.5f };
+		m_SecondaryAttackProperties.uNumberOfFrames = 1;
+		m_SecondaryAttackProperties.eElement = ELEMENTTYPE::EARTH;
 	}
 
 	CreateSpecialVFX();

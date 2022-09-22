@@ -24,6 +24,9 @@ private:
 public:
 	sf::Vector2f GetPosition() const;
 
+	unsigned GetDamagedDealt() const;
+	ELEMENTTYPE GetElement() const;
 	bool IsFriendly() const;
+	bool IsDestroyedOnCollision() const;
 };
 
