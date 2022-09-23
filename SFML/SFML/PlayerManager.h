@@ -44,5 +44,10 @@ private:
 	bool m_bIsWhipingScreen{ false };
 	float m_fScreenWhipeDuration{ 3.0f };
 	std::string m_sScreenWhipeVFXKey{};
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
 };
 

@@ -14,18 +14,27 @@ class Obstacle;
 class ObjectManager : public sf::Drawable
 {
 public:
-	inline static ObjectManager& GetInstance()
-	{
-		static ObjectManager instance;
-		return instance;
-	}
-
+	static ObjectManager& GetInstance();
+	
+	/// <summary>
+	/// Force cleanup all obstacles
+	/// </summary>
 	void CleanupObstacles();
+	/// <summary>
+	/// Create an obstacle with the specified properties
+	/// </summary>
+	/// <param name="_properties"></param>
 	void CreateObstacle(ObstacleProperties _properties);
-	void Update();
-	std::vector<sf::Sprite> GetObstacleSprites() const;
-	std::vector<Obstacle*> GetObstacles() const;
 
+	/// <summary>
+	/// Update all obstacles
+	/// </summary>
+	void Update();
+
+	/// <summary>
+	/// Handles the spawning of obstacles at a specified rate
+	/// </summary>
+	/// <param name="_rate"></param>
 	void SpawnObstacles(float _rate);
 
 private:
@@ -36,5 +45,13 @@ private:
 
 	float m_SpawnTimer{ 3.0f };
 	std::vector<Obstacle*> Obstacles{};
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
+
+	std::vector<sf::Sprite> GetObstacleSprites() const;
+	std::vector<Obstacle*> GetObstacles() const;
 };
 

@@ -36,6 +36,10 @@ private:
 	BoxCollider* m_BoxCollider{ nullptr };
 
 public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
+
 	sf::Vector2f GetPosition() const;
 
 	unsigned GetDamagedDealt() const;

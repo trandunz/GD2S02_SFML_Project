@@ -32,8 +32,8 @@ Animator::~Animator()
 
 void Animator::AddState(std::string _stateName, AnimStateProperties _properties)
 {
-	_properties.FrameHeight = _properties.StateTexture->getSize().y;
-	_properties.FrameWidth = _properties.StateTexture->getSize().x / _properties.NumberOfFrames;
+	_properties.iFrameHeight = _properties.StateTexture->getSize().y;
+	_properties.iFrameWidth = _properties.StateTexture->getSize().x / _properties.uNumberOfFrames;
 	m_mapAnimationStates.insert_or_assign(_stateName, _properties);
 
 	if (m_mapAnimationStates.size() == 1)
@@ -67,8 +67,8 @@ bool Animator::StartState(std::string _stateName)
 		//max left frame refers to the maximuim value of the top left coordinate of the frame 
 		//is calculated by mutltiplying the frame width
 		//with the number of frames (minus one because the first frame is of coordinate zero)
-		m_iMaxLeftFramePos = (currentStateProp->NumberOfFrames - 1) * currentStateProp->FrameWidth;
-		m_irectSpriteFrame = { 0,0,currentStateProp->FrameWidth,currentStateProp->FrameHeight };
+		m_iMaxLeftFramePos = (currentStateProp->uNumberOfFrames - 1) * currentStateProp->iFrameWidth;
+		m_irectSpriteFrame = { 0,0,currentStateProp->iFrameWidth,currentStateProp->iFrameHeight };
 		m_Mesh.setTextureRect(m_irectSpriteFrame);
 		m_Mesh.setScale(currentStateProp->v2fScale);
 		SetOriginCenter(m_Mesh);
@@ -116,7 +116,7 @@ void Animator::Update()
 			//the current animation progress. We need to know how long this frame lasts
 			AnimStateProperties* currentStateProp = &m_mapAnimationStates[m_sCurrentState];
 			m_fAnimationProgress += Statics::fDeltaTime;
-			if (m_fAnimationProgress >= currentStateProp->FrameInterval)
+			if (m_fAnimationProgress >= currentStateProp->fFrameInterval)
 			{
 				m_fAnimationProgress = 0.0f;
 				//If the current progress is equal or longer than the interval, then change to the next frame.
@@ -126,13 +126,13 @@ void Animator::Update()
 				//If it is, we either 
 				// a: reset the coordinate to 0 if we're looping
 				// b: start the default animation.
-				int newLeftFrameCoord = m_irectSpriteFrame.left + currentStateProp->FrameWidth;
+				int newLeftFrameCoord = m_irectSpriteFrame.left + currentStateProp->iFrameWidth;
 				if (newLeftFrameCoord > m_iMaxLeftFramePos)
 				{
 					m_irectSpriteFrame.left = 0;
 					m_Mesh.setTextureRect(m_irectSpriteFrame);
 
-					if (!currentStateProp->Loops)
+					if (!currentStateProp->bLoops)
 					{
 						StartState(m_sDefaultState);
 					}
@@ -156,6 +156,21 @@ void Animator::Update()
 	}
 }
 
+sf::Sprite& Animator::GetSprite()
+{
+	return m_Mesh;
+}
+
+sf::FloatRect Animator::GetLocalBounds()
+{
+	return m_Mesh.getLocalBounds();
+}
+
+sf::FloatRect Animator::GetGlobalBounds()
+{
+	return m_Mesh.getGlobalBounds();
+}
+
 void Animator::SetScale(const sf::Vector2f& _factors)
 {
 	m_Mesh.setScale(_factors);
@@ -174,6 +189,11 @@ void Animator::SetPosition(const sf::Vector2f& _position)
 void Animator::SetPosition(float _positionX, float _positionY)
 {
 	m_Mesh.setPosition(_positionX, _positionY);
+}
+
+sf::Vector2f Animator::GetPosition() const
+{
+	return m_Mesh.getPosition();
 }
 
 void Animator::MoveSprite(const sf::Vector2f& _offset)

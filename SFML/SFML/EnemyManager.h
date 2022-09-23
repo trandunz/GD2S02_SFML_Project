@@ -14,21 +14,35 @@ class Enemy;
 class EnemyManager : public sf::Drawable
 {
 public:
-	inline static EnemyManager& GetInstance()
-	{
-		static EnemyManager instance;
-		return instance;
-	}
+	static EnemyManager& GetInstance();
 
+	/// <summary>
+	/// Cleans up any enemies with bDestory = true
+	/// </summary>
 	void CleanupDestroyed();
+
+	/// <summary>
+	/// Force cleans up all enemies
+	/// </summary>
 	void CleanupEnemies();
+
+	/// <summary>
+	/// Creates an eenemy with the specified properties
+	/// </summary>
+	/// <param name="_properties"></param>
 	void CreateEnemy(EnemyProperties _properties);
+
+	/// <summary>
+	/// Handles updating all enemies
+	/// </summary>
 	void Update();
 
+	/// <summary>
+	/// Handles the spawning of enemies at the specified rate
+	/// </summary>
+	/// <param name="_rate"></param>
 	void SpawnEnemies(float _rate);
 
-	std::vector<sf::Sprite> GetEnemySprites() const ;
-	std::vector<Enemy*>& GetEnemies();
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 
@@ -40,5 +54,13 @@ private:
 	std::vector<Enemy*> m_Enemies{}; // Vector to hold all enemy types
 
 	float m_fDestroyDistanceY{ 64.0f }; // The distance below the game window of when to destroy enemies
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
+
+	std::vector<sf::Sprite> GetEnemySprites() const;
+	std::vector<Enemy*>& GetEnemies();
 };
 

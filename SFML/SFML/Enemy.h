@@ -57,9 +57,14 @@ public:
 
 	void SlowEnemy(float _seconds, float _slowMovementPercentage);
 
+	/// <summary>
+	/// Checks collision between enemy and another collider
+	/// </summary>
+	/// <param name="_otherCollider"></param>
+	/// <returns></returns>
 	bool CheckCollision(BoxCollider& _otherCollider);
 
-	bool m_bDestroy = false;
+	bool bDestroy{ false };
 
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
@@ -94,35 +99,38 @@ private:
 
 	// Status effect related variables
 	// -Damage over time on enemy variables-
-	bool m_bDamaged;
-	unsigned m_uDamageOverTime;
-	float m_fOneSecond = 1.0f;
-	float m_fDamageTime;
-	sf::Color m_DamagedSpriteColor = sf::Color(255, 23, 23);
+	bool m_bDamaged{false};
+	unsigned m_uDamageOverTime{};
+	float m_fOneSecond{ 1.0f };
+	float m_fDamageTime{};
+	sf::Color m_DamagedSpriteColor{ 255, 23, 23 };
 	// -Enemy being frozen variables (unable to move)-
-	bool m_bFrozen; 
-	float m_fFreezeTime;
-	sf::Color m_FrozenSpriteColor = sf::Color(0, 162, 232);
+	bool m_bFrozen{false};
+	float m_fFreezeTime{};
+	sf::Color m_FrozenSpriteColor{ 0, 162, 232 };
 	// -Enemy being slowed variables-
-	bool m_bSlowed; 
-	float m_fSlowTime;
-	sf::Color m_SlowedSpriteColor = sf::Color(181, 230, 29);
+	bool m_bSlowed{false};
+	float m_fSlowTime{};
+	sf::Color m_SlowedSpriteColor{ 181, 230, 29 };
 
 	// Changing sprite color
-	bool m_bSpriteColorChanged = false;
-	float m_fSpriteChangeColorSpeed = 0.2f; // Color changing speed
-	float m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed; // Color changing timer
+	bool m_bSpriteColorChanged{ false };
+	float m_fSpriteChangeColorSpeed{ 0.2f }; // Color changing speed
+	float m_fSpriteChangeColorCounter{ m_fSpriteChangeColorSpeed }; // Color changing timer
 
 	// Movement
-	float m_fArcherYPos = 0;
-	bool m_bFirstMoveComplete = false;
+	float m_fArcherYPos{};
+	bool m_bFirstMoveComplete{ false };
 	
-	BoxCollider* m_BoxCollider;
+	BoxCollider* m_BoxCollider{nullptr};
 
 	Animator m_AnimatedSprite{};
 
 public:
-	// Getters and Setters
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
+
 	ENEMYTYPE GetType();
 
 	sf::Vector2f GetPosition() const;

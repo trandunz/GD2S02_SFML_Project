@@ -28,7 +28,7 @@ Player::Player(PlayerProperties _properties)
 
 	// Set box collider
 	fColliderOffset = _properties.fBoxColliderOffsetY;
-	m_BoxCollider = new BoxCollider(_properties.BoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset));
+	m_BoxCollider = new BoxCollider(_properties.v2fBoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset));
 
 	//Set up properties that are the same for both players
 	m_BasicAttackProperties.uDamage = 1;
@@ -37,13 +37,13 @@ Player::Player(PlayerProperties _properties)
 
 	if (m_Properties.bPlayerOne == false)
 	{
-		m_MoveUpKey = sf::Keyboard::Up;
-		m_MoveDownKey = sf::Keyboard::Down;
-		m_MoveLeftKey = sf::Keyboard::Left;
-		m_MoveRightKey = sf::Keyboard::Right;
-		m_BasicAttackKey = sf::Keyboard::Numpad1;
-		m_SecondaryAttackKey = sf::Keyboard::Numpad2;
-		m_SpecialAttackKey = sf::Keyboard::Numpad3;
+		m_MoveUpKey = sf::Keyboard::Key::Up;
+		m_MoveDownKey = sf::Keyboard::Key::Down;
+		m_MoveLeftKey = sf::Keyboard::Key::Left;
+		m_MoveRightKey = sf::Keyboard::Key::Right;
+		m_BasicAttackKey = sf::Keyboard::Key::Numpad1;
+		m_SecondaryAttackKey = sf::Keyboard::Key::Numpad2;
+		m_SpecialAttackKey = sf::Keyboard::Key::Numpad3;
 
 		sf::Vector2u windowSize = Statics::RenderWindow.getSize();
 		CreateHeartsUI("P2", { windowSize.x - 80.0f, 40 }, { windowSize.x - 48.0f ,40 }, { windowSize.x - 16.0f,40 });
@@ -56,7 +56,7 @@ Player::Player(PlayerProperties _properties)
 		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 		m_SecondaryAttackProperties.v2fScale = { 2.00f,2.00f };
 		m_SecondaryAttackProperties.uNumberOfFrames = 3;
-		m_SecondaryAttackProperties.eElement = ELEMENTTYPE::FIRE;
+		m_SecondaryAttackProperties.Element = ELEMENTTYPE::FIRE;
 	}
 	else
 	{
@@ -70,7 +70,7 @@ Player::Player(PlayerProperties _properties)
 		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/SecondaryDefault_Green.png");//("Earth_Spell.png");
 		m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
 		m_SecondaryAttackProperties.uNumberOfFrames = 1;
-		m_SecondaryAttackProperties.eElement = ELEMENTTYPE::EARTH;
+		m_SecondaryAttackProperties.Element = ELEMENTTYPE::EARTH;
 	}
 
 	CreateSpecialVFX();
@@ -144,7 +144,7 @@ void Player::Update()
 
 	// Update position of collider
 	if (m_BoxCollider)
-		m_BoxCollider->UpdatePosition({ m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset });
+		m_BoxCollider->SetPosition({ m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset });
 }
 	
 

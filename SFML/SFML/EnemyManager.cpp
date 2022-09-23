@@ -14,12 +14,18 @@
 #include "TextureLoader.h"
 #include "Helper.h"
 
+EnemyManager& EnemyManager::GetInstance()
+{
+	static EnemyManager instance;
+	return instance;
+}
+
 void EnemyManager::CleanupDestroyed()
 {
 	auto enemyIt = m_Enemies.begin();
 	while (enemyIt != m_Enemies.end())
 	{
-		if ((*enemyIt)->m_bDestroy == true)
+		if ((*enemyIt)->bDestroy == true)
 		{
 			if ((*enemyIt) != nullptr)
 			{
@@ -53,12 +59,12 @@ void EnemyManager::Update()
 		if (enemy->GetCurrentHealth() <= 0)
 		{
 			Statics::fGameScore += 20.0f; // Increase game score
-			enemy->m_bDestroy = true;
+			enemy->bDestroy = true;
 		}
 		// bDestroy enemies if they below the screen
 		else if (enemy->GetPosition().y >= Statics::RenderWindow.getSize().y + m_fDestroyDistanceY)
 		{
-			enemy->m_bDestroy = true;
+			enemy->bDestroy = true;
 		}
 		else
 		{
@@ -73,7 +79,7 @@ void EnemyManager::Update()
 						case ENEMYTYPE::KAMIKAZE:
 						{
 							player->TakeDamage(1);
-							enemy->m_bDestroy = true;
+							enemy->bDestroy = true;
 
 							break;
 						}

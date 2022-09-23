@@ -12,6 +12,12 @@
 #include "TextureLoader.h"
 #include "Helper.h"
 
+ObjectManager& ObjectManager::GetInstance()
+{
+	static ObjectManager instance;
+	return instance;
+}
+
 void ObjectManager::CleanupObstacles()
 {
 	CleanupVector(Obstacles);

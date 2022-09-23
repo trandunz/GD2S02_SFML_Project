@@ -19,8 +19,8 @@ Obstacle::Obstacle(ObstacleProperties _properties)
 	m_Mesh.setPosition(_properties.v2fStartPos);
 
 	// Set box collider
-	fColliderOffset = _properties.fBoxColliderOffsetY;
-	m_BoxCollider = new BoxCollider(_properties.BoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset));
+	m_fColliderOffset = _properties.fBoxColliderOffsetY;
+	m_BoxCollider = new BoxCollider(_properties.v2fBoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + m_fColliderOffset));
 }
 
 Obstacle::~Obstacle()
@@ -32,7 +32,7 @@ void Obstacle::Update()
 	Movement();
 
 	// Update position of collider
-	m_BoxCollider->UpdatePosition(sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset));
+	m_BoxCollider->SetPosition(sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + m_fColliderOffset));
 }
 
 sf::Sprite Obstacle::GetSprite() const

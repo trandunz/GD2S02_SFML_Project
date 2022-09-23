@@ -22,7 +22,12 @@ public:
 	virtual void HandleEvents() override;
 	virtual void Update() override;
 	virtual void Draw() override;
+
 private:
 
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
 };
 

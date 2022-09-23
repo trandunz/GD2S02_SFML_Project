@@ -87,8 +87,8 @@ MenuScene::~MenuScene()
 void MenuScene::HandleEvents()
 {
 	if (Statics::EventHandle.type == sf::Event::KeyPressed) {
-		if (Statics::EventHandle.key.code == sf::Keyboard::W ||
-			Statics::EventHandle.key.code == sf::Keyboard::Up)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::W ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
 		{
 			m_iButtonSelected = --m_iButtonSelected % m_vecButtons.size();
 			if (m_iButtonSelected < 0)
@@ -96,19 +96,19 @@ void MenuScene::HandleEvents()
 				m_iButtonSelected = m_vecButtons.size() - 1;
 			}
 		}
-		if (Statics::EventHandle.key.code == sf::Keyboard::S ||
-			Statics::EventHandle.key.code == sf::Keyboard::Down)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::S ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Down)
 		{
 			m_iButtonSelected = ++m_iButtonSelected % m_vecButtons.size();
 
 		}
-		if (Statics::EventHandle.key.code == sf::Keyboard::Enter ||
-			Statics::EventHandle.key.code == sf::Keyboard::V ||
-			Statics::EventHandle.key.code == sf::Keyboard::B ||
-			Statics::EventHandle.key.code == sf::Keyboard::N ||
-			Statics::EventHandle.key.code == sf::Keyboard::Numpad1 ||
-			Statics::EventHandle.key.code == sf::Keyboard::Numpad2 ||
-			Statics::EventHandle.key.code == sf::Keyboard::Numpad3)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Enter ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::B ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::N ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2 ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad3)
 		{
 			Button* button = nullptr;
 

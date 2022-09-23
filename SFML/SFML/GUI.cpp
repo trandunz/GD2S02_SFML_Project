@@ -12,6 +12,12 @@
 #include "Button.h"
 #include "Helper.h"
 
+GUI& GUI::GetInstance()
+{
+	static GUI instance;
+	return instance;
+}
+
 void GUI::CleanupElements()
 {
 	CleanupMap(m_vecTexts);

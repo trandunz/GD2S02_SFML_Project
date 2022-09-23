@@ -41,4 +41,9 @@ private:
 	void ApplyDebuff_Enemy(Enemy* _target, ELEMENTTYPE _element);
 
 	std::vector<Projectile*> m_Projectiles{};
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
 };

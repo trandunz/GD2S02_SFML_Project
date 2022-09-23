@@ -14,25 +14,41 @@ class BoxCollider;
 class Obstacle : public sf::Drawable
 {
 public:
+	/// <summary>
+	/// Construct an obstacle with the specified properties
+	/// </summary>
+	/// <param name="_properties"></param>
 	Obstacle(ObstacleProperties _properties);
+	/// <summary>
+	/// Obstacle destructor
+	/// </summary>
 	~Obstacle();
 
+	/// <summary>
+	/// Update the obstacle
+	/// </summary>
 	void Update();
 
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 
+	/// <summary>
+	/// Handles movement for the obstacle 
+	/// </summary>
 	void Movement();
 
 	ObstacleProperties m_Properties{};
 	sf::Vector2f m_v2fVelocity{};
 	sf::Sprite m_Mesh{};
 
-	BoxCollider* m_BoxCollider;
-	float fColliderOffset;
+	BoxCollider* m_BoxCollider{nullptr};
+	float m_fColliderOffset{};
 
 public:
-	// Getters
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
+
 	sf::Sprite GetSprite() const;
 	BoxCollider* GetCollisionBox();
 };

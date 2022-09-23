@@ -43,7 +43,7 @@ struct ProjectileProperties
 	unsigned uDamage{ 0 };
 	float fMoveSpeed{ 1000.0f };
 	unsigned uNumberOfFrames{ 1 };
-	ELEMENTTYPE eElement{ ELEMENTTYPE::NONE };
+	ELEMENTTYPE Element{ ELEMENTTYPE::NONE };
 	bool bDestroyOnCollision{ true };
 };
 
@@ -52,7 +52,7 @@ struct ObstacleProperties
 	sf::Texture* Texture{ nullptr };
 	sf::Vector2f v2fStartPos{};
 	sf::Vector2f v2fScale{ 1,1 };
-	sf::Vector2f BoxColliderSize{ 10,10 };
+	sf::Vector2f v2fBoxColliderSize{ 10,10 };
 	float fBoxColliderOffsetY{};	
 	float fMoveSpeed{ 160.0f };
 };
@@ -61,7 +61,7 @@ struct PlayerProperties
 {
 	sf::Texture* Texture{ nullptr };
 	sf::Vector2f v2fStartPos{};
-	sf::Vector2f BoxColliderSize{ 10,10 };
+	sf::Vector2f v2fBoxColliderSize{ 10,10 };
 	float fBoxColliderOffsetY{};
 	float fMoveSpeed{ 1000.0f };
 	int iMaxHealth{ 3 };
@@ -112,21 +112,21 @@ struct SpecialEffectProperties
 	sf::Vector2f v2fStartPos{};
 	sf::Vector2f v2fScale{ 1,1 };
 	sf::Color Color{1,1,1};
-	unsigned NumberOfFrames{ 1 };
-	float AnimFrameInterval{};
-	sf::Vector2f Velocity{};
+	unsigned uNumberOfFrames{ 1 };
+	float fAnimFrameInterval{};
+	sf::Vector2f v2fVelocity{};
 };
 
 struct AnimStateProperties
 {
 	sf::Texture* StateTexture{ nullptr };
 	sf::Vector2i TopLeftStartFrame { 0,0 };
-	int FrameHeight{ 32 };
-	int FrameWidth{ 32 };
-	unsigned NumberOfFrames{ 1 };
-	float FrameInterval{};
+	int iFrameHeight{ 32 };
+	int iFrameWidth{ 32 };
+	unsigned uNumberOfFrames{ 1 };
+	float fFrameInterval{};
 	sf::Vector2f v2fScale{ 1.0f,1.0f };
-	bool Loops{ false };
+	bool bLoops{ false };
 };
 
 class Statics
@@ -151,5 +151,10 @@ public:
 	static bool bDebugMode;
 private:
 	static float m_fLastTime;
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
 };
 

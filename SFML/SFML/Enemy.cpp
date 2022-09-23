@@ -35,16 +35,16 @@ Enemy::Enemy(EnemyProperties _properties)
 	{
 		case ENEMYTYPE::KAMIKAZE:
 		{
-			animProperties.NumberOfFrames = 4;
-			animProperties.FrameInterval = 0.1f;
+			animProperties.uNumberOfFrames = 4;
+			animProperties.fFrameInterval = 0.1f;
 			break;
 		}
 		case ENEMYTYPE::ARCHER:
 		{
-			animProperties.NumberOfFrames = 4;
-			animProperties.FrameInterval = 0.1f;
+			animProperties.uNumberOfFrames = 4;
+			animProperties.fFrameInterval = 0.1f;
 
-			m_fArcherYPos = (rand() % 261) + 70;
+			m_fArcherYPos = (rand() % 261) + 70.0f;
 			std::cout << m_fArcherYPos << std::endl;
 			break;
 		}
@@ -52,7 +52,7 @@ Enemy::Enemy(EnemyProperties _properties)
 			break;
 	}
 
-	animProperties.Loops = true;
+	animProperties.bLoops = true;
 	animProperties.v2fScale = _properties.v2fMoveScale;
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
@@ -71,9 +71,9 @@ Enemy::~Enemy()
 	SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/explosion.png") };
 	explosionProperties.v2fScale = { 2.0f, 2.0f };
 	explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
-	explosionProperties.NumberOfFrames = 9;
-	explosionProperties.AnimFrameInterval = 0.5f / 9;
-	explosionProperties.Velocity = {0.0f, 160.0f };
+	explosionProperties.uNumberOfFrames = 9;
+	explosionProperties.fAnimFrameInterval = 0.5f / 9;
+	explosionProperties.v2fVelocity = {0.0f, 160.0f };
 	VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
 }
 
@@ -108,7 +108,7 @@ void Enemy::Update()
 			// bDestroy enemy if health is <= 0
 			if (m_iCurrentHealth <= 0)
 			{
-				m_bDestroy = true;
+				bDestroy = true;
 			}
 
 			m_fOneSecond = 1.0f; // Reset OneSecond variable for counting
@@ -167,7 +167,7 @@ void Enemy::Update()
 	}
 
 	// Update collider position
-	m_BoxCollider->UpdatePosition({ m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
+	m_BoxCollider->SetPosition({ m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 }
 
 ENEMYTYPE Enemy::GetType()
@@ -197,7 +197,7 @@ void Enemy::TakeDamage(unsigned _amount)
 	// bDestroy enemy if health is <= 0
 	if (m_iCurrentHealth <= 0)
 	{
-		m_bDestroy = true;
+		bDestroy = true;
 	}
 }
 

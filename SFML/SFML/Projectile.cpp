@@ -15,9 +15,9 @@ Projectile::Projectile(ProjectileProperties _properties)
 {
 	AnimStateProperties animProperties;
 	animProperties.StateTexture = _properties.Texture;
-	animProperties.NumberOfFrames = _properties.uNumberOfFrames;
-	animProperties.FrameInterval = 0.1f;
-	animProperties.Loops = true;
+	animProperties.uNumberOfFrames = _properties.uNumberOfFrames;
+	animProperties.fFrameInterval = 0.1f;
+	animProperties.bLoops = true;
 	animProperties.v2fScale = _properties.v2fScale;
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
@@ -60,7 +60,7 @@ void Projectile::Update()
 
 	// Update position of collider
 	if (m_BoxCollider)
-		m_BoxCollider->UpdatePosition(m_AnimatedSprite.GetPosition());
+		m_BoxCollider->SetPosition(m_AnimatedSprite.GetPosition());
 }
 
 bool Projectile::CheckCollision(BoxCollider& _otherCollider)
@@ -87,7 +87,7 @@ unsigned Projectile::GetDamagedDealt() const
 
 ELEMENTTYPE Projectile::GetElement() const
 {
-	return m_Properties.eElement;
+	return m_Properties.Element;
 }
 
 bool Projectile::IsFriendly() const

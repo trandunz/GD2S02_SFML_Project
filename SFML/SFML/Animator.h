@@ -117,18 +117,14 @@ private:
 	bool m_bPause{ false };
 
 public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
 
-	/// <summary>
-	/// Returns the current frame being displayed
-	/// </summary>
-	/// <returns></returns>
-	sf::Sprite& GetSprite() { return m_Mesh; };
+	sf::Sprite& GetSprite();
 
-	/// <summary>
-	/// Passes arguments to sf::sprite GetLocalBounds function
-	/// </summary>
-	inline sf::FloatRect GetLocalBounds() { return m_Mesh.getLocalBounds(); };
-	inline sf::FloatRect GetGlobalBounds() { return m_Mesh.getGlobalBounds(); };
+	sf::FloatRect GetLocalBounds();
+	sf::FloatRect GetGlobalBounds();
 
 	void SetScale(const sf::Vector2f& _factors);
 	void SetScale(float factorX, float _factorY);
@@ -136,10 +132,6 @@ public:
 	void SetPosition(const sf::Vector2f& _position);
 	void SetPosition(float _positionX, float _positionY);
 
-	/// <summary>
-	/// Get the current position of the sprite
-	/// </summary>
-	/// <returns></returns>
-	sf::Vector2f GetPosition() const { return m_Mesh.getPosition(); }
+	sf::Vector2f GetPosition() const;
 };
 

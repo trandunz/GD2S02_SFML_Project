@@ -10,6 +10,12 @@
 #include "VFX.h"
 #include "Math.h"
 
+VFX& VFX::GetInstance()
+{
+	static VFX instance;
+	return instance;
+}
+
 void VFX::CleanupElements()
 {
 	CleanupMap(m_Effects);
@@ -22,7 +28,7 @@ void VFX::Update()
 		if (effect.second.LifeTime > 0)
 		{
 			effect.second.Animator.Update();
-			effect.second.Animator.MoveSprite(effect.second.Properties.Velocity * Statics::fDeltaTime);
+			effect.second.Animator.MoveSprite(effect.second.Properties.v2fVelocity * Statics::fDeltaTime);
 			effect.second.LifeTime -= Statics::fDeltaTime;
 		}
 	}
@@ -32,8 +38,8 @@ void VFX::CreateAndPlayEffect(std::string _key, SpecialEffectProperties _propert
 {
 	m_Effects.insert_or_assign(_key, SpecialEffect{});
 	AnimStateProperties animatorProperties{ _properties.Texture };
-	animatorProperties.NumberOfFrames = _properties.NumberOfFrames;
-	animatorProperties.FrameInterval = _properties.AnimFrameInterval;
+	animatorProperties.uNumberOfFrames = _properties.uNumberOfFrames;
+	animatorProperties.fFrameInterval = _properties.fAnimFrameInterval;
 	animatorProperties.v2fScale = _properties.v2fScale;
 	m_Effects[_key].Properties = _properties;
 	m_Effects[_key].Animator.AddState("Default", animatorProperties);
@@ -46,8 +52,8 @@ void VFX::CreateEffect(std::string _key, SpecialEffectProperties _properties)
 {
 	m_Effects.insert_or_assign(_key, SpecialEffect{});
 	AnimStateProperties animatorProperties{ _properties.Texture };
-	animatorProperties.NumberOfFrames = _properties.NumberOfFrames;
-	animatorProperties.FrameInterval = _properties.AnimFrameInterval;
+	animatorProperties.uNumberOfFrames = _properties.uNumberOfFrames;
+	animatorProperties.fFrameInterval = _properties.fAnimFrameInterval;
 	animatorProperties.v2fScale = _properties.v2fScale;
 	m_Effects[_key].Properties = _properties;
 	m_Effects[_key].Animator.AddState("Default", animatorProperties);
@@ -70,8 +76,8 @@ std::string VFX::CreateAndPlayEffect(SpecialEffectProperties _properties, float 
 
 	m_Effects.insert_or_assign(uniqueKeyAsString, SpecialEffect{});
 	AnimStateProperties animatorProperties{ _properties.Texture };
-	animatorProperties.NumberOfFrames = _properties.NumberOfFrames;
-	animatorProperties.FrameInterval = _properties.AnimFrameInterval;
+	animatorProperties.uNumberOfFrames = _properties.uNumberOfFrames;
+	animatorProperties.fFrameInterval = _properties.fAnimFrameInterval;
 	animatorProperties.v2fScale = _properties.v2fScale;
 	m_Effects[uniqueKeyAsString].Properties = _properties;
 	m_Effects[uniqueKeyAsString].Animator.AddState("Default", animatorProperties);
@@ -100,8 +106,8 @@ std::string VFX::CreateEffect(SpecialEffectProperties _properties)
 
 	m_Effects.insert_or_assign(uniqueKeyAsString, SpecialEffect{});
 	AnimStateProperties animatorProperties{ _properties.Texture };
-	animatorProperties.NumberOfFrames = _properties.NumberOfFrames;
-	animatorProperties.FrameInterval = _properties.AnimFrameInterval;
+	animatorProperties.uNumberOfFrames = _properties.uNumberOfFrames;
+	animatorProperties.fFrameInterval = _properties.fAnimFrameInterval;
 	animatorProperties.v2fScale = _properties.v2fScale;
 	m_Effects[uniqueKeyAsString].Properties = _properties;
 	m_Effects[uniqueKeyAsString].Animator.AddState("Default", animatorProperties);

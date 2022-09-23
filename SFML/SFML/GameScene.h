@@ -27,5 +27,10 @@ private:
 
 	std::vector<sf::Sprite> m_Backgrounds{};
 	float m_fDistanceTravelled{};
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
 };
 

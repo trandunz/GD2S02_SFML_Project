@@ -31,5 +31,10 @@ public:
 private:
 	static Level* CurrentLevel;
 	static LEVELS LevelToLoad;
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
 };
 

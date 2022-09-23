@@ -64,7 +64,7 @@ void PlayerManager::Update()
 			{
 				if (enemy->GetCollider()->CheckCollision(VFX::GetInstance().GetEffect(m_sScreenWhipeVFXKey).GetGlobalBounds()))
 				{
-					enemy->m_bDestroy = true;
+					enemy->bDestroy = true;
 				}
 			}
 		}
@@ -120,7 +120,7 @@ void PlayerManager::WhipeScreenFromSpecial()
 
 	whipeEffectProperties.v2fStartPos = Statics::RenderWindow.getView().getCenter();
 	whipeEffectProperties.v2fStartPos.y += Statics::RenderWindow.getSize().y / 2.0f + whipeEffectProperties.Texture->getSize().y / 2;
-	whipeEffectProperties.Velocity = { 0, -Statics::fBackgroundScrollSpeed * 4.0f};
+	whipeEffectProperties.v2fVelocity = { 0, -Statics::fBackgroundScrollSpeed * 4.0f};
 
 	m_sScreenWhipeVFXKey = VFX::GetInstance().CreateAndPlayEffect(whipeEffectProperties, m_fScreenWhipeDuration);
 	m_bIsWhipingScreen = true;

@@ -29,5 +29,10 @@ private:
 	int m_iButtonSelected{};
 
 	std::vector<std::string> m_vecButtons;
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
 };
 
