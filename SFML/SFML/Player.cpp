@@ -113,9 +113,10 @@ void Player::Update()
 	}
 	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
 	{
-		if (m_AttackTimer <= 0)
+		if (m_AttackTimer <= 0 && m_SecondaryTimer <= 0)
 		{
 			m_AttackTimer = m_AttackSpeed;
+			m_SecondaryTimer = m_SecondaryCooldown;
 			SecondaryAttack();
 		}
 	}
@@ -131,6 +132,11 @@ void Player::Update()
 	if (m_SpecialTimer > 0)
 	{
 		m_SpecialTimer -= Statics::fDeltaTime;
+	}
+
+	if (m_SecondaryTimer > 0)
+	{
+		m_SecondaryTimer -= Statics::fDeltaTime;
 	}
 
 	m_v2fVelocity = GetMoveInput();
