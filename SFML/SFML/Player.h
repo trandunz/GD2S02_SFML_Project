@@ -144,6 +144,8 @@ private:
 	float m_CombineSpecialDelay{ 0.5f };
 	float m_SpecialTimer{ };
 	float m_AttackTimer{ };
+	float m_SecondaryTimer{ };
+	float m_SecondaryCooldown{ 5.0f };
 	bool m_bCollided{ false };
 	sf::Sprite m_Mesh{};
 	sf::Vector2f m_PreviousMove{};
