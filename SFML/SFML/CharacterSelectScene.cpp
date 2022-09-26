@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : CharacterSelectScene.cpp 
 // Description : CharacterSelectScene Implementation File		
-// Author :
+// Author : Bartlett, Benjamin
 
 #include "CharacterSelectScene.h"
 #include "LevelLoader.h"
@@ -93,11 +93,7 @@ void CharacterSelectScene::HandleEvents()
 		{
 			if (Statics::EventHandle.key.code == sf::Keyboard::Key::Enter ||
 				Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
-				Statics::EventHandle.key.code == sf::Keyboard::Key::B ||
-				Statics::EventHandle.key.code == sf::Keyboard::Key::N ||
-				Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
-				Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2 ||
-				Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad3)
+				Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1)
 			{
 				Button* button = nullptr;
 
@@ -118,13 +114,19 @@ void CharacterSelectScene::HandleEvents()
 			{
 				m_iPlayer1Selection = SelectRight(m_iPlayer1Selection);
 			}
-			if (Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
-				Statics::EventHandle.key.code == sf::Keyboard::Key::B ||
-				Statics::EventHandle.key.code == sf::Keyboard::Key::N)
+			if (Statics::EventHandle.key.code == sf::Keyboard::Key::V)
 			{
 				m_bPlayer1Selected = true;
 				PlayerManager::GetInstance().ePlayer1Element = SetPlayerElement(m_iPlayer1Selection);
 			}
+			if (Statics::EventHandle.key.code == sf::Keyboard::Key::B)
+			{
+				LevelLoader::LoadLevel(LEVELS::MENUSCENE);
+			}
+		}
+		else if (Statics::EventHandle.key.code == sf::Keyboard::Key::B)
+		{
+			m_bPlayer1Selected = false;
 		}
 
 		// Player 2 Selection
@@ -138,17 +140,25 @@ void CharacterSelectScene::HandleEvents()
 			{
 				m_iPlayer2Selection = SelectRight(m_iPlayer2Selection);
 			}
-			if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
-				Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2 ||
-				Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad3)
+			if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1)
 			{
 				m_bPlayer2Selected = true;
 				PlayerManager::GetInstance().ePlayer2Element = SetPlayerElement(m_iPlayer2Selection);
 			}
+			if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
+			{
+				LevelLoader::LoadLevel(LEVELS::MENUSCENE);
+			}
+		}
+		else if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
+		{
+			m_bPlayer2Selected = false;
 		}
 	}
-	else 
-		GUI::GetInstance().HandleEvents();	
+	else
+	{
+		GUI::GetInstance().HandleEvents();
+	}
 }
 
 void CharacterSelectScene::Update()
@@ -220,7 +230,6 @@ int CharacterSelectScene::SelectLeft(int _player)
 			thisPlayer = 1;
 		}
 	}
-	std::cout << thisPlayer;
 	return thisPlayer;
 }
 
@@ -248,7 +257,6 @@ int CharacterSelectScene::SelectRight(int _player)
 			thisPlayer = 3;
 		}
 	}
-	std::cout << thisPlayer;
 	return thisPlayer;
 }
 
