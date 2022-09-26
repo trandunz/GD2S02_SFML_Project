@@ -59,7 +59,7 @@ struct ObstacleProperties
 
 struct PlayerProperties
 {
-	sf::Texture* Texture{ nullptr };
+	//sf::Texture* Texture{ nullptr };
 	sf::Vector2f v2fStartPos{};
 	sf::Vector2f v2fBoxColliderSize{ 10,10 };
 	float fBoxColliderOffsetY{};
@@ -149,6 +149,7 @@ public:
 	static float fBackgroundScrollSpeed;
 
 	static bool bDebugMode;
+
 private:
 	static float m_fLastTime;
 

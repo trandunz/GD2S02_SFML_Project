@@ -21,17 +21,20 @@ GameScene::GameScene()
 {
 	PlayerManager::GetInstance().CreatePlayer(
 		{ 
-			&TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png"),
+			//&TextureLoader::LoadTexture(Statics::sPlayer1Element),
 			{200, 600},
 			{32,32},
 			{16},
-			{300}
+			{300},
+			3,
+			3,
+			true
 			
 		});
 
 	PlayerManager::GetInstance().CreatePlayer(
 		{
-			&TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png"),
+			//&TextureLoader::LoadTexture(Statics::sPlayer2Element),
 			{Statics::RenderWindow.getSize().x - 200.0f, 600},
 			{32,32},
 			{16},

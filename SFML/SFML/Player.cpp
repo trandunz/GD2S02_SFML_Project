@@ -18,7 +18,8 @@
 
 Player::Player(PlayerProperties _properties)
 {
-	m_Mesh.setTexture(*_properties.Texture, true);
+	//m_Mesh.setTexture(*_properties.Texture, true);
+	SetTextureByElement();
 	SetPosition(_properties.v2fStartPos);
 	m_Mesh.setScale(_properties.v2fScale);
 	SetOriginCenter(m_Mesh);
@@ -449,6 +450,63 @@ bool Player::CheckCollision(BoxCollider& _otherCollider)
 	{
 		return false;
 	}
+}
+
+void Player::SetTextureByElement()
+{
+	if (m_Properties.bPlayerOne == true)
+	{
+		switch (PlayerManager::GetInstance().ePlayer1Element)
+		{
+		case ELEMENTTYPE::EARTH:
+		{
+			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png"), true);
+			break;
+		}
+		case ELEMENTTYPE::FIRE:
+		{
+			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png"), true);
+			break;
+		}
+		case ELEMENTTYPE::WATER:
+		{
+			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Water_Mage.png"), true);
+			break;
+		}
+		case ELEMENTTYPE::NONE:
+		{
+			std::cout << "SetTextureByElement() element set to NONE.\n";
+			break;
+		}
+		}
+	}
+	else {
+		std::cout << "else is being called.\n";
+		switch (PlayerManager::GetInstance().ePlayer2Element)
+		{
+		case ELEMENTTYPE::EARTH:
+		{
+			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png"), true);
+			break;
+		}
+		case ELEMENTTYPE::FIRE:
+		{
+			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png"), true);
+			break;
+		}
+		case ELEMENTTYPE::WATER:
+		{
+			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Water_Mage.png"), true);
+			break;
+		}
+		case ELEMENTTYPE::NONE:
+		{
+			std::cout << "SetTextureByElement() element set to NONE.\n";
+			break;
+		}
+		}
+	}
+
 }
 
 int Player::GetCurrentHealth() const
