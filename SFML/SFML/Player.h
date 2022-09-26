@@ -53,6 +53,8 @@ public:
 	/// <returns></returns>
 	bool CheckCollision(BoxCollider& _otherCollider);
 
+	void SetTextureByElement();
+
 	bool bDestroy{ false };
 	
 private:

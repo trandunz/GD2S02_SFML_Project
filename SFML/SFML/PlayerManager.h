@@ -32,6 +32,9 @@ public:
 
 	void WhipeScreenFromSpecial();
 
+	ELEMENTTYPE ePlayer1Element;
+	ELEMENTTYPE ePlayer2Element;
+
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 

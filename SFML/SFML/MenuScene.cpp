@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : MenuScene.cpp 
 // Description : MenuScene Implementation File		
-// Author :
+// Author : Bartlett, Benjamin
 
 #include "MenuScene.h"
 #include "LevelLoader.h"
@@ -25,7 +25,7 @@ MenuScene::MenuScene()
 			{windowSize.x / 2.0f, windowSize.y / 2.1f},
 			[]()
 			{
-				LevelLoader::LoadLevel(LEVELS::GAMESCENE);
+				LevelLoader::LoadLevel(LEVELS::CHARACTERSELECTSCENE);
 			},
 			&TextureLoader::LoadTexture("StartButton.png")
 		}
@@ -75,8 +75,6 @@ MenuScene::MenuScene()
 		});
 
 	m_iButtonSelected = 0;
-
-
 }
 
 MenuScene::~MenuScene()
