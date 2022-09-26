@@ -33,7 +33,7 @@ Player::Player(PlayerProperties _properties)
 	//Set up properties that are the same for both players
 	m_BasicAttackProperties.uDamage = 1;
 	m_SecondaryAttackProperties.bDestroyOnCollision = false;
-	m_SecondaryAttackProperties.fMoveSpeed = 500.0f;
+	m_SecondaryAttackProperties.fMoveSpeed = 250.0f;
 
 	if (m_Properties.bPlayerOne == false)
 	{
@@ -48,29 +48,29 @@ Player::Player(PlayerProperties _properties)
 		sf::Vector2u windowSize = Statics::RenderWindow.getSize();
 		CreateHeartsUI("P2", { windowSize.x - 80.0f, 40 }, { windowSize.x - 48.0f ,40 }, { windowSize.x - 16.0f,40 });
 		CreateManaUI("P2", { windowSize.x - 80.0f, 80 }, { windowSize.x - 48.0f, 80 }, { windowSize.x - 16.0f, 80 });
+		SetElement_Fire();
+		//m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
+		//m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
+		//m_BasicAttackProperties.uNumberOfFrames = 3;
 
-		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
-		m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
-		m_BasicAttackProperties.uNumberOfFrames = 3;
-
-		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
-		m_SecondaryAttackProperties.v2fScale = { 2.00f,2.00f };
-		m_SecondaryAttackProperties.uNumberOfFrames = 3;
-		m_SecondaryAttackProperties.Element = ELEMENTTYPE::FIRE;
+		//m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
+		//m_SecondaryAttackProperties.v2fScale = { 2.00f,2.00f };
+		//m_SecondaryAttackProperties.uNumberOfFrames = 3;
+		//m_SecondaryAttackProperties.Element = ELEMENTTYPE::FIRE;
 	}
 	else
 	{
 		CreateHeartsUI("P1", { 16, 40 }, { 48,40 }, { 80,40 });
 		CreateManaUI("P1", { 16, 80 }, { 48, 80 }, { 80, 80 });
+		SetElement_Earth();  
+		//m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
+		//m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
+		//m_BasicAttackProperties.uNumberOfFrames = 3;
 
-		m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
-		m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
-		m_BasicAttackProperties.uNumberOfFrames = 3;
-
-		m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/SecondaryDefault_Green.png");//("Earth_Spell.png");
-		m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
-		m_SecondaryAttackProperties.uNumberOfFrames = 1;
-		m_SecondaryAttackProperties.Element = ELEMENTTYPE::EARTH;
+		//m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/SecondaryDefault_Green.png");//("Earth_Spell.png");
+		//m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
+		//m_SecondaryAttackProperties.uNumberOfFrames = 1;
+		//m_SecondaryAttackProperties.Element = ELEMENTTYPE::EARTH;
 	}
 
 	CreateSpecialVFX();
@@ -101,21 +101,36 @@ void Player::HandleEvents()
 
 void Player::Update()
 {
-	m_AttackTimer -= Statics::fDeltaTime;
+	;
+	if (m_AttackTimer > 0)
+	{
+		m_AttackTimer -= Statics::fDeltaTime;
+	}
+
+	if (m_SpecialTimer > 0)
+	{
+		m_SpecialTimer -= Statics::fDeltaTime;
+	}
+
+	if (m_SecondaryTimer > 0)
+	{
+		m_SecondaryTimer -= Statics::fDeltaTime;
+	}
+
 	if (sf::Keyboard::isKeyPressed(m_SpecialAttackKey))
 	{
-		if (m_AttackTimer <= 0 && m_SpecialTimer <= 0)
+		if (/*m_AttackTimer <= 0 && */m_SpecialTimer <= 0)
 		{
 			m_SpecialTimer = m_SpecialDuration;
-			m_AttackTimer = m_AttackSpeed;
+			//m_AttackTimer = m_AttackSpeed;
 			Special();
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
 	{
-		if (m_AttackTimer <= 0 && m_SecondaryTimer <= 0)
+		if (/*m_AttackTimer <= 0 && */m_SecondaryTimer <= 0)
 		{
-			m_AttackTimer = m_AttackSpeed;
+			//m_AttackTimer = m_AttackSpeed;
 			m_SecondaryTimer = m_SecondaryCooldown;
 			SecondaryAttack();
 		}
@@ -127,16 +142,6 @@ void Player::Update()
 			m_AttackTimer = m_AttackSpeed;
 			BasicAttack();
 		}
-	}
-
-	if (m_SpecialTimer > 0)
-	{
-		m_SpecialTimer -= Statics::fDeltaTime;
-	}
-
-	if (m_SecondaryTimer > 0)
-	{
-		m_SecondaryTimer -= Statics::fDeltaTime;
 	}
 
 	m_v2fVelocity = GetMoveInput();
@@ -384,6 +389,42 @@ void Player::Special()
 			}
 		}
 	}
+}
+
+void Player::SetElement_Fire()
+{
+	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
+	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
+	m_BasicAttackProperties.uNumberOfFrames = 3;
+
+	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/7_firespin_spritesheet.png");// ("Fire_Spell.png");
+	m_SecondaryAttackProperties.v2fScale = { 1.50f,1.50f };
+	m_SecondaryAttackProperties.uNumberOfFrames = 61;
+	m_SecondaryAttackProperties.Element = ELEMENTTYPE::FIRE;
+}
+
+void Player::SetElement_Water()
+{
+	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
+	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
+	m_BasicAttackProperties.uNumberOfFrames = 3;
+
+	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/18_midnight_spritesheet.png");//("Earth_Spell.png");
+	m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
+	m_SecondaryAttackProperties.uNumberOfFrames = 61;
+	m_SecondaryAttackProperties.Element = ELEMENTTYPE::WATER;
+}
+
+void Player::SetElement_Earth()
+{
+	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
+	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
+	m_BasicAttackProperties.uNumberOfFrames = 3;
+
+	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/17_felspell_spritesheet.png");//("Earth_Spell.png");
+	m_SecondaryAttackProperties.v2fScale = { 1.0f,1.0f };
+	m_SecondaryAttackProperties.uNumberOfFrames = 91;
+	m_SecondaryAttackProperties.Element = ELEMENTTYPE::EARTH;
 }
 
 sf::Vector2f Player::GetPosition() const
