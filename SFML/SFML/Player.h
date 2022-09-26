@@ -134,6 +134,18 @@ private:
 	/// Fires the players special attack
 	/// </summary>
 	void Special();
+	/// <summary>
+	/// Set the wizard's element to fire
+	/// </summary>
+	void SetElement_Fire();
+	/// <summary>
+	/// Set the wizard's element to water
+	/// </summary>
+	void SetElement_Water();
+	/// <summary>
+	/// Set the wizard's element to earth
+	/// </summary>
+	void SetElement_Earth();
 
 	sf::Vector2f GetFuturePosition(sf::Vector2f _velocity) const;
 	void RestrictToScreen();
@@ -141,6 +153,7 @@ private:
 	ProjectileProperties m_BasicAttackProperties{};
 	ProjectileProperties m_SecondaryAttackProperties{};
 	PlayerProperties m_Properties{};
+	ELEMENTTYPE m_eElement = ELEMENTTYPE::NONE;
 	float m_AttackSpeed{ 0.2f };
 	float m_SpecialDuration{ 10.0f };
 	float m_CombineSpecialDelay{ 0.5f };

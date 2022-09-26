@@ -63,14 +63,20 @@ void ProjectileManager::Update()
 		}
 		else
 		{
-			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
+			//Only check  for obstacles if the projectile is marked as destroy on
+			//collision
+			if(projectile->IsDestroyedOnCollision())
 			{
-				if (projectile->CheckCollision(*obstacle->GetCollisionBox()))
+				for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
 				{
-					projectile->bDestroy = true;
-					break;
+					if (projectile->CheckCollision(*obstacle->GetCollisionBox()))
+					{
+						projectile->bDestroy = true;
+						break;
+					}
 				}
 			}
+
 			if (projectile->IsFriendly() == true)
 			{
 				for (auto& enemy : EnemyManager::GetInstance().GetEnemies())
