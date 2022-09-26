@@ -86,84 +86,20 @@ void Enemy::Update()
 
 	m_AnimatedSprite.Update(); // Update animated sprite
 
+	// If enemy is damaged from fire spell, then run function to damage over time
 	if (m_bDamaged)
 	{
-		// Change sprite color
-		m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
-		if (m_fSpriteChangeColorCounter <= 0)
-		{
-			m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
-			m_bSpriteColorChanged = !m_bSpriteColorChanged;
-		}
-
-		if (m_bSpriteColorChanged)
-			m_AnimatedSprite.SetSpriteColor(m_DamagedSpriteColor);
-		else
-			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255));
-
-		m_fOneSecond -= 1 * Statics::fDeltaTime; // Count down
-
-		if (m_fOneSecond <= 0) // Do below every second
-		{
-			// bDestroy enemy if health is <= 0
-			if (m_iCurrentHealth <= 0)
-			{
-				bDestroy = true;
-			}
-
-			m_fOneSecond = 1.0f; // Reset OneSecond variable for counting
-			m_fDamageTime -= 1; // Countdown the damage time variable by one second
-
-			// Stop damage over time
-			if (m_fDamageTime <= 0)
-			{
-				m_bDamaged = false;
-				m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Reset sprite color
-			}
-		}
+		HandleDamageOverTime();
 	}
-	
-	if (m_bFrozen)
+	// If enemy is hit from freeze spell, then run function for freezing said enemy
+	if (m_bStopped)
 	{
-		m_fFreezeTime -= 1 * Statics::fDeltaTime; // Count down
-
-		if (m_fFreezeTime <= 0)
-		{
-			m_bFrozen = false;
-			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
-			// Reset movement and jump speed
-			m_fMoveSpeed = m_Properties.fMoveSpeed;
-			m_fJumpSpeed = m_Properties.fJumpSpeed;
-			// Resume animations
-			m_AnimatedSprite.ResumeAnim();
-		}
+		HandleStop();
 	}
-
+	// If enemy is hit from earth spell, then run function to slow enemy
 	if (m_bSlowed)
 	{
-		// Change sprite color
-		m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
-		if (m_fSpriteChangeColorCounter <= 0)
-		{
-			m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
-			m_bSpriteColorChanged = !m_bSpriteColorChanged;
-		}
-
-		if (m_bSpriteColorChanged)
-			m_AnimatedSprite.SetSpriteColor(m_SlowedSpriteColor);
-		else
-			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255));
-
-		m_fSlowTime -= 1 * Statics::fDeltaTime; // Count down
-
-		if (m_fSlowTime <= 0)
-		{
-			m_bSlowed = false;
-			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
-			// Reset movement and jump speed
-			m_fJumpSpeed = m_Properties.fJumpSpeed;
-			m_fMoveSpeed = m_Properties.fMoveSpeed;
-		}
+		HandleSlow();
 	}
 
 	// Update collider position
@@ -210,8 +146,9 @@ void Enemy::Heal(unsigned _amount)
 	}
 }
 
-void Enemy::DamageEnemyOverTime(unsigned _damagePerSecond, float _seconds)
+void Enemy::ApplyDamageOverTime(unsigned _damagePerSecond, float _seconds, sf::Color _color)
 {
+	m_DamagedSpriteColor = _color;
 	m_fSpriteChangeColorSpeed = 0.2f;
 	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
 	m_bSpriteColorChanged = true;
@@ -220,29 +157,30 @@ void Enemy::DamageEnemyOverTime(unsigned _damagePerSecond, float _seconds)
 	m_fDamageTime = _seconds;
 }
 
-void Enemy::FreezeEnemy(float _seconds)
+void Enemy::ApplyStop(float _seconds, sf::Color _color)
 {
 	// Stop enemy movement
 	m_fMoveSpeed = Statics::fBackgroundScrollSpeed;
 	m_fJumpSpeed = Statics::fBackgroundScrollSpeed;
 
 	// Change sprite color
-	m_AnimatedSprite.SetSpriteColor(m_FrozenSpriteColor);
+	m_AnimatedSprite.SetSpriteColor(_color);
 
 	// Pause animations
 	m_AnimatedSprite.PauseAnim();
 
 	m_bSpriteColorChanged = true;
-	m_bFrozen = true;
-	m_fFreezeTime = _seconds;
+	m_bStopped = true;
+	m_fStopTime = _seconds;
 }
 
-void Enemy::SlowEnemy(float _seconds, float _slowMovementPercentage)
+void Enemy::ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color)
 {
 	// Slow enemy movement by percentage
 	m_fMoveSpeed = m_fMoveSpeed * _slowMovementPercentage;
 	m_fJumpSpeed = m_fJumpSpeed * _slowMovementPercentage;
 
+	m_SlowedSpriteColor = _color;
 	m_fSpriteChangeColorSpeed = 0.5f;
 	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
 	m_bSpriteColorChanged = true;
@@ -250,7 +188,7 @@ void Enemy::SlowEnemy(float _seconds, float _slowMovementPercentage)
 	m_fSlowTime = _seconds;
 }
 
-BoxCollider* Enemy::GetCollider()
+BoxCollider* Enemy::GetCollider() const
 {
 	if (m_BoxCollider)
 	{
@@ -260,6 +198,11 @@ BoxCollider* Enemy::GetCollider()
 	{
 		return nullptr;
 	}
+}
+
+Animator Enemy::GetAnimation() const
+{
+	return m_AnimatedSprite;
 }
 
 bool Enemy::CheckCollision(BoxCollider& _otherCollider)
@@ -405,5 +348,85 @@ void Enemy::Attack()
 				500.0f
 			}
 		);
+	}
+}
+
+void Enemy::HandleDamageOverTime()
+{
+	// Change sprite color
+	m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
+	if (m_fSpriteChangeColorCounter <= 0)
+	{
+		m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+		m_bSpriteColorChanged = !m_bSpriteColorChanged;
+	}
+
+	if (m_bSpriteColorChanged)
+		m_AnimatedSprite.SetSpriteColor(m_DamagedSpriteColor);
+	else
+		m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255));
+
+	m_fOneSecond -= 1 * Statics::fDeltaTime; // Count down
+
+	if (m_fOneSecond <= 0) // Do below every second
+	{
+		// bDestroy enemy if health is <= 0
+		if (m_iCurrentHealth <= 0)
+		{
+			bDestroy = true;
+		}
+
+		m_fOneSecond = 1.0f; // Reset OneSecond variable for counting
+		m_fDamageTime -= 1; // Countdown the damage time variable by one second
+
+		// Stop damage over time
+		if (m_fDamageTime <= 0)
+		{
+			m_bDamaged = false;
+			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Reset sprite color
+		}
+	}
+}
+
+void Enemy::HandleStop()
+{
+	m_fStopTime -= 1 * Statics::fDeltaTime; // Count down
+
+	if (m_fStopTime <= 0)
+	{
+		m_bStopped = false;
+		m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+		// Reset movement and jump speed
+		m_fMoveSpeed = m_Properties.fMoveSpeed;
+		m_fJumpSpeed = m_Properties.fJumpSpeed;
+		// Resume animations
+		m_AnimatedSprite.ResumeAnim();
+	}
+}
+
+void Enemy::HandleSlow()
+{
+	// Change sprite color
+	m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
+	if (m_fSpriteChangeColorCounter <= 0)
+	{
+		m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+		m_bSpriteColorChanged = !m_bSpriteColorChanged;
+	}
+
+	if (m_bSpriteColorChanged)
+		m_AnimatedSprite.SetSpriteColor(m_SlowedSpriteColor);
+	else
+		m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255));
+
+	m_fSlowTime -= 1 * Statics::fDeltaTime; // Count down
+
+	if (m_fSlowTime <= 0)
+	{
+		m_bSlowed = false;
+		m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+		// Reset movement and jump speed
+		m_fJumpSpeed = m_Properties.fJumpSpeed;
+		m_fMoveSpeed = m_Properties.fMoveSpeed;
 	}
 }

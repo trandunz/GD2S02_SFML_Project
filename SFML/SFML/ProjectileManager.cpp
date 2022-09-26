@@ -141,17 +141,17 @@ void ProjectileManager::ApplyDebuff_Enemy(Enemy* _target, ELEMENTTYPE _element)
 		}
 		case ELEMENTTYPE::FIRE:
 		{
-			_target->DamageEnemyOverTime(DEBUFF_BURNAMOUNT, DEBUFF_BURNTIME);
+			_target->ApplyDamageOverTime(DEBUFF_BURNAMOUNT, DEBUFF_BURNTIME);
 			break;
 		}
 		case ELEMENTTYPE::WATER:
 		{
-			_target->SlowEnemy(DEBUFF_SLOWTIME, DEBUFF_SLOWAMOUNT);
+			_target->ApplySlow(DEBUFF_SLOWTIME, DEBUFF_SLOWAMOUNT);
 			break;
 		}
 		case ELEMENTTYPE::EARTH:
 		{
-			_target->FreezeEnemy(DEBUFF_FREEZETIME);
+			_target->ApplyStop(DEBUFF_FREEZETIME);
 			break;
 		}
 		default:

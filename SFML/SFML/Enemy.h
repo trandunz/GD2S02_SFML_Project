@@ -51,11 +51,11 @@ public:
 	/// <param name="_amount"></param>
 	void Heal(unsigned _amount);
 
-	void DamageEnemyOverTime(unsigned _damagePerSecond, float _seconds);
+	void ApplyDamageOverTime(unsigned _damagePerSecond, float _seconds, sf::Color _color = { 255, 23, 23 });
 
-	void FreezeEnemy(float _seconds);
+	void ApplyStop(float _seconds, sf::Color _color = { 0, 162, 232 });
 
-	void SlowEnemy(float _seconds, float _slowMovementPercentage);
+	void ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color = { 181, 230, 29 });
 
 	/// <summary>
 	/// Checks collision between enemy and another collider
@@ -87,6 +87,24 @@ private:
 	/// </summary>
 	void Attack();
 
+	/// <summary>
+	/// Handles the damage over time of the enemy for the specified 
+	/// amount of time from the ApplyDamageOverTime function
+	/// </summary>
+	void HandleDamageOverTime();
+
+	/// <summary>
+	/// Handles the stopping of the enemy for the specified amount of time
+	/// from the ApplyFreeze function (example freeze or stun)
+	/// </summary>
+	void HandleStop();
+
+	/// <summary>
+	/// Handles the slowing of the enemy for the specified amount of time
+	/// from the ApplySlow function
+	/// </summary>
+	void HandleSlow();
+
 	EnemyProperties m_Properties{};
 	float m_fAttackSpeed{ 1.0f };
 	float m_fAttackTimer{};
@@ -103,15 +121,14 @@ private:
 	unsigned m_uDamageOverTime{};
 	float m_fOneSecond{ 1.0f };
 	float m_fDamageTime{};
-	sf::Color m_DamagedSpriteColor{ 255, 23, 23 };
+	sf::Color m_DamagedSpriteColor;
 	// -Enemy being frozen variables (unable to move)-
-	bool m_bFrozen{false};
-	float m_fFreezeTime{};
-	sf::Color m_FrozenSpriteColor{ 0, 162, 232 };
+	bool m_bStopped{false};
+	float m_fStopTime{};
 	// -Enemy being slowed variables-
 	bool m_bSlowed{false};
 	float m_fSlowTime{};
-	sf::Color m_SlowedSpriteColor{ 181, 230, 29 };
+	sf::Color m_SlowedSpriteColor;
 
 	// Changing sprite color
 	bool m_bSpriteColorChanged{ false };
@@ -140,5 +157,9 @@ public:
 
 	int GetCurrentHealth() const;
 
-	BoxCollider* GetCollider();
+	BoxCollider* GetCollider() const;
+
+	Animator GetAnimation() const;
+
+
 };
