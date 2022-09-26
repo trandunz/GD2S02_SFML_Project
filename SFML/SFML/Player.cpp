@@ -19,13 +19,14 @@
 Player::Player(PlayerProperties _properties)
 {
 	//m_Mesh.setTexture(*_properties.Texture, true);
-	SetTextureByElement();
+
 	SetPosition(_properties.v2fStartPos);
 	m_Mesh.setScale(_properties.v2fScale);
 	SetOriginCenter(m_Mesh);
 	m_Properties = _properties;
 	SetHPMax();
 	SetManaMax();
+	SetTextureByElement();
 
 	// Set box collider
 	fColliderOffset = _properties.fBoxColliderOffsetY;
@@ -49,29 +50,11 @@ Player::Player(PlayerProperties _properties)
 		sf::Vector2u windowSize = Statics::RenderWindow.getSize();
 		CreateHeartsUI("P2", { windowSize.x - 80.0f, 40 }, { windowSize.x - 48.0f ,40 }, { windowSize.x - 16.0f,40 });
 		CreateManaUI("P2", { windowSize.x - 80.0f, 80 }, { windowSize.x - 48.0f, 80 }, { windowSize.x - 16.0f, 80 });
-		SetElement_Fire();
-		//m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
-		//m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
-		//m_BasicAttackProperties.uNumberOfFrames = 3;
-
-		//m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
-		//m_SecondaryAttackProperties.v2fScale = { 2.00f,2.00f };
-		//m_SecondaryAttackProperties.uNumberOfFrames = 3;
-		//m_SecondaryAttackProperties.Element = ELEMENTTYPE::FIRE;
 	}
 	else
 	{
 		CreateHeartsUI("P1", { 16, 40 }, { 48,40 }, { 80,40 });
 		CreateManaUI("P1", { 16, 80 }, { 48, 80 }, { 80, 80 });
-		SetElement_Earth();  
-		//m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
-		//m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
-		//m_BasicAttackProperties.uNumberOfFrames = 3;
-
-		//m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/SecondaryDefault_Green.png");//("Earth_Spell.png");
-		//m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
-		//m_SecondaryAttackProperties.uNumberOfFrames = 1;
-		//m_SecondaryAttackProperties.Element = ELEMENTTYPE::EARTH;
 	}
 
 	CreateSpecialVFX();
@@ -502,16 +485,19 @@ void Player::SetTextureByElement()
 		case ELEMENTTYPE::EARTH:
 		{
 			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png"), true);
+			SetElement_Earth();
 			break;
 		}
 		case ELEMENTTYPE::FIRE:
 		{
 			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png"), true);
+			SetElement_Fire();
 			break;
 		}
 		case ELEMENTTYPE::WATER:
 		{
 			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Water_Mage.png"), true);
+			SetElement_Water();
 			break;
 		}
 		case ELEMENTTYPE::NONE:
@@ -522,22 +508,24 @@ void Player::SetTextureByElement()
 		}
 	}
 	else {
-		std::cout << "else is being called.\n";
 		switch (PlayerManager::GetInstance().ePlayer2Element)
 		{
 		case ELEMENTTYPE::EARTH:
 		{
 			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png"), true);
+			SetElement_Earth();
 			break;
 		}
 		case ELEMENTTYPE::FIRE:
 		{
 			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png"), true);
+			SetElement_Fire();
 			break;
 		}
 		case ELEMENTTYPE::WATER:
 		{
 			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Water_Mage.png"), true);
+			SetElement_Water();
 			break;
 		}
 		case ELEMENTTYPE::NONE:
