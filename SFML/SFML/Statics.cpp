@@ -46,3 +46,11 @@ void Statics::SetPaused(bool _paused)
 	else
 		fTimeScale = 1.0f;
 }
+
+bool Statics::IsPaused()
+{
+	if (fTimeScale < 1.0f)
+		return true;
+	else
+		return false;
+}

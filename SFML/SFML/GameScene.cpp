@@ -78,21 +78,13 @@ void GameScene::HandleEvents()
 	{
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
 		{
-			if (Statics::fTimeScale > 0.0f)
+			if (m_PauseMenu)
 			{
-				Statics::SetPaused(true);
-
-				m_PauseMenu = new PauseMenu();
+				m_PauseMenu->bDestroy = true;
 			}
 			else
 			{
-				Statics::SetPaused(false);
-
-				if (m_PauseMenu)
-				{
-					delete m_PauseMenu;
-					m_PauseMenu = nullptr;
-				}
+				m_PauseMenu = new PauseMenu();
 			}
 		}
 	}
@@ -106,6 +98,8 @@ void GameScene::Update()
 	PlayerManager::GetInstance().Update();
 	GUI::GetInstance().Update();
 	VFX::GetInstance().Update();
+	if (m_PauseMenu)
+		m_PauseMenu->Update();
 
 	ScrollBackground();
 	//GUI::GetInstance().SetText("Score", "Score: " + FloatToString(m_fDistanceTravelled, 0)); // Changing to on killing enemy
@@ -115,6 +109,7 @@ void GameScene::Update()
 	ObjectManager::GetInstance().CleanupDestroyed();
 	EnemyManager::GetInstance().CleanupDestroyed();
 	PlayerManager::GetInstance().CleanupDestroyed();
+	CleanupPauseMenuIfDestroyed();
 }
 
 void GameScene::Draw()
@@ -153,6 +148,18 @@ void GameScene::ScrollBackground()
 			>= background.getGlobalBounds().height)
 		{
 			background.move({ 0,- 2 *background.getGlobalBounds().height });
+		}
+	}
+}
+
+void GameScene::CleanupPauseMenuIfDestroyed()
+{
+	if (m_PauseMenu)
+	{
+		if (m_PauseMenu->bDestroy)
+		{
+			delete m_PauseMenu;
+			m_PauseMenu = nullptr;
 		}
 	}
 }

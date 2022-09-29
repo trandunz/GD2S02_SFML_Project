@@ -136,6 +136,9 @@
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
     <ClCompile Include="PauseMenu.cpp">
+      <Filter>Source Files\Juice</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -213,6 +216,9 @@
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
     <ClInclude Include="PauseMenu.h">
+      <Filter>Header Files\Juice</Filter>
+    </ClInclude>
+    <ClInclude Include="SettingsMenu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

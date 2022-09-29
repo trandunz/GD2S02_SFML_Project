@@ -26,6 +26,7 @@ public:
 private:
 	void CreateScrollingBackground();
 	void ScrollBackground();
+	void CleanupPauseMenuIfDestroyed();
 
 	std::vector<sf::Sprite> m_Backgrounds{};
 	float m_fDistanceTravelled{};

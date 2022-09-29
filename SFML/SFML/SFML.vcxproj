@@ -167,6 +167,7 @@
     <ClCompile Include="PlayerManager.cpp" />
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="ProjectileManager.cpp" />
+    <ClCompile Include="SettingsMenu.cpp" />
     <ClCompile Include="Statics.cpp" />
     <ClCompile Include="TextureLoader.cpp" />
     <ClCompile Include="VFX.cpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="PlayerManager.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="ProjectileManager.h" />
+    <ClInclude Include="SettingsMenu.h" />
     <ClInclude Include="Statics.h" />
     <ClInclude Include="TextureLoader.h" />
     <ClInclude Include="VFX.h" />

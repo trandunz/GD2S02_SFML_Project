@@ -17,8 +17,9 @@ public:
 	Button(ButtonProperties _properties);
 	~Button();
 
-	void CallOnMouseOver();
+	bool CallOnMouseOver();
 	void CallOnPress();
+	sf::Sprite GetSprite()const;
 
 	void ResetScale();
 private:

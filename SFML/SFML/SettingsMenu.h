@@ -1,13 +1,10 @@
 #pragma once
 
-class SettingsMenu;
-class PauseMenu
+class SettingsMenu
 {
 public:
-	PauseMenu();
-	~PauseMenu();
-
-	void Update();
+	SettingsMenu();
+	~SettingsMenu();
 
 	bool bDestroy{ false };
 
@@ -17,7 +14,5 @@ private:
 	void CreateMenuText();
 
 	void CleanupElements();
-
-	SettingsMenu* m_SettingsMenu{ nullptr };
 };
 
