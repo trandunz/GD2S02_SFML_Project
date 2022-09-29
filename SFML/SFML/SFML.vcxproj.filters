@@ -132,6 +132,9 @@
     <ClCompile Include="Pickup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>Source Files\Juice</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnemyManager.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="Pickup.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>Header Files\Juice</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
