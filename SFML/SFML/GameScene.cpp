@@ -55,7 +55,7 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
-	ObjectManager::GetInstance().CleanupObstacles();
+	ObjectManager::GetInstance().CleanupEverything();
 	ProjectileManager::GetInstance().CleanupProjectiles();
 	PlayerManager::GetInstance().CleanupPlayers();
 	EnemyManager::GetInstance().CleanupEnemies();
@@ -83,6 +83,7 @@ void GameScene::Update()
 	GUI::GetInstance().SetText("Score", "Score: " + FloatToString(Statics::fGameScore, 0));
 
 	ProjectileManager::GetInstance().CleanupDestroyed();
+	ObjectManager::GetInstance().CleanupDestroyed();
 	EnemyManager::GetInstance().CleanupDestroyed();
 	PlayerManager::GetInstance().CleanupDestroyed();
 }
