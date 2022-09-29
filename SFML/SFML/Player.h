@@ -46,6 +46,8 @@ public:
 	/// <param name="_amount"></param>
 	void Heal(unsigned _amount);
 
+	void RestoreMana(unsigned _amount);
+
 	/// <summary>
 	/// Checks collision between the player and the specified box collider
 	/// </summary>

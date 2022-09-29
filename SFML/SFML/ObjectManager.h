@@ -10,6 +10,7 @@
 #pragma once
 #include "Statics.h"
 
+class Pickup;
 class Obstacle;
 class ObjectManager : public sf::Drawable
 {
@@ -20,11 +21,27 @@ public:
 	/// Force cleanup all obstacles
 	/// </summary>
 	void CleanupObstacles();
+
+	/// <summary>
+	/// Force cleanup all pickups
+	/// </summary>
+	void CleanupPickups();
+
+	void CleanupDestroyed();
+
+	void CleanupEverything();
+
 	/// <summary>
 	/// Create an obstacle with the specified properties
 	/// </summary>
 	/// <param name="_properties"></param>
 	void CreateObstacle(ObstacleProperties _properties);
+
+	/// <summary>
+	/// Create a pickup with the specified properties
+	/// </summary>
+	/// <param name="_properties"></param>
+	void CreatePickup(PickupProperties _properties);
 
 	/// <summary>
 	/// Update all obstacles
@@ -37,21 +54,30 @@ public:
 	/// <param name="_rate"></param>
 	void SpawnObstacles(float _rate);
 
+	/// <summary>
+	/// Handles the spawning of pickups at a specified rate
+	/// </summary>
+	/// <param name="_rate"></param>
+	void SpawnPickups(float _rate);
+
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 	inline ObjectManager() {}
 	inline ObjectManager(const ObjectManager&) {}
 	inline ~ObjectManager() {}
 
-	float m_SpawnTimer{ 3.0f };
-	std::vector<Obstacle*> Obstacles{};
+	float m_ObstacleSpawnTimer{ 3.0f };
+	float m_PickupSpawnTimer{ 3.0f };
+	std::vector<Obstacle*> m_vecObstacles{};
+	std::vector<Pickup*> m_vecPickups{};
 
 public:
 	///////////////////////////
 	/// Getters and Setters	///
 	/////////////////////////// 
 
-	std::vector<sf::Sprite> GetObstacleSprites() const;
-	std::vector<Obstacle*> GetObstacles() const;
+	std::vector<sf::Sprite> GetObstacleSprites();
+	std::vector<Obstacle*>& GetObstacles();
+	std::vector<Pickup*>& GetPickups();
 };
 
