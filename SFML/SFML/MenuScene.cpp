@@ -84,7 +84,12 @@ MenuScene::~MenuScene()
 
 void MenuScene::HandleEvents()
 {
-	if (Statics::EventHandle.type == sf::Event::KeyPressed) {
+	if (Statics::EventHandle.type == sf::Event::KeyPressed) 
+	{
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
+		{
+			Statics::RenderWindow.close();
+		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::W ||
 			Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
 		{

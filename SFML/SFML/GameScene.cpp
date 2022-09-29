@@ -55,6 +55,12 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	if (m_PauseMenu)
+	{
+		delete m_PauseMenu;
+		m_PauseMenu = nullptr;
+	}
+
 	ObjectManager::GetInstance().CleanupEverything();
 	ProjectileManager::GetInstance().CleanupProjectiles();
 	PlayerManager::GetInstance().CleanupPlayers();
@@ -67,6 +73,29 @@ void GameScene::HandleEvents()
 {
 	PlayerManager::GetInstance().HandleEvents();
 	GUI::GetInstance().HandleEvents();
+
+	if (Statics::EventHandle.type == sf::Event::KeyPressed)
+	{
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
+		{
+			if (Statics::fTimeScale > 0.0f)
+			{
+				Statics::SetPaused(true);
+
+				m_PauseMenu = new PauseMenu();
+			}
+			else
+			{
+				Statics::SetPaused(false);
+
+				if (m_PauseMenu)
+				{
+					delete m_PauseMenu;
+					m_PauseMenu = nullptr;
+				}
+			}
+		}
+	}
 }
 
 void GameScene::Update()

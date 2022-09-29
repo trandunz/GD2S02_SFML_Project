@@ -21,6 +21,21 @@ public:
 	void CleanupElements();
 
 	/// <summary>
+	/// Force Cleanup the specified element
+	/// </summary>
+	void CleanupImageElement(std::string _key);
+
+	/// <summary>
+	/// Force Cleanup the specified element
+	/// </summary>
+	void CleanupTextElement(std::string _key);
+
+	/// <summary>
+	/// Force Cleanup the specified element
+	/// </summary>
+	void CleanupButtonElement(std::string _key);
+
+	/// <summary>
 	/// Handles all GUI events such as clicking a button
 	/// </summary>
 	void HandleEvents();

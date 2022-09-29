@@ -38,3 +38,11 @@ void Statics::InitGlobalFont(std::string _fileName)
 {
 	Statics::TimesNewRoman.loadFromFile("Resources/Fonts/" + _fileName);
 }
+
+void Statics::SetPaused(bool _paused)
+{
+	if (_paused)
+		fTimeScale = 0.0f;
+	else
+		fTimeScale = 1.0f;
+}

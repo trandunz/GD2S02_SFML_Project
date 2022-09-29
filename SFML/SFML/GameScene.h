@@ -10,7 +10,9 @@
 #pragma once
 #include "Level.h"
 #include "Statics.h"
+#include "PauseMenu.h"
 
+class PauseMenu;
 class GameScene : public Level
 {
 public:
@@ -28,6 +30,7 @@ private:
 	std::vector<sf::Sprite> m_Backgrounds{};
 	float m_fDistanceTravelled{};
 
+	PauseMenu* m_PauseMenu{ nullptr };
 public:
 	///////////////////////////
 	/// Getters and Setters	///
