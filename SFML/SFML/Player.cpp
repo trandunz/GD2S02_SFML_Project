@@ -438,31 +438,19 @@ void Player::TakeDamage(unsigned _amount)
 
 void Player::Heal(unsigned _amount)
 {
-	for (short i = _amount; m_iCurrentHealth < m_Properties.iMaxHealth; i--)
-	{
-		m_iCurrentHealth++;
-	}
+	m_iCurrentHealth += _amount;
+
+	if (m_iCurrentHealth > m_Properties.iMaxHealth)
+		m_iCurrentHealth = m_Properties.iMaxHealth;
 }
 
-//bool Player::CheckCollision(sf::Sprite _otherSprite)
-//{
-//	if (m_Mesh.getGlobalBounds().intersects(_otherSprite.getGlobalBounds()))
-//	{
-//		if (_otherSprite.getPosition().y + (_otherSprite.getScale().y / 2.0f) < m_PreviousMove.y - 32.0f)
-//		{
-//			m_Mesh.setPosition(m_PreviousMove + sf::Vector2f(0, 1.0f));
-//		}
-//		else
-//		{
-//			m_Mesh.setPosition(m_PreviousMove);
-//		}
-//
-//
-//		
-//		return true;
-//	}
-//	return false;
-//}
+void Player::RestoreMana(unsigned _amount)
+{
+	m_iCurrentMana += _amount;
+
+	if (m_iCurrentMana > m_Properties.iMaxMana)
+		m_iCurrentMana = m_Properties.iMaxMana;
+}
 
 bool Player::CheckCollision(BoxCollider& _otherCollider)
 {

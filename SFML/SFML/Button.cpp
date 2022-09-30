@@ -39,16 +39,20 @@ Button::~Button()
 	m_Properties.OnPressFunction = nullptr;
 }
 
-void Button::CallOnMouseOver()
+bool Button::CallOnMouseOver()
 {
+	bool wasPressed = false;
 	if (m_Properties.OnPressFunction != nullptr)
 	{
 		sf::Vector2f mousePos = { (float)sf::Mouse::getPosition(Statics::RenderWindow).x, (float)sf::Mouse::getPosition(Statics::RenderWindow).y };
 		if (m_Sprite.getGlobalBounds().contains(mousePos))
 		{
+			wasPressed = true;
 			m_Properties.OnPressFunction();
 		}
 	}
+
+	return wasPressed;
 }
 
 void Button::CallOnPress()
@@ -57,6 +61,11 @@ void Button::CallOnPress()
 	{
 		m_Properties.OnPressFunction();
 	}
+}
+
+sf::Sprite Button::GetSprite() const
+{
+	return m_Sprite;
 }
 
 void Button::SetLabel(std::string _newLabel)

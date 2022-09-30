@@ -11,8 +11,7 @@
 #include "Level.h"
 #include "Statics.h"
 
-class Button;
-
+class SettingsMenu;
 class MenuScene : public Level
 {
 public:
@@ -54,8 +53,12 @@ public:
 	/// <param name="_button"></param>
 	void ScaleSelectedButton(std::string _button);
 private:
+	void CleanupElements();
+	void CreateElements();
+
 	std::string m_sHighLighted{};
 	int m_iButtonSelected{};
+	SettingsMenu* m_SettingsMenu{ nullptr };
 
 	std::vector<std::string> m_vecButtons;
 

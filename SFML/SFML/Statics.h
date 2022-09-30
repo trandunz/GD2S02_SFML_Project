@@ -34,6 +34,14 @@ enum class ELEMENTTYPE
 	EARTH,
 };
 
+enum class PICKUPTYPE
+{
+	UNASSIGNED = 0,
+
+	HEALTH,
+	MANA
+};
+
 struct ProjectileProperties
 {
 	sf::Texture* Texture{ nullptr };
@@ -129,6 +137,15 @@ struct AnimStateProperties
 	bool bLoops{ false };
 };
 
+struct PickupProperties
+{
+	PICKUPTYPE ePickupType{ PICKUPTYPE ::UNASSIGNED };
+	sf::Vector2f v2fStartPos{};
+	sf::Vector2f v2fVelocity{};
+	unsigned uNumberOfFrames{ 1 };
+	float fAnimFrameInterval{};
+};
+
 class Statics
 {
 public:
@@ -143,6 +160,8 @@ public:
 	static float fDeltaTime;
 	static float fUnscaledDeltaTime;
 	static void CalculateDeltaTime();
+	static void SetPaused(bool _paused);
+	static bool IsPaused();
 
 	static float fGameScore;
 

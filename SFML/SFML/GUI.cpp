@@ -25,6 +25,30 @@ void GUI::CleanupElements()
 	CleanupMap(m_vecButtons);
 }
 
+void GUI::CleanupImageElement(std::string _key)
+{
+	if (m_vecImages.contains(_key))
+	{
+		m_vecImages.erase(m_vecImages.find(_key));
+	}
+}
+
+void GUI::CleanupTextElement(std::string _key)
+{
+	if (m_vecTexts.contains(_key))
+	{
+		m_vecTexts.erase(m_vecTexts.find(_key));
+	}
+}
+
+void GUI::CleanupButtonElement(std::string _key)
+{
+	if (m_vecButtons.contains(_key))
+	{
+		m_vecButtons.erase(m_vecButtons.find(_key));
+	}
+}
+
 void GUI::CreateButton(std::string _key, ButtonProperties _properties)
 {
 	m_vecButtons.insert_or_assign(_key, Button(_properties));
@@ -99,9 +123,17 @@ void GUI::HandleEvents()
 	if (Statics::EventHandle.type == sf::Event::MouseButtonReleased
 		&& Statics::EventHandle.mouseButton.button == sf::Mouse::Left)
 	{
-		for (auto& button : m_vecButtons)
+		auto it = m_vecButtons.rbegin();
+		while (it != m_vecButtons.rend())
 		{
-			button.second.CallOnMouseOver();
+			if (it->second.CallOnMouseOver())
+			{
+				break;
+			}
+			else
+			{
+				it++;
+			}
 		}
 	}
 }
