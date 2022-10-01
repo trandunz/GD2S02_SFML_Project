@@ -160,6 +160,8 @@ public:
 	static float fDeltaTime;
 	static float fUnscaledDeltaTime;
 	static void CalculateDeltaTime();
+	static void SetPaused(bool _paused);
+	static bool IsPaused();
 
 	static float fGameScore;
 

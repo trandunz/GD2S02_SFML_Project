@@ -13,66 +13,11 @@
 #include "GameScene.h"
 #include "Math.h"
 #include "TextureLoader.h"
+#include "SettingsMenu.h"
 
 MenuScene::MenuScene()
 {
-	sf::Vector2f windowSize(Statics::RenderWindow.getSize());
-
-	m_vecButtons.emplace_back("Start");
-	GUI::GetInstance().CreateButton("Start",
-		{
-			"",
-			{windowSize.x / 2.0f, windowSize.y / 2.1f},
-			[]()
-			{
-				LevelLoader::LoadLevel(LEVELS::CHARACTERSELECTSCENE);
-			},
-			&TextureLoader::LoadTexture("StartButton.png")
-		}
-	);
-
-	m_vecButtons.emplace_back("Options");
-	GUI::GetInstance().CreateButton("Options",
-		{
-			"",
-			{windowSize.x / 2.0f, (windowSize.y / 1.6f)},
-			nullptr,
-			& TextureLoader::LoadTexture("OptionsButton.png")
-		}
-	);
-
-	m_vecButtons.emplace_back("High Score");
-	GUI::GetInstance().CreateButton("High Score",
-		{
-			"",
-			{ windowSize.x / 2.0f, (windowSize.y / 1.3f) },
-			[]()
-			{
-				Statics::RenderWindow.close();
-			},
-			&TextureLoader::LoadTexture("HighScoreButton.png")
-		}
-	);
-
-	m_vecButtons.emplace_back("Quit");
-	GUI::GetInstance().CreateButton("Quit",
-		{
-			"",
-			{windowSize.x / 2.0f, (windowSize.y / 1.1f)},
-			[]()
-			{
-				Statics::RenderWindow.close();
-			},
-			&TextureLoader::LoadTexture("QuitButton.png")
-		}
-	);
-
-	GUI::GetInstance().CreateImage("Title",
-		{
-			&TextureLoader::LoadTexture("Title.png"),
-			{windowSize.x / 2.0f, (windowSize.y / 4.0f)},
-			{1.5f, 1.5f}
-		});
+	CreateElements();
 
 	m_iButtonSelected = 0;
 }
@@ -80,11 +25,21 @@ MenuScene::MenuScene()
 MenuScene::~MenuScene()
 {
 	GUI::GetInstance().CleanupElements();
+	if (m_SettingsMenu)
+	{
+		delete m_SettingsMenu;
+		m_SettingsMenu = nullptr;
+	}
 }
 
 void MenuScene::HandleEvents()
 {
-	if (Statics::EventHandle.type == sf::Event::KeyPressed) {
+	if (Statics::EventHandle.type == sf::Event::KeyPressed) 
+	{
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
+		{
+			Statics::RenderWindow.close();
+		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::W ||
 			Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
 		{
@@ -125,6 +80,19 @@ void MenuScene::Update()
 	GUI::GetInstance().ResetAllButtonsScale();
 
 	ScaleSelectedButton(m_vecButtons[m_iButtonSelected]);
+
+	if (m_SettingsMenu)
+	{
+		CleanupElements();
+
+		if (m_SettingsMenu->bDestroy)
+		{
+			delete m_SettingsMenu;
+			m_SettingsMenu = nullptr;
+
+			CreateElements();
+		}
+	}
 }
 
 void MenuScene::Draw()
@@ -141,4 +109,74 @@ void MenuScene::ScaleSelectedButton(std::string _button)
 		float throb = 1 + sinf(ToRad((float)Statics::Time.getElapsedTime().asMilliseconds())) / 10;
 		button->SetScale({ throb, throb });
 	}
+}
+
+void MenuScene::CleanupElements()
+{
+	GUI::GetInstance().CleanupButtonElement("Quit");
+	GUI::GetInstance().CleanupButtonElement("High Score");
+	GUI::GetInstance().CleanupButtonElement("Options");
+	GUI::GetInstance().CleanupButtonElement("Start");
+	GUI::GetInstance().CleanupImageElement("Title");
+}
+
+void MenuScene::CreateElements()
+{
+	sf::Vector2f windowSize(Statics::RenderWindow.getSize());
+
+	m_vecButtons.emplace_back("Start");
+	GUI::GetInstance().CreateButton("Start",
+		{
+			"",
+			{windowSize.x / 2.0f, windowSize.y / 2.1f},
+			[]()
+			{
+				LevelLoader::LoadLevel(LEVELS::CHARACTERSELECTSCENE);
+			},
+			&TextureLoader::LoadTexture("StartButton.png")
+		}
+	);
+
+	m_vecButtons.emplace_back("Options");
+	GUI::GetInstance().CreateButton("Options",
+		{
+			"",
+			{windowSize.x / 2.0f, (windowSize.y / 1.6f)},
+			[this]()
+			{
+				m_SettingsMenu = new SettingsMenu;
+			},
+			&TextureLoader::LoadTexture("OptionsButton.png")
+		}
+	);
+
+	m_vecButtons.emplace_back("High Score");
+	GUI::GetInstance().CreateButton("High Score",
+		{
+			"",
+			{ windowSize.x / 2.0f, (windowSize.y / 1.3f) },
+			nullptr,
+			&TextureLoader::LoadTexture("HighScoreButton.png")
+		}
+	);
+
+	m_vecButtons.emplace_back("Quit");
+	GUI::GetInstance().CreateButton("Quit",
+		{
+			"",
+			{windowSize.x / 2.0f, (windowSize.y / 1.1f)},
+			[]()
+			{
+				Statics::RenderWindow.close();
+			},
+			&TextureLoader::LoadTexture("QuitButton.png")
+		}
+	);
+
+	GUI::GetInstance().CreateImage("Title",
+		{
+			&TextureLoader::LoadTexture("Title.png"),
+			{windowSize.x / 2.0f, (windowSize.y / 4.0f)},
+			{1.5f, 1.5f}
+		});
 }

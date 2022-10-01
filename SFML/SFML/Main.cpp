@@ -55,10 +55,6 @@ void PollEvents()
 	{
 		if (Statics::EventHandle.type == sf::Event::KeyPressed)
 		{
-			if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
-			{
-				Statics::RenderWindow.close();
-			}
 			if (Statics::EventHandle.key.code == sf::Keyboard::Key::End)
 			{
 				Statics::bDebugMode = !Statics::bDebugMode;

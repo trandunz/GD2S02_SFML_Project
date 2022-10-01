@@ -95,8 +95,7 @@ void ProjectileManager::Update()
 							}
 							else
 							{
-								ELEMENTTYPE projElement = projectile->GetElement();
-								ApplyDebuff_Enemy(enemy, projElement);
+								ApplyDebuff_Enemy(enemy, projectile->GetElement());
 							}
 							break;
 						}
