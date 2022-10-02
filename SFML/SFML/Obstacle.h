@@ -29,6 +29,7 @@ public:
 	/// </summary>
 	void Update();
 
+	bool bDestroy{ false };
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 
@@ -50,6 +51,7 @@ public:
 	/////////////////////////// 
 
 	sf::Sprite GetSprite() const;
+
 	BoxCollider* GetCollisionBox();
 };
 

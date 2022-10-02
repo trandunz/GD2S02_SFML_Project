@@ -9,6 +9,7 @@
 
 // Includes
 #include "Enemy.h"
+#include "EnemyManager.h"
 #include "Math.h"
 #include "ObjectManager.h"
 #include "Obstacle.h"
@@ -49,6 +50,12 @@ Enemy::Enemy(EnemyProperties _properties)
 			std::cout << m_fArcherYPos << std::endl;
 			break;
 		}
+		case ENEMYTYPE::WARRIOR:
+		{
+			animProperties.uNumberOfFrames = 4;
+			animProperties.fFrameInterval = 0.05f;
+			break;
+		}
 		default:
 			break;
 	}
@@ -70,32 +77,32 @@ Enemy::~Enemy()
 {
 	switch (m_Properties.EnemyType)
 	{
-	case ENEMYTYPE::KAMIKAZE:
-	{
-		// Play explosion VFX animation
-		SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/explosion.png") };
-		explosionProperties.v2fScale = { 2.0f, 2.0f };
-		explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
-		explosionProperties.uNumberOfFrames = 9;
-		explosionProperties.fAnimFrameInterval = 0.5f / 9;
-		explosionProperties.v2fVelocity = { 0.0f, 160.0f };
-		VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
-		break;
-	}
-	case ENEMYTYPE::ARCHER:
-	{
-		// Play archer death VFX animation
-		SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/Goblin_Archer_Death.png") };
-		explosionProperties.v2fScale = { 2.0f, 2.0f };
-		explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
-		explosionProperties.uNumberOfFrames = 5;
-		explosionProperties.fAnimFrameInterval = 0.5f / 5;
-		explosionProperties.v2fVelocity = { 0.0f, 0.0f };
-		VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
-		break;
-	}
-	default:
-		break;
+		case ENEMYTYPE::KAMIKAZE:
+		{
+			// Play explosion VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/explosion.png") };
+			explosionProperties.v2fScale = { 2.0f, 2.0f };
+			explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+			explosionProperties.uNumberOfFrames = 9;
+			explosionProperties.fAnimFrameInterval = 0.5f / 9;
+			explosionProperties.v2fVelocity = { 0.0f, 160.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+			break;
+		}
+		case ENEMYTYPE::ARCHER:
+		{
+			// Play archer death VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/Goblin_Archer_Death.png") };
+			explosionProperties.v2fScale = { 2.0f, 2.0f };
+			explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+			explosionProperties.uNumberOfFrames = 5;
+			explosionProperties.fAnimFrameInterval = 0.5f / 5;
+			explosionProperties.v2fVelocity = { 0.0f, 0.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+			break;
+		}
+		default:
+			break;
 	}
 	
 }
@@ -228,6 +235,11 @@ Animator Enemy::GetAnimation() const
 	return m_AnimatedSprite;
 }
 
+BoxCollider* Enemy::GetCollisionBox()
+{
+	return m_BoxCollider;
+}
+
 bool Enemy::CheckCollision(BoxCollider& _otherCollider)
 {
 	if (m_BoxCollider)
@@ -334,6 +346,29 @@ void Enemy::Movement()
 				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale);
 				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
 			}
+			break;
+		}
+		// Movement of Warrior enemy
+		// Runs straight down, and destroys obstacles & other goblins if in the way
+		case ENEMYTYPE::WARRIOR:
+		{
+			m_v2fVelocity = { 0,1 };
+
+			// Checking collisions with obstacles
+			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
+			{
+				if (m_BoxCollider->CheckCollision(*obstacle->GetCollisionBox()))
+					obstacle->bDestroy = true;
+			}
+
+			for (auto& enemy : EnemyManager::GetInstance().GetEnemies())
+			{
+				if (m_BoxCollider->CheckCollision(*enemy->GetCollisionBox()) &&
+					enemy->GetType() != ENEMYTYPE::WARRIOR)
+					enemy->TakeDamage(50);
+			}
+
+			m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
 			break;
 		}
 		default:

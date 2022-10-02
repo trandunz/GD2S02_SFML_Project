@@ -130,6 +130,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 		m_fSpawnTimer = _rate;
 
 		int iRandomEnemy = rand() % 6;
+		// Create Archer
 		if (iRandomEnemy == 0)
 		{
 			CreateEnemy(
@@ -143,6 +144,22 @@ void EnemyManager::SpawnEnemies(float _rate)
 					{250.0f}
 				});
 		}
+		// Create Warrior
+		else if (iRandomEnemy == 1 || iRandomEnemy == 2)
+		{
+			CreateEnemy(
+				{
+					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Warrior_Running.png"), // Set warrior running sprite
+					{100.0f + (rand() % 600), 0}, // Set random starting position
+					{ENEMYTYPE::WARRIOR}, // Set enemy type - Warrior
+					{2.0f,2.0f}, // Warrior sprite size
+					{0.0f,0.0f}, // Warrior does not jump
+					{300.0f}, // Faster run speed
+					{0.0f}, // Warrior does not jump
+					{10} // High health
+				});
+		}
+		// Create Kamakazi
 		else
 		{
 			int iRandomKamakazi = rand() % 5;

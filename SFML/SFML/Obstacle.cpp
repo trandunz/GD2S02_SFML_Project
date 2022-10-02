@@ -10,9 +10,12 @@
 #include "Obstacle.h"
 #include "Math.h"
 #include "BoxCollider.h"
+#include "TextureLoader.h"
+#include "VFX.h"
 
 Obstacle::Obstacle(ObstacleProperties _properties)
 {
+	m_Properties = _properties;
 	m_Mesh.setTexture(*_properties.Texture, true);
 	SetOriginCenter(m_Mesh);
 	m_Mesh.setScale(_properties.v2fScale);
@@ -25,6 +28,47 @@ Obstacle::Obstacle(ObstacleProperties _properties)
 
 Obstacle::~Obstacle()
 {
+	switch (m_Properties.ObstacleType)
+	{
+		case OBSTACLETYPE::ROCK:
+		{	
+			// Play rock destruction VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/rock_obstacle_explosion.png") };
+			explosionProperties.v2fScale = { 2.0f, 2.0f };
+			explosionProperties.v2fStartPos = m_Mesh.getPosition();
+			explosionProperties.uNumberOfFrames = 4;
+			explosionProperties.fAnimFrameInterval = 0.5f / 8;
+			explosionProperties.v2fVelocity = { 0.0f, 160.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.25f);
+			break;
+		}
+		case OBSTACLETYPE::HEDGE:
+		{
+			// Play log destruction VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/hedge_obstacle_explosion.png") };
+			explosionProperties.v2fScale = { 2.0f, 2.0f };
+			explosionProperties.v2fStartPos = m_Mesh.getPosition();
+			explosionProperties.uNumberOfFrames = 4;
+			explosionProperties.fAnimFrameInterval = 0.5f / 8;
+			explosionProperties.v2fVelocity = { 0.0f, 160.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.25f);
+			break;
+		}
+		case OBSTACLETYPE::LOG:
+		{
+			// Play log destruction VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/log_obstacle_explosion.png") };
+			explosionProperties.v2fScale = { 2.0f, 2.0f };
+			explosionProperties.v2fStartPos = m_Mesh.getPosition();
+			explosionProperties.uNumberOfFrames = 4;
+			explosionProperties.fAnimFrameInterval = 0.5f / 8;
+			explosionProperties.v2fVelocity = { 0.0f, 160.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.25f);
+			break;
+		}
+		default:
+			break;
+	}
 }
 
 void Obstacle::Update()
