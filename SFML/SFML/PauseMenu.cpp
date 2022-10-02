@@ -73,7 +73,7 @@ void PauseMenu::CreateMenuButtons()
 				bDestroy = true; // On Press Lambda
 			},
 			nullptr,
-			{1,1}, // Scale
+			{0.9f,0.9f}, // Scale
 		});
 	GUI::GetInstance().CreateButton("Settings", // Key
 		{
@@ -84,7 +84,7 @@ void PauseMenu::CreateMenuButtons()
 				m_SettingsMenu = new SettingsMenu; // On Press Lambda
 			},
 			nullptr,
-			{1,1}, // Scale
+			{0.9f,0.9f}, // Scale
 		});
 	GUI::GetInstance().CreateButton("Quit", // Key
 		{
@@ -95,7 +95,7 @@ void PauseMenu::CreateMenuButtons()
 				LevelLoader::LoadLevel(LEVELS::MENUSCENE); // On Press Lambda
 			},
 			nullptr,
-			{1,1}, // Scale
+			{0.9f,0.9f}, // Scale
 		});
 }
 
@@ -105,7 +105,7 @@ void PauseMenu::CreateMenuText()
 
 	GUI::GetInstance().CreateText("PauseMenuTitle", // Key
 		{
-			{ScreenCentre.x, ScreenCentre.y - 110}, // Position
+			{ScreenCentre.x, ScreenCentre.y - 100}, // Position
 			"Paused" // Label / String
 		});
 }

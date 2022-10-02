@@ -30,6 +30,20 @@ public:
 	/// Stop the current song
 	/// </summary>
 	static void StopMusic();
+	static void SetMusicVolume(float _volume);
+	static void IncrementMusicVolume(float _amount);
+	static void DecrementMusicVolume(float _amount);
+	static void MuteMusic();
+	static void ToggleMuteMusic();
+	static void SetEffectsVolume(float _volume);
+	static void IncrementEffectsVolume(float _amount);
+	static void DecrementEffectsVolume(float _amount);
+	static void MuteEffects();
+	static void ToggleMuteEffects();
+	static bool IsMusicMuted();
+	static bool IsEffectsMuted();
+	static float GetMusicVolume();
+	static float GetEffectsVolume();
 	/// <summary>
 	/// Create an audio source with the given key
 	/// </summary>
@@ -64,6 +78,10 @@ public:
 	/// </summary>
 	static void Cleanup();
 private:
+	static float m_MusicVolume;
+	static bool m_MusicMuted;
+	static float m_EffectsVolume;
+	static bool m_EffectsMuted;
 	inline static sf::Music m_Jutebox;
 	inline static std::map<std::string, sf::Sound*> m_AudioSources;
 	inline static std::map<std::string, sf::SoundBuffer*> m_LoadedSounds;

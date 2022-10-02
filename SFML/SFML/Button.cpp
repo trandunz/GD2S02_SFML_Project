@@ -21,6 +21,7 @@ Button::Button(ButtonProperties _properties)
 	m_Label.setString(_properties.Label);
 	m_Label.setCharacterSize(24); 
 	m_Label.setFillColor(sf::Color::Black);
+	SetOriginCenter(m_Label);
 	m_Properties = _properties;
 	if (_properties.Texture == nullptr)
 	{
@@ -30,6 +31,7 @@ Button::Button(ButtonProperties _properties)
 	{
 		SetTexture(*_properties.Texture);
 	}
+
 	SetScale(_properties.v2fScale);
 	SetPosition(_properties.v2fStartPos);
 }
@@ -44,7 +46,7 @@ bool Button::CallOnMouseOver()
 	bool wasPressed = false;
 	if (m_Properties.OnPressFunction != nullptr)
 	{
-		sf::Vector2f mousePos = { (float)sf::Mouse::getPosition(Statics::RenderWindow).x, (float)sf::Mouse::getPosition(Statics::RenderWindow).y };
+		sf::Vector2f mousePos = { Statics::RenderWindow.mapPixelToCoords(sf::Mouse::getPosition(Statics::RenderWindow))};
 		if (m_Sprite.getGlobalBounds().contains(mousePos))
 		{
 			wasPressed = true;
@@ -71,6 +73,7 @@ sf::Sprite Button::GetSprite() const
 void Button::SetLabel(std::string _newLabel)
 {
 	m_Label.setString(_newLabel);
+	SetOriginCenter(m_Label);
 }
 
 void Button::SetPosition(sf::Vector2f _position)
@@ -82,8 +85,7 @@ void Button::SetPosition(sf::Vector2f _position)
 void Button::SetScale(sf::Vector2f _scale)
 {
 	m_Sprite.setScale(_scale);
-	m_Label.setCharacterSize(m_Label.getCharacterSize() * (unsigned)Magnitude(_scale));
-	SetOriginCenter(m_Label);
+	m_Label.setScale(_scale);
 }
 
 void Button::ResetScale()
@@ -95,7 +97,6 @@ void Button::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(m_Sprite);
 	_target.draw(m_Label);
-
 }
 
 void Button::SetTexture(std::string _fileName)

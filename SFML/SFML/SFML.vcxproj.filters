@@ -139,7 +139,7 @@
       <Filter>Source Files\Juice</Filter>
     </ClCompile>
     <ClCompile Include="SettingsMenu.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Juice</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -219,7 +219,7 @@
       <Filter>Header Files\Juice</Filter>
     </ClInclude>
     <ClInclude Include="SettingsMenu.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Juice</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
