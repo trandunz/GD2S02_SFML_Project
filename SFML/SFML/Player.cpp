@@ -15,6 +15,7 @@
 #include "Math.h"
 #include "TextureLoader.h"
 #include "BoxCollider.h"
+#include "AudioManager.h"
 
 Player::Player(PlayerProperties _properties)
 {
@@ -107,6 +108,7 @@ void Player::Update()
 			m_SpecialTimer = m_SpecialDuration;
 			//m_AttackTimer = m_AttackSpeed;
 			Special();
+			AudioManager::PlayAudioSource("Special");
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
@@ -116,6 +118,7 @@ void Player::Update()
 			//m_AttackTimer = m_AttackSpeed;
 			m_SecondaryTimer = m_SecondaryCooldown;
 			SecondaryAttack();
+			AudioManager::PlayAudioSource("Secondary");
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(m_BasicAttackKey))
@@ -124,6 +127,7 @@ void Player::Update()
 		{
 			m_AttackTimer = m_AttackSpeed;
 			BasicAttack();
+			AudioManager::PlayAudioSource("Primary");
 		}
 	}
 

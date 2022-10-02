@@ -18,6 +18,7 @@
 #include "VFX.h"
 #include "BoxCollider.h"
 #include "ProjectileManager.h"
+#include "AudioManager.h"
 
 Enemy::Enemy(EnemyProperties _properties)
 {
@@ -370,6 +371,8 @@ void Enemy::Attack()
 				500.0f
 			}
 		);
+
+		AudioManager::PlayAudioSource("Bow");
 	}
 }
 

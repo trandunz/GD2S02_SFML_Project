@@ -16,6 +16,7 @@
 #include "GUI.h"
 #include "Math.h"
 #include "TextureLoader.h"
+#include "AudioManager.h"
 
 GameScene::GameScene()
 {
@@ -51,6 +52,19 @@ GameScene::GameScene()
 		);
 
 	CreateScrollingBackground();
+
+	// Music
+	AudioManager::PlayMusic("Music_GamePlay.wav", true);
+
+	// SFX
+	AudioManager::CreateAudioSource("Primary", "primary.wav");
+	AudioManager::CreateAudioSource("Secondary", "secondary.wav");
+	AudioManager::CreateAudioSource("Special", "special.wav");
+	AudioManager::CreateAudioSource("Bow", "bow.wav");
+	AudioManager::CreateAudioSource("PlayerDeath", "death.wav");
+	AudioManager::CreateAudioSource("EnemyDeath", "kill.wav");
+	AudioManager::CreateAudioSource("PickupHeart", "pickup_heart.wav");
+	AudioManager::CreateAudioSource("PickupMana", "pickup_mana.wav");
 }
 
 GameScene::~GameScene()

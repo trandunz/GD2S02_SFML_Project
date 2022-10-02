@@ -2,6 +2,7 @@
 #include "BoxCollider.h"
 #include "Player.h"
 #include "TextureLoader.h"
+#include "AudioManager.h"
 
 Pickup::Pickup(PickupProperties _properties)
 {
@@ -51,7 +52,16 @@ bool Pickup::CheckForPickup(Player& _player)
 		pickedUp = m_BoxCollider->CheckCollision(*_player.GetCollisionBox());
 	
 		if (pickedUp)
+		{
 			GivePlayerPickupEffect(_player);
+			if (m_Properties.ePickupType == PICKUPTYPE::HEALTH)
+			{
+				AudioManager::PlayAudioSource("PickupHeart");
+			}
+			else {
+				AudioManager::PlayAudioSource("PickupMana");
+			}
+		}
 	}
 
 	return pickedUp;
