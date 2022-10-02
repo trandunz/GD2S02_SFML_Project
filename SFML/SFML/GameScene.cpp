@@ -65,6 +65,7 @@ GameScene::GameScene()
 	AudioManager::CreateAudioSource("EnemyDeath", "kill.wav");
 	AudioManager::CreateAudioSource("PickupHeart", "pickup_heart.wav");
 	AudioManager::CreateAudioSource("PickupMana", "pickup_mana.wav");
+	AudioManager::CreateAudioSource("Hit", "hit.wav");
 }
 
 GameScene::~GameScene()

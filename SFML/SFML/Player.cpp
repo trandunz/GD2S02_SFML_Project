@@ -432,7 +432,7 @@ sf::Sprite Player::GetSprite() const
 void Player::TakeDamage(unsigned _amount)
 {
 	m_iCurrentHealth -= _amount;
-
+	AudioManager::PlayAudioSource("Hit");
 	if (m_iCurrentHealth <= 0)
 	{
 		bDestroy = true;
