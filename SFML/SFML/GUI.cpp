@@ -123,17 +123,10 @@ void GUI::HandleEvents()
 	if (Statics::EventHandle.type == sf::Event::MouseButtonReleased
 		&& Statics::EventHandle.mouseButton.button == sf::Mouse::Left)
 	{
-		auto it = m_vecButtons.rbegin();
-		while (it != m_vecButtons.rend())
+		for (auto& button : m_vecButtons)
 		{
-			if (it->second.CallOnMouseOver())
-			{
+			if (button.second.CallOnMouseOver())
 				break;
-			}
-			else
-			{
-				it++;
-			}
 		}
 	}
 }
