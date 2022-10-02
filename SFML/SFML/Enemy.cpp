@@ -18,6 +18,7 @@
 #include "VFX.h"
 #include "BoxCollider.h"
 #include "ProjectileManager.h"
+#include "AudioManager.h"
 
 Enemy::Enemy(EnemyProperties _properties)
 {
@@ -67,14 +68,36 @@ Enemy::Enemy(EnemyProperties _properties)
 
 Enemy::~Enemy()
 {
-	// Play explosion VFX animation
-	SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/explosion.png") };
-	explosionProperties.v2fScale = { 2.0f, 2.0f };
-	explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
-	explosionProperties.uNumberOfFrames = 9;
-	explosionProperties.fAnimFrameInterval = 0.5f / 9;
-	explosionProperties.v2fVelocity = {0.0f, 160.0f };
-	VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+	switch (m_Properties.EnemyType)
+	{
+	case ENEMYTYPE::KAMIKAZE:
+	{
+		// Play explosion VFX animation
+		SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/explosion.png") };
+		explosionProperties.v2fScale = { 2.0f, 2.0f };
+		explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+		explosionProperties.uNumberOfFrames = 9;
+		explosionProperties.fAnimFrameInterval = 0.5f / 9;
+		explosionProperties.v2fVelocity = { 0.0f, 160.0f };
+		VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+		break;
+	}
+	case ENEMYTYPE::ARCHER:
+	{
+		// Play archer death VFX animation
+		SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/Goblin_Archer_Death.png") };
+		explosionProperties.v2fScale = { 2.0f, 2.0f };
+		explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+		explosionProperties.uNumberOfFrames = 5;
+		explosionProperties.fAnimFrameInterval = 0.5f / 5;
+		explosionProperties.v2fVelocity = { 0.0f, 0.0f };
+		VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+		break;
+	}
+	default:
+		break;
+	}
+	
 }
 
 void Enemy::Update()
@@ -348,6 +371,8 @@ void Enemy::Attack()
 				500.0f
 			}
 		);
+
+		AudioManager::PlayAudioSource("Bow");
 	}
 }
 

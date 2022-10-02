@@ -53,6 +53,7 @@ struct ProjectileProperties
 	unsigned uNumberOfFrames{ 1 };
 	ELEMENTTYPE Element{ ELEMENTTYPE::NONE };
 	bool bDestroyOnCollision{ true };
+	bool bApplyElementToTarget{ false };
 };
 
 struct ObstacleProperties

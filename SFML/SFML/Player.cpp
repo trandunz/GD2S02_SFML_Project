@@ -15,18 +15,18 @@
 #include "Math.h"
 #include "TextureLoader.h"
 #include "BoxCollider.h"
+#include "AudioManager.h"
 
 Player::Player(PlayerProperties _properties)
 {
 	//m_Mesh.setTexture(*_properties.Texture, true);
-
+	m_Properties = _properties;
+	SetTextureByElement();
 	SetPosition(_properties.v2fStartPos);
 	m_Mesh.setScale(_properties.v2fScale);
 	SetOriginCenter(m_Mesh);
-	m_Properties = _properties;
 	SetHPMax();
 	SetManaMax();
-	SetTextureByElement();
 
 	// Set box collider
 	fColliderOffset = _properties.fBoxColliderOffsetY;
@@ -36,6 +36,8 @@ Player::Player(PlayerProperties _properties)
 	m_BasicAttackProperties.uDamage = 1;
 	m_SecondaryAttackProperties.bDestroyOnCollision = false;
 	m_SecondaryAttackProperties.fMoveSpeed = 250.0f;
+	m_SecondaryAttackProperties.bApplyElementToTarget = true;
+	m_EmpoweredBasicAttackProperties.bApplyElementToTarget = true;
 
 	if (m_Properties.bPlayerOne == false)
 	{
@@ -85,7 +87,6 @@ void Player::HandleEvents()
 
 void Player::Update()
 {
-	;
 	if (m_AttackTimer > 0)
 	{
 		m_AttackTimer -= Statics::fDeltaTime;
@@ -103,11 +104,12 @@ void Player::Update()
 
 	if (sf::Keyboard::isKeyPressed(m_SpecialAttackKey))
 	{
-		if (/*m_AttackTimer <= 0 && */m_SpecialTimer <= 0)
+		if (m_SpecialTimer <= 0)
 		{
 			m_SpecialTimer = m_SpecialDuration;
 			//m_AttackTimer = m_AttackSpeed;
 			Special();
+			AudioManager::PlayAudioSource("Special");
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
@@ -117,6 +119,7 @@ void Player::Update()
 			//m_AttackTimer = m_AttackSpeed;
 			m_SecondaryTimer = m_SecondaryCooldown;
 			SecondaryAttack();
+			AudioManager::PlayAudioSource("Secondary");
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(m_BasicAttackKey))
@@ -125,6 +128,7 @@ void Player::Update()
 		{
 			m_AttackTimer = m_AttackSpeed;
 			BasicAttack();
+			AudioManager::PlayAudioSource("Primary");
 		}
 	}
 
@@ -332,8 +336,16 @@ void Player::SetP2SpecialVFXPosition(sf::Vector2f _position)
 
 void Player::BasicAttack()
 {
-	m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
-	ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
+	if (m_SpecialTimer <= 0)
+	{
+		m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
+		ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
+	}
+	else
+	{
+		m_EmpoweredBasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
+		ProjectileManager::GetInstance().CreateProjectile(m_EmpoweredBasicAttackProperties);
+	}
 }
 
 void Player::SecondaryAttack()
@@ -380,6 +392,8 @@ void Player::SetElement_Fire()
 	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 	m_BasicAttackProperties.uNumberOfFrames = 3;
+	m_BasicAttackProperties.Element = ELEMENTTYPE::FIRE;
+	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
 	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/7_firespin_spritesheet.png");// ("Fire_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.50f,1.50f };
@@ -389,9 +403,11 @@ void Player::SetElement_Fire()
 
 void Player::SetElement_Water()
 {
-	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
+	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Water_Spell_Animated.png");//("Earth_Spell.png");
 	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 	m_BasicAttackProperties.uNumberOfFrames = 3;
+	m_BasicAttackProperties.Element = ELEMENTTYPE::WATER;
+	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
 	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/18_midnight_spritesheet.png");//("Earth_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
@@ -404,6 +420,8 @@ void Player::SetElement_Earth()
 	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
 	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 	m_BasicAttackProperties.uNumberOfFrames = 3;
+	m_BasicAttackProperties.Element = ELEMENTTYPE::EARTH;
+	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
 	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/17_felspell_spritesheet.png");//("Earth_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.0f,1.0f };
@@ -429,7 +447,7 @@ sf::Sprite Player::GetSprite() const
 void Player::TakeDamage(unsigned _amount)
 {
 	m_iCurrentHealth -= _amount;
-
+	AudioManager::PlayAudioSource("Hit");
 	if (m_iCurrentHealth <= 0)
 	{
 		bDestroy = true;

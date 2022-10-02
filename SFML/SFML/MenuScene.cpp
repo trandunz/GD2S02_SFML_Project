@@ -14,6 +14,7 @@
 #include "Math.h"
 #include "TextureLoader.h"
 #include "SettingsMenu.h"
+#include "AudioManager.h"
 
 MenuScene::MenuScene()
 {
@@ -34,6 +35,7 @@ MenuScene::~MenuScene()
 
 void MenuScene::HandleEvents()
 {
+	bool playMenuMove = false;
 	if (Statics::EventHandle.type == sf::Event::KeyPressed) 
 	{
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
@@ -48,11 +50,13 @@ void MenuScene::HandleEvents()
 			{
 				m_iButtonSelected = m_vecButtons.size() - 1;
 			}
+			playMenuMove = true;
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::S ||
 			Statics::EventHandle.key.code == sf::Keyboard::Key::Down)
 		{
 			m_iButtonSelected = ++m_iButtonSelected % m_vecButtons.size();
+			playMenuMove = true;
 
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Enter ||
@@ -72,6 +76,12 @@ void MenuScene::HandleEvents()
 	}
 	else
 		GUI::GetInstance().HandleEvents();
+
+	if (playMenuMove)
+	{
+		playMenuMove = false;
+		AudioManager::PlayAudioSource("MenuMove");
+	}
 }
 
 void MenuScene::Update()
@@ -179,4 +189,11 @@ void MenuScene::CreateElements()
 			{windowSize.x / 2.0f, (windowSize.y / 4.0f)},
 			{1.5f, 1.5f}
 		});
+
+	// SFX
+	AudioManager::CreateAudioSource("MenuMove", "menu_move.wav");
+	AudioManager::CreateAudioSource("Abracadabros", "Abracadabrooooos.wav");
+	AudioManager::PlayAudioSource("Abracadabros");
+	AudioManager::StopMusic();
+
 }

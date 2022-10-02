@@ -13,6 +13,7 @@
 #include "Player.h"
 #include "TextureLoader.h"
 #include "Helper.h"
+#include "AudioManager.h"
 
 EnemyManager& EnemyManager::GetInstance()
 {
@@ -60,6 +61,8 @@ void EnemyManager::Update()
 		{
 			Statics::fGameScore += 20.0f; // Increase game score
 			enemy->bDestroy = true;
+			
+			AudioManager::PlayAudioSource("EnemyDeath");
 		}
 		// bDestroy enemies if they below the screen
 		else if (enemy->GetPosition().y >= Statics::RenderWindow.getSize().y + m_fDestroyDistanceY)
@@ -80,7 +83,7 @@ void EnemyManager::Update()
 						{
 							player->TakeDamage(1);
 							enemy->bDestroy = true;
-
+							AudioManager::PlayAudioSource("EnemyDeath");
 							break;
 						}
 						default:

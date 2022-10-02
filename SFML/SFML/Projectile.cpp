@@ -13,6 +13,8 @@
 
 Projectile::Projectile(ProjectileProperties _properties)
 {
+	m_Properties = _properties;
+
 	AnimStateProperties animProperties;
 	animProperties.StateTexture = _properties.Texture;
 	animProperties.uNumberOfFrames = _properties.uNumberOfFrames;
@@ -22,11 +24,6 @@ Projectile::Projectile(ProjectileProperties _properties)
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.SetPosition(_properties.v2fStartPos);
-
-	//m_Properties.uDamage = _properties.uDamage;
-	//m_Properties.bFriendly = _properties.bFriendly;
-	//m_Properties.fMoveSpeed = _properties.fMoveSpeed;
-	m_Properties = _properties;
 
 	m_AnimatedSprite.StartState("Moving");
 
@@ -98,6 +95,11 @@ bool Projectile::IsFriendly() const
 bool Projectile::IsDestroyedOnCollision() const
 {
 	return m_Properties.bDestroyOnCollision;
+}
+
+bool Projectile::DoesApplyElementToTarget() const
+{
+	return m_Properties.bApplyElementToTarget;
 }
 
 void Projectile::draw(sf::RenderTarget& _target, sf::RenderStates _states) const

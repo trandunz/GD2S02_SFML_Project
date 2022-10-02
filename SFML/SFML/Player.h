@@ -153,6 +153,7 @@ private:
 	void RestrictToScreen();
 
 	ProjectileProperties m_BasicAttackProperties{};
+	ProjectileProperties m_EmpoweredBasicAttackProperties{};
 	ProjectileProperties m_SecondaryAttackProperties{};
 	PlayerProperties m_Properties{};
 	ELEMENTTYPE m_eElement = ELEMENTTYPE::NONE;

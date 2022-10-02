@@ -30,7 +30,7 @@ public:
 	bool bDestroy{ false };
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
-	
+
 	ProjectileProperties m_Properties{};
 	Animator m_AnimatedSprite{};
 	BoxCollider* m_BoxCollider{ nullptr };
@@ -46,5 +46,6 @@ public:
 	ELEMENTTYPE GetElement() const;
 
 	bool IsDestroyedOnCollision() const;
+	bool DoesApplyElementToTarget() const;
 };
 

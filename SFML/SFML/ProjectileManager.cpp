@@ -89,13 +89,14 @@ void ProjectileManager::Update()
 							//Assume that if it is not marked to be destroyed
 							//then it is a secondary attack projectile that dealt
 							//no damage but will inflict debuffs
-							if(projectile->IsDestroyedOnCollision())
-							{
-								projectile->bDestroy = true;
-							}
-							else
+							if (projectile->DoesApplyElementToTarget())
 							{
 								ApplyDebuff_Enemy(enemy, projectile->GetElement());
+							}
+
+							if (projectile->IsDestroyedOnCollision())
+							{
+								projectile->bDestroy = true;
 							}
 							break;
 						}
