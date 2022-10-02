@@ -26,6 +26,7 @@ public:
 	bool IsFriendly() const;
 
 	bool CheckCollision(BoxCollider& _otherCollider);
+	BoxCollider* GetCollider();
 
 	bool bDestroy{ false };
 private:

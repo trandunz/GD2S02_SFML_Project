@@ -79,6 +79,17 @@ void ProjectileManager::Update()
 
 			if (projectile->IsFriendly() == true)
 			{
+				for (auto& otherProjectile : m_Projectiles)
+				{
+					if (otherProjectile->IsFriendly() == false)
+					{
+						if (projectile->CheckCollision(*otherProjectile->GetCollider()))
+						{
+							otherProjectile->bDestroy = true;
+						}
+					}
+				}
+
 				for (auto& enemy : EnemyManager::GetInstance().GetEnemies())
 				{
 					if (enemy != nullptr)

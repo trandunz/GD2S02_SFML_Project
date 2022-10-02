@@ -72,6 +72,11 @@ bool Projectile::CheckCollision(BoxCollider& _otherCollider)
 	}
 }
 
+BoxCollider* Projectile::GetCollider()
+{
+	return m_BoxCollider;
+}
+
 sf::Vector2f Projectile::GetPosition() const
 {
 	return m_AnimatedSprite.GetPosition();//m_Mesh.getPosition();
