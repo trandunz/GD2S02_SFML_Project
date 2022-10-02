@@ -16,6 +16,7 @@
 #include "TextureLoader.h"
 #include "Enemy.h"
 #include "BoxCollider.h"
+#include "AudioManager.h"
 
 void PlayerManager::CleanupDestroyed()
 {
@@ -79,6 +80,7 @@ void PlayerManager::Update()
 		if (player->GetCurrentHealth() <= 0)
 		{
 			player->bDestroy = true;
+			AudioManager::PlayAudioSource("PlayerDeath");
 		}
 		else
 		{

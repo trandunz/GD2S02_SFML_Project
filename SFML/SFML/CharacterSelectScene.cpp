@@ -13,6 +13,7 @@
 #include "Math.h"
 #include "TextureLoader.h"
 #include "PlayerManager.h"
+#include "AudioManager.h"
 
 CharacterSelectScene::CharacterSelectScene()
 {
@@ -77,6 +78,15 @@ CharacterSelectScene::CharacterSelectScene()
 
 	m_bPlayer1Selected = false;
 	m_bPlayer2Selected = false;
+
+	// Music
+	AudioManager::PlayMusic("Music_Menu.wav", true);
+
+	// SFX
+	AudioManager::CreateAudioSource("MenuMove", "menu_move.wav");
+	AudioManager::CreateAudioSource("MenuEnter", "menu_enter.wav");
+	AudioManager::CreateAudioSource("Abracadabros", "Abracadabrooooos.wav");
+	AudioManager::PlayAudioSource("MenuEnter");
 }
 
 CharacterSelectScene::~CharacterSelectScene()
@@ -86,6 +96,8 @@ CharacterSelectScene::~CharacterSelectScene()
 
 void CharacterSelectScene::HandleEvents()
 {
+	bool playMenuMove = false;
+	bool playMenuEnter = false;
 	if (Statics::EventHandle.type == sf::Event::KeyPressed) {
 
 		// If both players are selected
@@ -109,13 +121,16 @@ void CharacterSelectScene::HandleEvents()
 			if (Statics::EventHandle.key.code == sf::Keyboard::Key::A)
 			{
 				m_iPlayer1Selection = SelectLeft(m_iPlayer1Selection);
+				playMenuMove = true;
 			}
 			if (Statics::EventHandle.key.code == sf::Keyboard::Key::D)
 			{
 				m_iPlayer1Selection = SelectRight(m_iPlayer1Selection);
+				playMenuMove = true;
 			}
 			if (Statics::EventHandle.key.code == sf::Keyboard::Key::V)
 			{
+				playMenuEnter = true;
 				m_bPlayer1Selected = true;
 				PlayerManager::GetInstance().ePlayer1Element = SetPlayerElement(m_iPlayer1Selection);
 			}
@@ -134,14 +149,17 @@ void CharacterSelectScene::HandleEvents()
 		{
 			if (Statics::EventHandle.key.code == sf::Keyboard::Key::Left)
 			{
+				playMenuMove = true;
 				m_iPlayer2Selection = SelectLeft(m_iPlayer2Selection);
 			}
 			if (Statics::EventHandle.key.code == sf::Keyboard::Key::Right)
 			{
+				playMenuMove = true;
 				m_iPlayer2Selection = SelectRight(m_iPlayer2Selection);
 			}
 			if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1)
 			{
+				playMenuEnter = true;
 				m_bPlayer2Selected = true;
 				PlayerManager::GetInstance().ePlayer2Element = SetPlayerElement(m_iPlayer2Selection);
 			}
@@ -158,6 +176,17 @@ void CharacterSelectScene::HandleEvents()
 	else
 	{
 		GUI::GetInstance().HandleEvents();
+	}
+
+	if (playMenuMove)
+	{
+		playMenuMove = false;
+		AudioManager::PlayAudioSource("MenuMove");
+	}
+	if (playMenuEnter)
+	{
+		playMenuEnter = false;
+		AudioManager::PlayAudioSource("MenuEnter");
 	}
 }
 
