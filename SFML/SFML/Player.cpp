@@ -19,14 +19,13 @@
 Player::Player(PlayerProperties _properties)
 {
 	//m_Mesh.setTexture(*_properties.Texture, true);
-
+	m_Properties = _properties;
+	SetTextureByElement();
 	SetPosition(_properties.v2fStartPos);
 	m_Mesh.setScale(_properties.v2fScale);
 	SetOriginCenter(m_Mesh);
-	m_Properties = _properties;
 	SetHPMax();
 	SetManaMax();
-	SetTextureByElement();
 
 	// Set box collider
 	fColliderOffset = _properties.fBoxColliderOffsetY;
