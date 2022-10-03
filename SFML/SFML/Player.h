@@ -195,5 +195,7 @@ public:
 	void SetPosition(sf::Vector2f _newPosition);
 
 	sf::Sprite GetSprite() const;
+
+	sf::Vector2f GetPreviousMove() const; 
 };
 

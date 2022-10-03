@@ -444,6 +444,11 @@ sf::Sprite Player::GetSprite() const
 	return m_Mesh;
 }
 
+sf::Vector2f Player::GetPreviousMove() const
+{
+	return m_PreviousMove;
+}
+
 void Player::TakeDamage(unsigned _amount)
 {
 	m_iCurrentHealth -= _amount;
