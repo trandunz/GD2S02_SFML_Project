@@ -13,6 +13,7 @@
 #include "PauseMenu.h"
 
 class PauseMenu;
+class EndGameMenu;
 class GameScene : public Level
 {
 public:
@@ -30,8 +31,10 @@ private:
 
 	std::vector<sf::Sprite> m_Backgrounds{};
 	float m_fDistanceTravelled{};
+	bool m_bGameOver{ false };
 
 	PauseMenu* m_PauseMenu{ nullptr };
+	EndGameMenu* m_EndGameMenu{ nullptr };
 public:
 	///////////////////////////
 	/// Getters and Setters	///

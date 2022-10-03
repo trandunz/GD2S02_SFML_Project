@@ -17,6 +17,7 @@
 #include "Math.h"
 #include "TextureLoader.h"
 #include "AudioManager.h"
+#include "EndGameMenu.h"
 
 GameScene::GameScene()
 {
@@ -75,6 +76,11 @@ GameScene::~GameScene()
 		delete m_PauseMenu;
 		m_PauseMenu = nullptr;
 	}
+	if (m_EndGameMenu)
+	{
+		delete m_EndGameMenu;
+		m_EndGameMenu = nullptr;
+	}
 
 	ObjectManager::GetInstance().CleanupEverything();
 	ProjectileManager::GetInstance().CleanupProjectiles();
@@ -93,13 +99,16 @@ void GameScene::HandleEvents()
 	{
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
 		{
-			if (m_PauseMenu)
+			if (m_bGameOver == false)
 			{
-				m_PauseMenu->bDestroy = true;
-			}
-			else
-			{
-				m_PauseMenu = new PauseMenu();
+				if (m_PauseMenu)
+				{
+					m_PauseMenu->bDestroy = true;
+				}
+				else
+				{
+					m_PauseMenu = new PauseMenu();
+				}
 			}
 		}
 	}
@@ -125,6 +134,13 @@ void GameScene::Update()
 	EnemyManager::GetInstance().CleanupDestroyed();
 	PlayerManager::GetInstance().CleanupDestroyed();
 	CleanupPauseMenuIfDestroyed();
+
+	if (PlayerManager::GetInstance().GetPlayers().size() <= 0
+		&& m_bGameOver == false)
+	{
+		m_bGameOver = true;
+		m_EndGameMenu = new EndGameMenu;
+	}
 }
 
 void GameScene::Draw()

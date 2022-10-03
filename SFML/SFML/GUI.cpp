@@ -76,6 +76,11 @@ void GUI::CreateText(std::string _key, TextProperties _properties)
 	m_vecTexts[_key].setFont(Statics::TimesNewRoman);
 	m_vecTexts[_key].setCharacterSize(_properties.iCharacterSize);
 	m_vecTexts[_key].setFillColor(_properties.Color);
+	if (_properties.OutlineColor != _properties.Color)
+	{
+		m_vecTexts[_key].setOutlineColor(_properties.OutlineColor);
+		m_vecTexts[_key].setOutlineThickness(2.0f);
+	}
 	m_vecTexts[_key].setString(_properties.String);
 	SetOriginCenter(m_vecTexts[_key]);
 	m_vecTexts[_key].setPosition(_properties.v2fStartPos);

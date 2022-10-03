@@ -114,6 +114,7 @@ struct TextProperties
 	std::string String{};
 	sf::Color Color{};
 	int iCharacterSize{36};
+	sf::Color OutlineColor{};
 };
 
 struct ImageProperties
