@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : Obstacle.cpp 
 // Description : Obstacle Implementation File		
-// Author : Inman, Will
+// Author : Inman, Will; Frear Stace
 
 #include "Obstacle.h"
 #include "Math.h"
@@ -98,7 +98,7 @@ void Obstacle::Movement()
 	m_Mesh.move(m_v2fVelocity * Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
 }
 
-BoxCollider* Obstacle::GetCollisionBox()
+BoxCollider* Obstacle::GetCollisionBox() const
 {
 	return m_BoxCollider;
 }
