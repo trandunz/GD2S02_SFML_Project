@@ -161,5 +161,5 @@ public:
 
 	Animator GetAnimation() const;
 
-
+	BoxCollider* GetCollisionBox();
 };

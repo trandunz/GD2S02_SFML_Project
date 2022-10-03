@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : Obstacle.h 
 // Description : Obstacle Header File
-// Author : Inman, Will
+// Author : Inman, Will; Frear Stace
 
 #pragma once
 #include "Statics.h"
@@ -29,6 +29,7 @@ public:
 	/// </summary>
 	void Update();
 
+	bool bDestroy{ false }; // Variable used to check whether to destroy object
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 
@@ -37,10 +38,11 @@ private:
 	/// </summary>
 	void Movement();
 
-	ObstacleProperties m_Properties{};
+	ObstacleProperties m_Properties{}; 
 	sf::Vector2f m_v2fVelocity{};
 	sf::Sprite m_Mesh{};
 
+	// Collision related variables
 	BoxCollider* m_BoxCollider{nullptr};
 	float m_fColliderOffset{};
 
@@ -50,6 +52,7 @@ public:
 	/////////////////////////// 
 
 	sf::Sprite GetSprite() const;
-	BoxCollider* GetCollisionBox();
+
+	BoxCollider* GetCollisionBox() const;
 };
 

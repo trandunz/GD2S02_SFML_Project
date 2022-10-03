@@ -42,6 +42,13 @@ enum class PICKUPTYPE
 	MANA
 };
 
+enum class OBSTACLETYPE
+{
+	ROCK,
+	HEDGE,
+	LOG
+};
+
 struct ProjectileProperties
 {
 	sf::Texture* Texture{ nullptr };
@@ -61,6 +68,7 @@ struct ObstacleProperties
 	sf::Texture* Texture{ nullptr };
 	sf::Vector2f v2fStartPos{};
 	sf::Vector2f v2fScale{ 1,1 };
+	OBSTACLETYPE ObstacleType{ OBSTACLETYPE::ROCK };
 	sf::Vector2f v2fBoxColliderSize{ 10,10 };
 	float fBoxColliderOffsetY{};	
 	float fMoveSpeed{ 160.0f };
