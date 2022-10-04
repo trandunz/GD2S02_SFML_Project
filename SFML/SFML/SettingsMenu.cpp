@@ -30,7 +30,8 @@ void SettingsMenu::CreateMenuBackground()
 	GUI::GetInstance().CreateImage("SettingsMenuBackground", // Key
 		{
 			&TextureLoader::LoadTexture("GUI/PauseMenuBackground.png"), // Texture
-			ScreenCentre // Position
+			ScreenCentre, // Position
+			{0.3f, 0.3f}
 		});
 }
 
@@ -39,13 +40,13 @@ void SettingsMenu::CreateMenuButtons()
 	sf::Vector2f ScreenCentre = Statics::RenderWindow.getView().getCenter();
 	GUI::GetInstance().CreateButton("Back", // Key
 		{
-			"Back", // Label / String
+			"", // Label / String
 			{ ScreenCentre.x,ScreenCentre.y + 80}, // Position
 			[this]()
 			{
 				bDestroy = true; // On Press Lambda
 			},
-			nullptr,
+			& TextureLoader::LoadTexture("GUI/Back.png"),
 			{0.9f,0.9f}, // Scale
 		});
 	GUI::GetInstance().CreateButton("IncreaseMusicVolume", // Key
