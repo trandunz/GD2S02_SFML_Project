@@ -73,7 +73,7 @@ void GUI::ResetAllButtonsScale()
 void GUI::CreateText(std::string _key, TextProperties _properties)
 {
 	m_vecTexts.insert_or_assign(_key, sf::Text());
-	m_vecTexts[_key].setFont(Statics::TimesNewRoman);
+	m_vecTexts[_key].setFont(Statics::MetalMania);
 	m_vecTexts[_key].setCharacterSize(_properties.iCharacterSize);
 	m_vecTexts[_key].setFillColor(_properties.Color);
 	if (_properties.OutlineColor != _properties.Color)

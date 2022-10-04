@@ -119,9 +119,9 @@ struct TextProperties
 {
 	sf::Vector2f v2fStartPos{};
 	std::string String{};
-	sf::Color Color{};
+	sf::Color Color {sf::Color::Black};
 	int iCharacterSize{36};
-	sf::Color OutlineColor{};
+	sf::Color OutlineColor{ sf::Color::Black };
 };
 
 struct ImageProperties
@@ -168,7 +168,7 @@ class Statics
 public:
 	static sf::RenderWindow RenderWindow;
 	static sf::Event EventHandle;
-	static sf::Font TimesNewRoman;
+	static sf::Font MetalMania;
 	static void InitRenderWindow(sf::Vector2i _size, std::string _title, sf::Uint32 _style, sf::ContextSettings _settings);
 	static void InitGlobalFont(std::string _fileName);
 

@@ -17,7 +17,7 @@ Button::Button()
 
 Button::Button(ButtonProperties _properties)
 {
-	m_Label.setFont(Statics::TimesNewRoman);
+	m_Label.setFont(Statics::MetalMania);
 	m_Label.setString(_properties.Label);
 	m_Label.setCharacterSize(24); 
 	m_Label.setFillColor(sf::Color::Black);
