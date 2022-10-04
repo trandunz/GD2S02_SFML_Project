@@ -102,7 +102,12 @@ void ProjectileManager::Update()
 							//no damage but will inflict debuffs
 							if (projectile->DoesApplyElementToTarget())
 							{
-								ApplyDebuff_Enemy(enemy, projectile->GetElement());
+								if (projectile->GetProjectileType() == PROJECTILETYPE::BASIC)
+									if (rand() % 2 == 0)
+										ApplyDebuff_Enemy(enemy, projectile->GetElement());
+								else
+									ApplyDebuff_Enemy(enemy, projectile->GetElement());
+									
 							}
 
 							if (projectile->IsDestroyedOnCollision())

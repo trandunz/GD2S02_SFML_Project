@@ -46,6 +46,8 @@ public:
 	unsigned GetDamagedDealt() const;
 	ELEMENTTYPE GetElement() const;
 
+	PROJECTILETYPE GetProjectileType() const;
+
 	bool IsDestroyedOnCollision() const;
 	bool DoesApplyElementToTarget() const;
 };

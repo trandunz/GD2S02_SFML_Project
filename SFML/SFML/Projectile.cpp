@@ -92,6 +92,11 @@ ELEMENTTYPE Projectile::GetElement() const
 	return m_Properties.Element;
 }
 
+PROJECTILETYPE Projectile::GetProjectileType() const
+{
+	return m_Properties.eProjectileType;
+}
+
 bool Projectile::IsFriendly() const
 {
 	return m_Properties.bFriendly;

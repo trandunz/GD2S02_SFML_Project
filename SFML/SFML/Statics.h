@@ -49,6 +49,12 @@ enum class OBSTACLETYPE
 	LOG
 };
 
+enum class PROJECTILETYPE
+{
+	BASIC,
+	SECONDARY
+};
+
 struct ProjectileProperties
 {
 	sf::Texture* Texture{ nullptr };
@@ -61,6 +67,7 @@ struct ProjectileProperties
 	ELEMENTTYPE Element{ ELEMENTTYPE::NONE };
 	bool bDestroyOnCollision{ true };
 	bool bApplyElementToTarget{ false };
+	PROJECTILETYPE eProjectileType{ PROJECTILETYPE::BASIC };
 };
 
 struct ObstacleProperties

@@ -37,6 +37,7 @@ Player::Player(PlayerProperties _properties)
 	m_SecondaryAttackProperties.bDestroyOnCollision = false;
 	m_SecondaryAttackProperties.fMoveSpeed = 250.0f;
 	m_SecondaryAttackProperties.bApplyElementToTarget = true;
+	m_SecondaryAttackProperties.eProjectileType == PROJECTILETYPE::SECONDARY;
 	m_EmpoweredBasicAttackProperties.bApplyElementToTarget = true;
 
 	if (m_Properties.bPlayerOne == false)
