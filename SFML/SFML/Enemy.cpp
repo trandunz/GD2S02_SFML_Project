@@ -165,6 +165,8 @@ void Enemy::TakeDamage(unsigned _amount)
 	{
 		bDestroy = true;
 	}
+
+	FlashWhenHit();
 }
 
 void Enemy::Heal(unsigned _amount)
@@ -185,6 +187,17 @@ void Enemy::ApplyDamageOverTime(unsigned _damagePerSecond, float _seconds, sf::C
 	m_bDamaged = true;
 	m_uDamageOverTime = _damagePerSecond;
 	m_fDamageTime = _seconds;
+}
+
+void Enemy::FlashWhenHit()
+{
+	m_DamagedSpriteColor = sf::Color::Red; // Set damage color
+	m_fSpriteChangeColorSpeed = 0.01f; // Set speed of color change
+	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+	m_bSpriteColorChanged = true;
+	m_bDamaged = true;
+	m_uDamageOverTime = 0.0f;
+	m_fDamageTime = 0.05f;
 }
 
 void Enemy::ApplyStop(float _seconds, sf::Color _color)
@@ -426,7 +439,7 @@ void Enemy::Attack()
 void Enemy::HandleDamageOverTime()
 {
 	// Change sprite color
-	m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
+	m_fSpriteChangeColorCounter -= Statics::fDeltaTime; // Count down
 	if (m_fSpriteChangeColorCounter <= 0)
 	{
 		m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
@@ -438,25 +451,19 @@ void Enemy::HandleDamageOverTime()
 	else
 		m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255));
 
-	m_fOneSecond -= 1 * Statics::fDeltaTime; // Count down
-
-	if (m_fOneSecond <= 0) // Do below every second
+	// bDestroy enemy if health is <= 0
+	if (m_iCurrentHealth <= 0)
 	{
-		// bDestroy enemy if health is <= 0
-		if (m_iCurrentHealth <= 0)
-		{
-			bDestroy = true;
-		}
+		bDestroy = true;
+	}
 
-		m_fOneSecond = 1.0f; // Reset OneSecond variable for counting
-		m_fDamageTime -= 1; // Countdown the damage time variable by one second
+	m_fDamageTime -= Statics::fDeltaTime; // Countdown the damage time variable by one second
 
-		// Stop damage over time
-		if (m_fDamageTime <= 0)
-		{
-			m_bDamaged = false;
-			m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Reset sprite color
-		}
+	// Stop damage over time
+	if (m_fDamageTime <= 0)
+	{
+		m_bDamaged = false;
+		m_AnimatedSprite.SetSpriteColor(sf::Color(255, 255, 255)); // Reset sprite color
 	}
 }
 

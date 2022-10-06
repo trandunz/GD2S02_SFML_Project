@@ -61,6 +61,7 @@ public:
 	/// <param name="_seconds"></param>
 	/// <param name="_color"></param>
 	void ApplyDamageOverTime(unsigned _damagePerSecond, float _seconds, sf::Color _color = { 255, 23, 23 });
+	void FlashWhenHit();
 
 	/// <summary>
 	/// Sets the enemy to stop moving/shooting
