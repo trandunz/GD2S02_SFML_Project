@@ -49,7 +49,7 @@ bool Animator::SetDefaultState(std::string _stateName)
 	}
 	else
 	{
-		printf("WARN [Animator]: Unable to set default state\n");
+		Print("WARN [Animator]: Unable to set default state\n");
 		return false;
 	}
 }

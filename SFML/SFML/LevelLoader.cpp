@@ -11,6 +11,7 @@
 #include "MenuScene.h"
 #include "GameScene.h"
 #include "CharacterSelectScene.h"
+#include "HighScores.h"
 
 Level* LevelLoader::CurrentLevel = nullptr;
 LEVELS LevelLoader::LevelToLoad = LEVELS::UNASSIGNED;
@@ -59,6 +60,11 @@ void LevelLoader::SwitchToLoadedLevel()
 		case LEVELS::GAMESCENE:
 		{
 			CurrentLevel = new GameScene();
+			break;
+		}
+		case LEVELS::HIGHSCORE:
+		{
+			CurrentLevel = new HighScores();
 			break;
 		}
 		default:

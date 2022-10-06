@@ -314,20 +314,20 @@ ELEMENTTYPE CharacterSelectScene::SetPlayerElement(int _player)
 {
 	switch (_player)
 	{
-	case 1:
-	{
-		return ELEMENTTYPE::FIRE;
-		break;
-	}
-	case 2:
-	{
-		return ELEMENTTYPE::EARTH;
-		break;
-	}
-	case 3:
-	{
-		return ELEMENTTYPE::WATER;
-		break;
-	}
+		case 1:
+		{
+			return ELEMENTTYPE::FIRE;
+			break;
+		}
+		case 2:
+		{
+			return ELEMENTTYPE::EARTH;
+			break;
+		}
+		case 3:
+		{
+			return ELEMENTTYPE::WATER;
+			break;
+		}
 	}
 }
