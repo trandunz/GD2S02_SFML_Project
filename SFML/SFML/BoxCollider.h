@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : BoxCollider.h 
 // Description : BoxCollider Header File
-// Author : 
+// Author : Frear, Stace
 
 #pragma once
 #include "Statics.h"

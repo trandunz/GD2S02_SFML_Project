@@ -10,6 +10,8 @@
 #include "Projectile.h"
 #include "Player.h"
 #include "BoxCollider.h"
+#include "TextureLoader.h"
+#include "VFX.h"
 
 Projectile::Projectile(ProjectileProperties _properties)
 {
@@ -24,12 +26,31 @@ Projectile::Projectile(ProjectileProperties _properties)
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.SetPosition(_properties.v2fStartPos);
-
 	m_AnimatedSprite.StartState("Moving");
 
-	sf::Vector2f colliderSize{ 32,32 };
-	colliderSize.x *= _properties.v2fScale.x;
-	colliderSize.y *= _properties.v2fScale.y;
+	sf::Vector2f colliderSize{};
+	switch (m_Properties.eProjectileType)
+	{
+		case PROJECTILETYPE::BASIC:
+		{
+			colliderSize = { 24.0f, 48.0f };
+			break;
+		}
+		case PROJECTILETYPE::SECONDARY:
+		{
+			colliderSize.x *= _properties.v2fScale.x;
+			colliderSize.y *= _properties.v2fScale.y;
+			break;
+		}
+		case PROJECTILETYPE::ARROW:
+		{
+			colliderSize = { 8.0f, 32.0f };
+			break;
+		}
+		default:
+			break;
+	}
+	
 	m_BoxCollider = new BoxCollider(colliderSize, _properties.v2fStartPos);
 }
 
@@ -40,6 +61,15 @@ Projectile::~Projectile()
 		delete m_BoxCollider;
 		m_BoxCollider = nullptr;
 	}
+
+	//// Play explosion VFX animation
+	//SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/arrow_destruction.png") };
+	//explosionProperties.v2fScale = { 2.0f, 2.0f };
+	//explosionProperties.v2fStartPos = { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 16.0f };
+	//explosionProperties.uNumberOfFrames = 3;
+	//explosionProperties.fAnimFrameInterval = 0.5f / 3;
+	//explosionProperties.v2fVelocity = { 0.0f, Statics::fBackgroundScrollSpeed };
+	//VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.25f);
 }
 
 void Projectile::Update()
@@ -72,6 +102,11 @@ bool Projectile::CheckCollision(BoxCollider& _otherCollider)
 	}
 }
 
+BoxCollider* Projectile::GetCollider()
+{
+	return m_BoxCollider;
+}
+
 sf::Vector2f Projectile::GetPosition() const
 {
 	return m_AnimatedSprite.GetPosition();//m_Mesh.getPosition();
@@ -85,6 +120,11 @@ unsigned Projectile::GetDamagedDealt() const
 ELEMENTTYPE Projectile::GetElement() const
 {
 	return m_Properties.Element;
+}
+
+PROJECTILETYPE Projectile::GetProjectileType() const
+{
+	return m_Properties.eProjectileType;
 }
 
 bool Projectile::IsFriendly() const

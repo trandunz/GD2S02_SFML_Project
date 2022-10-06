@@ -67,7 +67,7 @@ private:
 	inline ~ObjectManager() {}
 
 	float m_ObstacleSpawnTimer{ 3.0f };
-	float m_PickupSpawnTimer{ 3.0f };
+	float m_PickupSpawnTimer{ 8.0f };
 	std::vector<Obstacle*> m_vecObstacles{};
 	std::vector<Pickup*> m_vecPickups{};
 

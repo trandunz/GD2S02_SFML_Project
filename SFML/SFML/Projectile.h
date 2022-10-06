@@ -26,6 +26,7 @@ public:
 	bool IsFriendly() const;
 
 	bool CheckCollision(BoxCollider& _otherCollider);
+	BoxCollider* GetCollider();
 
 	bool bDestroy{ false };
 private:
@@ -44,6 +45,8 @@ public:
 
 	unsigned GetDamagedDealt() const;
 	ELEMENTTYPE GetElement() const;
+
+	PROJECTILETYPE GetProjectileType() const;
 
 	bool IsDestroyedOnCollision() const;
 	bool DoesApplyElementToTarget() const;

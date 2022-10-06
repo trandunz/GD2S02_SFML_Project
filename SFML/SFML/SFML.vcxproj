@@ -152,6 +152,7 @@
     <ClCompile Include="BoxCollider.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="CharacterSelectScene.cpp" />
+    <ClCompile Include="EndGameMenu.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="BoxCollider.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="CharacterSelectScene.h" />
+    <ClInclude Include="EndGameMenu.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="GameScene.h" />

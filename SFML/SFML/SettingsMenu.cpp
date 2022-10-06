@@ -30,7 +30,21 @@ void SettingsMenu::CreateMenuBackground()
 	GUI::GetInstance().CreateImage("SettingsMenuBackground", // Key
 		{
 			&TextureLoader::LoadTexture("GUI/PauseMenuBackground.png"), // Texture
-			ScreenCentre // Position
+			ScreenCentre, // Position
+			{0.3f, 0.3f}
+		});
+
+	GUI::GetInstance().CreateImage("PlayerOneControlsBackground", // Key
+		{
+			&TextureLoader::LoadTexture("GUI/PauseMenuBackground.png"), // Texture
+			{ScreenCentre.x - 225.0f, ScreenCentre.y }, // Position
+			{0.3f, 0.3f}
+		});
+	GUI::GetInstance().CreateImage("PlayerTwoControlsBackground", // Key
+		{
+			&TextureLoader::LoadTexture("GUI/PauseMenuBackground.png"), // Texture
+			{ScreenCentre.x + 225.0f, ScreenCentre.y}, // Position
+			{0.3f, 0.3f}
 		});
 }
 
@@ -39,13 +53,13 @@ void SettingsMenu::CreateMenuButtons()
 	sf::Vector2f ScreenCentre = Statics::RenderWindow.getView().getCenter();
 	GUI::GetInstance().CreateButton("Back", // Key
 		{
-			"Back", // Label / String
+			"", // Label / String
 			{ ScreenCentre.x,ScreenCentre.y + 80}, // Position
 			[this]()
 			{
 				bDestroy = true; // On Press Lambda
 			},
-			nullptr,
+			& TextureLoader::LoadTexture("GUI/Back.png"),
 			{0.9f,0.9f}, // Scale
 		});
 	GUI::GetInstance().CreateButton("IncreaseMusicVolume", // Key
@@ -159,7 +173,6 @@ void SettingsMenu::CreateMenuButtons()
 			& TextureLoader::LoadTexture("GUI/CircleButton.png"),
 			{1.25f,1.25f}, // Scale
 		});
-
 }
 
 void SettingsMenu::CreateMenuText()
@@ -171,12 +184,17 @@ void SettingsMenu::CreateMenuText()
 			{ScreenCentre.x, ScreenCentre.y - 100}, // Position
 			"Settings" // Label / String
 		});
+
+	CreatePlayerOneKeybinds();
+	CreatePlayerTwoKeybinds();
 }
 
 void SettingsMenu::CleanupElements()
 {
 	GUI::GetInstance().CleanupImageElement("SettingsMenuBackground");
 	GUI::GetInstance().CleanupImageElement("SettingsMenuDullBackground");
+	GUI::GetInstance().CleanupImageElement("PlayerOneControlsBackground");
+	GUI::GetInstance().CleanupImageElement("PlayerTwoControlsBackground");
 	GUI::GetInstance().CleanupTextElement("SettingsMenuTitle");
 	GUI::GetInstance().CleanupButtonElement("Back");
 	GUI::GetInstance().CleanupButtonElement("DecreaseMusicVolume");
@@ -187,4 +205,288 @@ void SettingsMenu::CleanupElements()
 	GUI::GetInstance().CleanupButtonElement("MuteEffects");
 	GUI::GetInstance().CleanupButtonElement("MusicVolume");
 	GUI::GetInstance().CleanupButtonElement("EffectsVolume");
+
+	GUI::GetInstance().CleanupTextElement("PlayerOneControls");
+	GUI::GetInstance().CleanupTextElement("P1MoveUp");
+	GUI::GetInstance().CleanupTextElement("P1MoveDown");
+	GUI::GetInstance().CleanupTextElement("P1MoveLeft");
+	GUI::GetInstance().CleanupTextElement("P1MoveRight");
+	GUI::GetInstance().CleanupTextElement("P1BasicAttack");
+	GUI::GetInstance().CleanupTextElement("P1SecondaryAttack");
+	GUI::GetInstance().CleanupTextElement("P1SpecialAttack");
+	GUI::GetInstance().CleanupTextElement("PlayerTwoControls");
+	GUI::GetInstance().CleanupTextElement("P2MoveUp");
+	GUI::GetInstance().CleanupTextElement("P2MoveDown");
+	GUI::GetInstance().CleanupTextElement("P2MoveLeft");
+	GUI::GetInstance().CleanupTextElement("P2MoveRight");
+	GUI::GetInstance().CleanupTextElement("P2BasicAttack");
+	GUI::GetInstance().CleanupTextElement("P2SecondaryAttack");
+	GUI::GetInstance().CleanupTextElement("P2SpecialAttack");
+
+	GUI::GetInstance().CleanupButtonElement("P1MoveUp");
+	GUI::GetInstance().CleanupButtonElement("P1MoveDown");
+	GUI::GetInstance().CleanupButtonElement("P1MoveLeft");
+	GUI::GetInstance().CleanupButtonElement("P1MoveRight");
+	GUI::GetInstance().CleanupButtonElement("P1BasicAttack");
+	GUI::GetInstance().CleanupButtonElement("P1SecondaryAttack");
+	GUI::GetInstance().CleanupButtonElement("P1SpecialAttack");
+	GUI::GetInstance().CleanupButtonElement("P2MoveUp");
+	GUI::GetInstance().CleanupButtonElement("P2MoveDown");
+	GUI::GetInstance().CleanupButtonElement("P2MoveLeft");
+	GUI::GetInstance().CleanupButtonElement("P2MoveRight");
+	GUI::GetInstance().CleanupButtonElement("P2BasicAttack");
+	GUI::GetInstance().CleanupButtonElement("P2SecondaryAttack");
+	GUI::GetInstance().CleanupButtonElement("P2SpecialAttack");
+}
+
+void SettingsMenu::CreatePlayerOneKeybinds()
+{
+	sf::Vector2f ScreenCentre = Statics::RenderWindow.getView().getCenter();
+
+	GUI::GetInstance().CreateText("PlayerOneControls", // Key
+		{
+			{ScreenCentre.x - 225.0f, ScreenCentre.y - 120.0f}, // Position
+			"Player One", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateText("P1MoveUp", // Key
+		{
+			{ScreenCentre.x - 250.0f, ScreenCentre.y - 80.0f}, // Position
+			"Up", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P1MoveUp", // Key
+		{
+			"W", // Label / String
+			{ScreenCentre.x - 180.0f, ScreenCentre.y - 80.0f}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P1MoveDown", // Key
+		{
+			{ScreenCentre.x - 250.0f, ScreenCentre.y - 50.0f}, // Position
+			"Down", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P1MoveDown", // Key
+		{
+			"S", // Label / String
+			{ScreenCentre.x - 180.0f, ScreenCentre.y - 50.0f}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P1MoveLeft", // Key
+		{
+			{ScreenCentre.x - 250.0f, ScreenCentre.y - 20.0f}, // Position
+			"Left", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P1MoveLeft", // Key
+		{
+			"A", // Label / String
+			{ScreenCentre.x - 180.0f, ScreenCentre.y - 20.0f}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P1MoveRight", // Key
+		{
+			{ScreenCentre.x - 250.0f, ScreenCentre.y + 10}, // Position
+			"Right", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P1MoveRight", // Key
+		{
+			"D", // Label / String
+			{ScreenCentre.x - 180.0f, ScreenCentre.y + 10}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P1BasicAttack", // Key
+		{
+			{ScreenCentre.x - 250.0f, ScreenCentre.y + 40.0f}, // Position
+			"Attack", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P1BasicAttack", // Key
+		{
+			"V", // Label / String
+			{ScreenCentre.x - 180.0f, ScreenCentre.y + 40}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P1SecondaryAttack", // Key
+		{
+			{ScreenCentre.x - 250.0f, ScreenCentre.y + 70.0f}, // Position
+			"Secondary", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P1SecondaryAttack", // Key
+		{
+			"B", // Label / String
+			{ScreenCentre.x - 180.0f, ScreenCentre.y + 70}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P1SpecialAttack", // Key
+		{
+			{ScreenCentre.x - 250.0f, ScreenCentre.y + 100.0f}, // Position
+			"Special", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P1SpecialAttack", // Key
+		{
+			"N", // Label / String
+			{ScreenCentre.x - 180.0f, ScreenCentre.y + 100.0f}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+}
+
+void SettingsMenu::CreatePlayerTwoKeybinds()
+{
+	sf::Vector2f ScreenCentre = Statics::RenderWindow.getView().getCenter();
+
+	GUI::GetInstance().CreateText("PlayerTwoControls", // Key
+		{
+			{ScreenCentre.x + 225.0f, ScreenCentre.y - 120.0f}, // Position
+			"Player Two", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateText("P2MoveUp", // Key
+		{
+			{ScreenCentre.x + 200.0f, ScreenCentre.y - 80.0f}, // Position
+			"Up", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P2MoveUp", // Key
+		{
+			"", // Label / String
+			{ScreenCentre.x + 270.0f, ScreenCentre.y - 80.0f}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/UpButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P2MoveDown", // Key
+		{
+			{ScreenCentre.x + 200.0f, ScreenCentre.y - 50.0f}, // Position
+			"Down", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P2MoveDown", // Key
+		{
+			"", // Label / String
+			{ScreenCentre.x + 270.0f, ScreenCentre.y - 50.0f}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/DownButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P2MoveLeft", // Key
+		{
+			{ScreenCentre.x + 200.0f, ScreenCentre.y - 20.0f}, // Position
+			"Left", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P2MoveLeft", // Key
+		{
+			"", // Label / String
+			{ScreenCentre.x + 270.0f, ScreenCentre.y - 20.0f}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/LeftButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P2MoveRight", // Key
+		{
+			{ScreenCentre.x + 200.0f, ScreenCentre.y + 10}, // Position
+			"Right", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P2MoveRight", // Key
+		{
+			"", // Label / String
+			{ScreenCentre.x + 270.0f, ScreenCentre.y + 10}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/RightButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P2BasicAttack", // Key
+		{
+			{ScreenCentre.x + 200.0f, ScreenCentre.y + 40.0f}, // Position
+			"Attack", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P2BasicAttack", // Key
+		{
+			"1", // Label / String
+			{ScreenCentre.x + 270.0f, ScreenCentre.y + 40}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P2SecondaryAttack", // Key
+		{
+			{ScreenCentre.x + 200.0f, ScreenCentre.y + 70.0f}, // Position
+			"Secondary", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P2SecondaryAttack", // Key
+		{
+			"2", // Label / String
+			{ScreenCentre.x + 270.0f, ScreenCentre.y + 70}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
+	GUI::GetInstance().CreateText("P2SpecialAttack", // Key
+		{
+			{ScreenCentre.x + 200.0f, ScreenCentre.y + 100.0f}, // Position
+			"Special", // Label / String,
+			{99, 99, 99},
+			22,
+			{255, 255, 255}
+		});
+	GUI::GetInstance().CreateButton("P2SpecialAttack", // Key
+		{
+			"3", // Label / String
+			{ScreenCentre.x + 270.0f, ScreenCentre.y + 100.0f}, // Position
+			nullptr,
+			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			{1.0f,1.0f}, // Scale
+		});
 }

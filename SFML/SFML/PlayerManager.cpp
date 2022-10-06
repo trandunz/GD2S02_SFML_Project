@@ -10,6 +10,7 @@
 #include "PlayerManager.h"
 #include "Player.h"
 #include "ObjectManager.h"
+#include "Obstacle.h"
 #include "Helper.h"
 #include "EnemyManager.h"
 #include "VFX.h"
@@ -84,10 +85,24 @@ void PlayerManager::Update()
 		}
 		else
 		{
-			//for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
-			//{
-			//	player->CheckCollision(*obstacle);
-			//}
+			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
+			{
+				if (player->CheckCollision(*obstacle->GetCollisionBox()) == true)
+				{
+					// Set player position to its previous position
+					player->SetPosition(player->GetPreviousMove());
+
+					// If player is also below the obstacle
+					// start pushing player downwards at same speed as background/obstacles
+					if (player->GetCollisionBox()->GetCollider().getPosition().y - player->GetCollisionBox()->GetCollider().getSize().y/2
+						>= obstacle->GetCollisionBox()->GetCollider().getPosition().y + (obstacle->GetCollisionBox()->GetCollider().getSize().y / 2) - 1)
+					{
+						player->SetPosition({ player->GetPosition().x,
+							obstacle->GetCollisionBox()->GetCollider().getPosition().y + (obstacle->GetCollisionBox()->GetCollider().getSize().y / 2) +
+							+(Statics::fBackgroundScrollSpeed * Statics::fDeltaTime) + 2 });
+					}
+				}
+			}
 		}
 		player->Update();
 	}

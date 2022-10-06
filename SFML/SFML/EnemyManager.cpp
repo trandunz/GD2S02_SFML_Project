@@ -60,9 +60,9 @@ void EnemyManager::Update()
 		if (enemy->GetCurrentHealth() <= 0)
 		{
 			Statics::fGameScore += 20.0f; // Increase game score
-			enemy->bDestroy = true;
+			enemy->bDestroy = true; // Set enemy to die
 			
-			AudioManager::PlayAudioSource("EnemyDeath");
+			AudioManager::PlayAudioSource("EnemyDeath"); // Play enemy death SFX
 		}
 		// bDestroy enemies if they below the screen
 		else if (enemy->GetPosition().y >= Statics::RenderWindow.getSize().y + m_fDestroyDistanceY)
@@ -79,15 +79,22 @@ void EnemyManager::Update()
 					{
 						switch (enemy->GetType())
 						{
-						case ENEMYTYPE::KAMIKAZE:
-						{
-							player->TakeDamage(1);
-							enemy->bDestroy = true;
-							AudioManager::PlayAudioSource("EnemyDeath");
-							break;
-						}
-						default:
-							break;
+							// If player collides with kamikazi, then kamikazi explodes, killing both
+							case ENEMYTYPE::KAMIKAZE:
+							{
+								player->TakeDamage(1);
+								enemy->bDestroy = true;
+								AudioManager::PlayAudioSource("EnemyDeath");
+								break;
+							}
+							// If player collides with warrior, then player dies, but warrior keeps going
+							case ENEMYTYPE::WARRIOR:
+							{
+								player->TakeDamage(1);
+								break;
+							}
+							default:
+								break;
 						}
 
 						break;
@@ -130,21 +137,39 @@ void EnemyManager::SpawnEnemies(float _rate)
 		m_fSpawnTimer = _rate;
 
 		int iRandomEnemy = rand() % 6;
+		// Create Archer
 		if (iRandomEnemy == 0)
 		{
 			CreateEnemy(
 				{
-					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Archer_Running.png"),
-					{100.0f + (rand() % 600), 0},
-					{ENEMYTYPE::ARCHER},
-					{2.0f,2.0f},
-					{2.4f,2.4f},
-					{150.0f},
-					{250.0f}
+					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Archer_Running.png"), // Set archer running sprite
+					{100.0f + (rand() % 600), 0}, // Set random starting position
+					{ENEMYTYPE::ARCHER}, // Set enemy type - Archer
+					{2.0f,2.0f}, // Archer sprite size
+					{2.4f,2.4f}, // Archer jump sprite size
+					{150.0f}, // Archer run speed
+					{250.0f} // Archer jump speed
 				});
 		}
+		// Create Warrior
+		else if (iRandomEnemy == 1 || iRandomEnemy == 2)
+		{
+			CreateEnemy(
+				{
+					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Warrior_Running.png"), // Set warrior running sprite
+					{100.0f + (rand() % 600), 0}, // Set random starting position
+					{ENEMYTYPE::WARRIOR}, // Set enemy type - Warrior
+					{2.0f,2.0f}, // Warrior sprite size
+					{0.0f,0.0f}, // Warrior does not jump
+					{300.0f}, // Faster run speed
+					{0.0f}, // Warrior does not jump
+					{10} // High health
+				});
+		}
+		// Create Kamakazi
 		else
 		{
+			// Pick a random sprite for kamikaze enemy
 			int iRandomKamakazi = rand() % 5;
 			std::string sEnemyTextureLocation;
 			if (iRandomKamakazi == 0)
@@ -170,11 +195,11 @@ void EnemyManager::SpawnEnemies(float _rate)
 
 			CreateEnemy(
 				{
-					&TextureLoader::LoadTexture(sEnemyTextureLocation),
-					{100.0f + (rand() % 600), 0},
-					{ENEMYTYPE::KAMIKAZE},
-					{2.0f,2.0f},
-					{2.4f,2.4f}
+					&TextureLoader::LoadTexture(sEnemyTextureLocation), // Set kamikaze running sprite
+					{100.0f + (rand() % 600), 0}, // Set random starting position
+					{ENEMYTYPE::KAMIKAZE}, // Set enemy type - Kamikaze
+					{2.0f,2.0f}, // Kamikaze sprite size
+					{2.4f,2.4f} // Kamikaze jump sprite size
 				});
 		}
 	}

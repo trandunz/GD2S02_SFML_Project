@@ -9,6 +9,7 @@
 
 // Includes
 #include "Enemy.h"
+#include "EnemyManager.h"
 #include "Math.h"
 #include "ObjectManager.h"
 #include "Obstacle.h"
@@ -34,33 +35,35 @@ Enemy::Enemy(EnemyProperties _properties)
 
 	switch (m_Properties.EnemyType)
 	{
-		case ENEMYTYPE::KAMIKAZE:
+		// Set related indivudual animation properties based on type
+		case ENEMYTYPE::KAMIKAZE: 
 		{
-			animProperties.uNumberOfFrames = 4;
 			animProperties.fFrameInterval = 0.1f;
 			break;
 		}
 		case ENEMYTYPE::ARCHER:
 		{
-			animProperties.uNumberOfFrames = 4;
 			animProperties.fFrameInterval = 0.1f;
 
 			m_fArcherYPos = (rand() % 261) + 70.0f;
-			std::cout << m_fArcherYPos << std::endl;
+			break;
+		}
+		case ENEMYTYPE::WARRIOR:
+		{
+			animProperties.fFrameInterval = 0.05f;
 			break;
 		}
 		default:
 			break;
 	}
-
+	// Set shared animation properties
+	animProperties.uNumberOfFrames = 4;
 	animProperties.bLoops = true;
 	animProperties.v2fScale = _properties.v2fMoveScale;
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.GetSprite().setPosition(_properties.v2fStartPos);
 	m_AnimatedSprite.StartState("Moving");
-	
-	//m_v2fSpriteJumpScale = _properties.v2fJumpScale;
 	
 	// Set box collider
 	m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
@@ -70,34 +73,38 @@ Enemy::~Enemy()
 {
 	switch (m_Properties.EnemyType)
 	{
-	case ENEMYTYPE::KAMIKAZE:
-	{
-		// Play explosion VFX animation
-		SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/explosion.png") };
-		explosionProperties.v2fScale = { 2.0f, 2.0f };
-		explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
-		explosionProperties.uNumberOfFrames = 9;
-		explosionProperties.fAnimFrameInterval = 0.5f / 9;
-		explosionProperties.v2fVelocity = { 0.0f, 160.0f };
-		VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
-		break;
+		// Set VFX for enemy death based on type
+		case ENEMYTYPE::KAMIKAZE:
+		{
+			// Play explosion VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/explosion.png") };
+			explosionProperties.v2fScale = { 2.0f, 2.0f };
+			explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+			explosionProperties.uNumberOfFrames = 9;
+			explosionProperties.fAnimFrameInterval = 0.5f / 9;
+			explosionProperties.v2fVelocity = { 0.0f, 160.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+			break;
+		}
+		case ENEMYTYPE::ARCHER:
+		{
+			// Play archer death VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/Goblin_Archer_Death.png") };
+			explosionProperties.v2fScale = { 2.0f, 2.0f };
+			explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+			explosionProperties.uNumberOfFrames = 5;
+			explosionProperties.fAnimFrameInterval = 0.5f / 5;
+			explosionProperties.v2fVelocity = { 0.0f, 0.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+			break;
+		}
+		case ENEMYTYPE::WARRIOR:
+		{
+			break;
+		}
+		default:
+			break;
 	}
-	case ENEMYTYPE::ARCHER:
-	{
-		// Play archer death VFX animation
-		SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/Goblin_Archer_Death.png") };
-		explosionProperties.v2fScale = { 2.0f, 2.0f };
-		explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
-		explosionProperties.uNumberOfFrames = 5;
-		explosionProperties.fAnimFrameInterval = 0.5f / 5;
-		explosionProperties.v2fVelocity = { 0.0f, 0.0f };
-		VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
-		break;
-	}
-	default:
-		break;
-	}
-	
 }
 
 void Enemy::Update()
@@ -171,8 +178,8 @@ void Enemy::Heal(unsigned _amount)
 
 void Enemy::ApplyDamageOverTime(unsigned _damagePerSecond, float _seconds, sf::Color _color)
 {
-	m_DamagedSpriteColor = _color;
-	m_fSpriteChangeColorSpeed = 0.2f;
+	m_DamagedSpriteColor = _color; // Set damage color
+	m_fSpriteChangeColorSpeed = 0.2f; // Set speed of color change
 	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
 	m_bSpriteColorChanged = true;
 	m_bDamaged = true;
@@ -203,8 +210,8 @@ void Enemy::ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _
 	m_fMoveSpeed = m_fMoveSpeed * _slowMovementPercentage;
 	m_fJumpSpeed = m_fJumpSpeed * _slowMovementPercentage;
 
-	m_SlowedSpriteColor = _color;
-	m_fSpriteChangeColorSpeed = 0.5f;
+	m_SlowedSpriteColor = _color; // Set damage color
+	m_fSpriteChangeColorSpeed = 0.5f; // Set speed of color change
 	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
 	m_bSpriteColorChanged = true;
 	m_bSlowed = true;
@@ -228,8 +235,14 @@ Animator Enemy::GetAnimation() const
 	return m_AnimatedSprite;
 }
 
+BoxCollider* Enemy::GetCollisionBox()
+{
+	return m_BoxCollider;
+}
+
 bool Enemy::CheckCollision(BoxCollider& _otherCollider)
 {
+	// Check collision between box colliders
 	if (m_BoxCollider)
 	{
 		return m_BoxCollider->CheckCollision(_otherCollider);
@@ -278,13 +291,15 @@ void Enemy::Movement()
 
 			if (m_BoxCollider->bColliding)
 			{
-				m_AnimatedSprite.SetScale(m_Properties.v2fJumpScale);
-				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
+				// If colliding with obstacle, then make goblin 'jump'
+				m_AnimatedSprite.SetScale(m_Properties.v2fJumpScale); // Increase sprite scale
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime); // Move goblin at increased speed
 			}
 			else
 			{
-				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale);
-				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
+				// Normal movement
+				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale);// Reset sprite size if not colliding
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime); // Move goblin
 			}
 			break;
 		}
@@ -325,19 +340,46 @@ void Enemy::Movement()
 			}
 
 			if (m_BoxCollider->bColliding)
-			{
-				m_AnimatedSprite.SetScale(m_Properties.v2fJumpScale);
-				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime);
+			{ 
+				// If colliding with obstacle, then make goblin 'jump'
+				m_AnimatedSprite.SetScale(m_Properties.v2fJumpScale); // Increase sprite scale
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime); // Move goblin at increased speed
 			}
 			else
 			{
-				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale);
-				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
+				// Normal movement
+				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale); // Reset sprite size if not colliding
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime); // Move goblin
 			}
 			break;
 		}
-		default:
+		// Movement of Warrior enemy
+		// Runs straight down, and destroys obstacles & other goblins if in the way
+		case ENEMYTYPE::WARRIOR:
+		{
 			m_v2fVelocity = { 0,1 };
+
+			// Checking collisions with obstacles
+			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
+			{
+				// Destroy obstacle if collide
+				if (m_BoxCollider->CheckCollision(*obstacle->GetCollisionBox()))
+					obstacle->bDestroy = true;
+			}
+
+			for (auto& enemy : EnemyManager::GetInstance().GetEnemies())
+			{
+				// Destroy kamikaze and archer goblins if collide
+				if (m_BoxCollider->CheckCollision(*enemy->GetCollisionBox()) &&
+					enemy->GetType() != ENEMYTYPE::WARRIOR)
+					enemy->TakeDamage(50);
+			}
+
+			m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime); // Move goblin
+			break;
+		}
+		default:
+			m_v2fVelocity = { 0,1 }; 
 			break;
 	}
 }
@@ -368,7 +410,12 @@ void Enemy::Attack()
 				{2.0f,2.0f},
 				false,
 				{1},
-				500.0f
+				500.0f,
+				1,
+				ELEMENTTYPE::NONE,
+				true,
+				false,
+				PROJECTILETYPE::ARROW
 			}
 		);
 

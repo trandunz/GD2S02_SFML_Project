@@ -11,7 +11,7 @@
 
 sf::RenderWindow Statics::RenderWindow{};
 sf::Event Statics::EventHandle{};
-sf::Font Statics::TimesNewRoman{};
+sf::Font Statics::MetalMania{};
 sf::Clock Statics::Time{};
 float Statics::fTimeScale{ 1.0f };
 float Statics::fDeltaTime{};
@@ -36,7 +36,7 @@ void Statics::InitRenderWindow(sf::Vector2i _size, std::string _title, sf::Uint3
 
 void Statics::InitGlobalFont(std::string _fileName)
 {
-	Statics::TimesNewRoman.loadFromFile("Resources/Fonts/" + _fileName);
+	Statics::MetalMania.loadFromFile("Resources/Fonts/" + _fileName);
 }
 
 void Statics::SetPaused(bool _paused)

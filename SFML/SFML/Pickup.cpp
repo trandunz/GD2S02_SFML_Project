@@ -12,6 +12,7 @@ Pickup::Pickup(PickupProperties _properties)
 	SetAnimStateTextureBasedOnType(animProperties);
 	animProperties.uNumberOfFrames = _properties.uNumberOfFrames;
 	animProperties.fFrameInterval = _properties.fAnimFrameInterval;
+	animProperties.v2fScale = _properties.v2fScale;
 	animProperties.bLoops = true;
 	m_Animator.AddState("Default", animProperties);
 	m_Animator.SetDefaultState("Default");
@@ -19,8 +20,8 @@ Pickup::Pickup(PickupProperties _properties)
 	m_Animator.StartState("Default");
 
 	sf::Vector2f colliderSize{};
-	colliderSize.x = m_Animator.GetLocalBounds().width;
-	colliderSize.y = m_Animator.GetLocalBounds().height;
+	colliderSize.x = m_Animator.GetLocalBounds().width * _properties.v2fScale.x;
+	colliderSize.y = m_Animator.GetLocalBounds().height * _properties.v2fScale.y;
 	m_BoxCollider = new BoxCollider(colliderSize, m_Animator.GetPosition());
 }
 

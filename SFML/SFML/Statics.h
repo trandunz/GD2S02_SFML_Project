@@ -42,6 +42,20 @@ enum class PICKUPTYPE
 	MANA
 };
 
+enum class OBSTACLETYPE
+{
+	ROCK,
+	HEDGE,
+	LOG
+};
+
+enum class PROJECTILETYPE
+{
+	BASIC,
+	SECONDARY,
+	ARROW
+};
+
 struct ProjectileProperties
 {
 	sf::Texture* Texture{ nullptr };
@@ -54,6 +68,7 @@ struct ProjectileProperties
 	ELEMENTTYPE Element{ ELEMENTTYPE::NONE };
 	bool bDestroyOnCollision{ true };
 	bool bApplyElementToTarget{ false };
+	PROJECTILETYPE eProjectileType{ PROJECTILETYPE::BASIC };
 };
 
 struct ObstacleProperties
@@ -61,6 +76,7 @@ struct ObstacleProperties
 	sf::Texture* Texture{ nullptr };
 	sf::Vector2f v2fStartPos{};
 	sf::Vector2f v2fScale{ 1,1 };
+	OBSTACLETYPE ObstacleType{ OBSTACLETYPE::ROCK };
 	sf::Vector2f v2fBoxColliderSize{ 10,10 };
 	float fBoxColliderOffsetY{};	
 	float fMoveSpeed{ 160.0f };
@@ -104,8 +120,9 @@ struct TextProperties
 {
 	sf::Vector2f v2fStartPos{};
 	std::string String{};
-	sf::Color Color{};
+	sf::Color Color {sf::Color::Black};
 	int iCharacterSize{36};
+	sf::Color OutlineColor{ sf::Color::Black };
 };
 
 struct ImageProperties
@@ -143,6 +160,7 @@ struct PickupProperties
 	PICKUPTYPE ePickupType{ PICKUPTYPE ::UNASSIGNED };
 	sf::Vector2f v2fStartPos{};
 	sf::Vector2f v2fVelocity{};
+	sf::Vector2f v2fScale{};
 	unsigned uNumberOfFrames{ 1 };
 	float fAnimFrameInterval{};
 };
@@ -152,7 +170,7 @@ class Statics
 public:
 	static sf::RenderWindow RenderWindow;
 	static sf::Event EventHandle;
-	static sf::Font TimesNewRoman;
+	static sf::Font MetalMania;
 	static void InitRenderWindow(sf::Vector2i _size, std::string _title, sf::Uint32 _style, sf::ContextSettings _settings);
 	static void InitGlobalFont(std::string _fileName);
 

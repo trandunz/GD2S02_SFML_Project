@@ -47,6 +47,22 @@ void ObjectManager::CleanupDestroyed()
 		}
 		it++;
 	}
+
+	auto it2 = m_vecObstacles.begin();
+	while (it2 != m_vecObstacles.end())
+	{
+		if ((*it2)->bDestroy == true)
+		{
+			if ((*it2) != nullptr)
+			{
+				delete (*it2);
+				(*it2) = nullptr;
+			}
+			it2= m_vecObstacles.erase(it2);
+			continue;
+		}
+		it2++;
+	}
 }
 
 void ObjectManager::CleanupEverything()
@@ -68,7 +84,7 @@ void ObjectManager::CreatePickup(PickupProperties _properties)
 void ObjectManager::Update()
 {
 	SpawnObstacles(1.5f);
-	SpawnPickups(3.0f);
+	SpawnPickups(6.0f);
 
 	for (auto& obstacle : m_vecObstacles)
 	{
@@ -123,7 +139,8 @@ void ObjectManager::SpawnPickups(float _rate)
 				{
 					PICKUPTYPE::HEALTH,
 					{100.0f + (rand() % 600), -32.0f},
-					{0, Statics::fBackgroundScrollSpeed}
+					{0, Statics::fBackgroundScrollSpeed},
+					{0.5f, 0.5f}
 				});
 		}
 		else
@@ -135,7 +152,8 @@ void ObjectManager::SpawnPickups(float _rate)
 				{
 					PICKUPTYPE::MANA,
 					{100.0f + (rand() % 600), -32.0f},
-					{0, Statics::fBackgroundScrollSpeed}
+					{0, Statics::fBackgroundScrollSpeed},
+					{0.5f, 0.5f}
 				});
 		}
 	}
@@ -169,6 +187,7 @@ void ObjectManager::SpawnObstacles(float _rate)
 					&TextureLoader::LoadTexture("Obstacles/rock_obstacle.png"),
 					{100.0f + (rand() % 600), -32.0f},
 					{2,2},
+					{OBSTACLETYPE::ROCK},
 					{40,40},
 					{6.0f}
 				});
@@ -180,6 +199,7 @@ void ObjectManager::SpawnObstacles(float _rate)
 					&TextureLoader::LoadTexture("Obstacles/hedge_obstacle.png"),
 					{100.0f + (rand() % 600), -32.0f},
 					{2,2},
+					{OBSTACLETYPE::HEDGE},
 					{40,40},
 					{6.0f}
 				});
@@ -191,6 +211,7 @@ void ObjectManager::SpawnObstacles(float _rate)
 					&TextureLoader::LoadTexture("Obstacles/log_obstacle.png"),
 					{100.0f + (rand() % 600), -32.0f},
 					{2,2},
+					{OBSTACLETYPE::LOG},
 					{54,20},
 					{8.0f}
 				});

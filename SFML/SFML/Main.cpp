@@ -30,7 +30,7 @@ void Start()
 {
 	Statics::InitRenderWindow({ 800, 800 }, "Game Name", sf::Style::Default, sf::ContextSettings());
 	Statics::RenderWindow.setKeyRepeatEnabled(false);
-	Statics::InitGlobalFont("TimesNewRoman.ttf");
+	Statics::InitGlobalFont("MetalMania.ttf");
 	LevelLoader::LoadLevel(LEVELS::MENUSCENE);
 }
 

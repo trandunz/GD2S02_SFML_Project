@@ -14,5 +14,8 @@ private:
 	void CreateMenuText();
 
 	void CleanupElements();
+
+	void CreatePlayerOneKeybinds();
+	void CreatePlayerTwoKeybinds();
 };
 

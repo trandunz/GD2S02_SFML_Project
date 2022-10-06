@@ -57,7 +57,8 @@ void PauseMenu::CreateMenuBackground()
 	GUI::GetInstance().CreateImage("Background", // Key
 		{
 			&TextureLoader::LoadTexture("GUI/PauseMenuBackground.png"), // Texture
-			ScreenCentre // Position
+			ScreenCentre, // Position
+			{0.3f, 0.3f}
 		});
 }
 
@@ -66,35 +67,35 @@ void PauseMenu::CreateMenuButtons()
 	sf::Vector2f ScreenCentre = Statics::RenderWindow.getView().getCenter();
 	GUI::GetInstance().CreateButton("Resume", // Key
 		{
-			"Resume", // Label / String
+			"", // Label / String
 			{ ScreenCentre.x,ScreenCentre.y - 40}, // Position
 			[this]()
 			{
 				bDestroy = true; // On Press Lambda
 			},
-			nullptr,
+			& TextureLoader::LoadTexture("GUI/Resume.png"),
 			{0.9f,0.9f}, // Scale
 		});
 	GUI::GetInstance().CreateButton("Settings", // Key
 		{
-			"Settings", // Label / String
+			"", // Label / String
 			{ ScreenCentre.x,ScreenCentre.y + 20}, // Position
 			[this]()
 			{
 				m_SettingsMenu = new SettingsMenu; // On Press Lambda
 			},
-			nullptr,
+			& TextureLoader::LoadTexture("GUI/Settings.png"),
 			{0.9f,0.9f}, // Scale
 		});
 	GUI::GetInstance().CreateButton("Quit", // Key
 		{
-			"Quit", // Label / String
+			"", // Label / String
 			{ ScreenCentre.x,ScreenCentre.y + 80}, // Position
 			[this]()
 			{
 				LevelLoader::LoadLevel(LEVELS::MENUSCENE); // On Press Lambda
 			},
-			nullptr,
+			& TextureLoader::LoadTexture("GUI/Quit.png"),
 			{0.9f,0.9f}, // Scale
 		});
 }
