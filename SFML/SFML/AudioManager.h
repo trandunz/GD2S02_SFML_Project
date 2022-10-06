@@ -30,19 +30,71 @@ public:
 	/// Stop the current song
 	/// </summary>
 	static void StopMusic();
+	/// <summary>
+	/// Set the volume for music.
+	/// </summary>
+	/// <param name="_volume"></param>
 	static void SetMusicVolume(float _volume);
+	/// <summary>
+	/// Increase music volume.
+	/// </summary>
+	/// <param name="_amount"></param>
 	static void IncrementMusicVolume(float _amount);
+	/// <summary>
+	/// Decrease music volume.
+	/// </summary>
+	/// <param name="_amount"></param>
 	static void DecrementMusicVolume(float _amount);
+	/// <summary>
+	/// Mute the music.
+	/// </summary>
 	static void MuteMusic();
+	/// <summary>
+	/// Toggles mute on and off.
+	/// </summary>
 	static void ToggleMuteMusic();
+	/// <summary>
+	/// Set sound effects volume.
+	/// </summary>
+	/// <param name="_volume"></param>
 	static void SetEffectsVolume(float _volume);
+	/// <summary>
+	/// Increase sound effects volume.
+	/// </summary>
+	/// <param name="_amount"></param>
 	static void IncrementEffectsVolume(float _amount);
+	/// <summary>
+	/// Decrease sound effects volume.
+	/// </summary>
+	/// <param name="_amount"></param>
 	static void DecrementEffectsVolume(float _amount);
+	/// <summary>
+	/// Mute sound effects.
+	/// </summary>
 	static void MuteEffects();
+	/// <summary>
+	/// Toggle sound effects on and off.
+	/// </summary>
 	static void ToggleMuteEffects();
+	/// <summary>
+	/// Checks if music is muted.
+	/// </summary>
+	/// <returns></returns>
 	static bool IsMusicMuted();
+	/// <summary>
+	/// Checks if sound effects are muted.
+	/// </summary>
+	/// <returns></returns>
 	static bool IsEffectsMuted();
+	/// <summary>
+	/// Gets the current volume setting for music.
+	/// </summary>
+	/// <returns></returns>
 	static float GetMusicVolume();
+	/// <summary>
+	/// Gets the current volume for sound effects.
+	/// </summary>
+	/// <returns></returns>
 	static float GetEffectsVolume();
 	/// <summary>
 	/// Create an audio source with the given key
