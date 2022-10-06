@@ -60,9 +60,9 @@ void EnemyManager::Update()
 		if (enemy->GetCurrentHealth() <= 0)
 		{
 			Statics::fGameScore += 20.0f; // Increase game score
-			enemy->bDestroy = true;
+			enemy->bDestroy = true; // Set enemy to die
 			
-			AudioManager::PlayAudioSource("EnemyDeath");
+			AudioManager::PlayAudioSource("EnemyDeath"); // Play enemy death SFX
 		}
 		// bDestroy enemies if they below the screen
 		else if (enemy->GetPosition().y >= Statics::RenderWindow.getSize().y + m_fDestroyDistanceY)
@@ -79,15 +79,22 @@ void EnemyManager::Update()
 					{
 						switch (enemy->GetType())
 						{
-						case ENEMYTYPE::KAMIKAZE:
-						{
-							player->TakeDamage(1);
-							enemy->bDestroy = true;
-							AudioManager::PlayAudioSource("EnemyDeath");
-							break;
-						}
-						default:
-							break;
+							// If player collides with kamikazi, then kamikazi explodes, killing both
+							case ENEMYTYPE::KAMIKAZE:
+							{
+								player->TakeDamage(1);
+								enemy->bDestroy = true;
+								AudioManager::PlayAudioSource("EnemyDeath");
+								break;
+							}
+							// If player collides with warrior, then player dies, but warrior keeps going
+							case ENEMYTYPE::WARRIOR:
+							{
+								player->TakeDamage(1);
+								break;
+							}
+							default:
+								break;
 						}
 
 						break;

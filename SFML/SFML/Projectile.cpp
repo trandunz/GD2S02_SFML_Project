@@ -10,6 +10,8 @@
 #include "Projectile.h"
 #include "Player.h"
 #include "BoxCollider.h"
+#include "TextureLoader.h"
+#include "VFX.h"
 
 Projectile::Projectile(ProjectileProperties _properties)
 {
@@ -40,6 +42,15 @@ Projectile::~Projectile()
 		delete m_BoxCollider;
 		m_BoxCollider = nullptr;
 	}
+
+	//// Play explosion VFX animation
+	//SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/arrow_destruction.png") };
+	//explosionProperties.v2fScale = { 2.0f, 2.0f };
+	//explosionProperties.v2fStartPos = { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 16.0f };
+	//explosionProperties.uNumberOfFrames = 3;
+	//explosionProperties.fAnimFrameInterval = 0.5f / 3;
+	//explosionProperties.v2fVelocity = { 0.0f, Statics::fBackgroundScrollSpeed };
+	//VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.25f);
 }
 
 void Projectile::Update()

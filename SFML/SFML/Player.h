@@ -170,9 +170,10 @@ private:
 	sf::Vector2f m_v2fVelocity{};
 	int m_iCurrentHealth{};
 	int m_iCurrentMana{};
+	bool m_bRestrictYPosition{ true };
 
-	BoxCollider* m_BoxCollider{nullptr};
-	float fColliderOffset{};
+	BoxCollider* m_BoxCollider{nullptr}; // Player  box collider
+	float fColliderOffset{}; // Y Offset position for box collider
 
 	sf::Keyboard::Key m_MoveUpKey {sf::Keyboard::Key::W };
 	sf::Keyboard::Key m_MoveDownKey { sf::Keyboard::Key::S};

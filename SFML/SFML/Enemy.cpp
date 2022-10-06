@@ -46,7 +46,6 @@ Enemy::Enemy(EnemyProperties _properties)
 			animProperties.fFrameInterval = 0.1f;
 
 			m_fArcherYPos = (rand() % 261) + 70.0f;
-			std::cout << m_fArcherYPos << std::endl;
 			break;
 		}
 		case ENEMYTYPE::WARRIOR:

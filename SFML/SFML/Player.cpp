@@ -562,18 +562,26 @@ sf::Vector2f Player::GetFuturePosition(sf::Vector2f _velocity) const
 
 void Player::RestrictToScreen()
 {
-	if (m_Mesh.getPosition().y + m_Mesh.getGlobalBounds().height / 2 >= Statics::RenderWindow.getSize().y)
+	// Restricting player position at bottom of window
+	// Unless bool is flipped - Obstacle collisions
+	if (m_bRestrictYPosition)
 	{
-		m_Mesh.setPosition(m_Mesh.getPosition().x, Statics::RenderWindow.getSize().y - m_Mesh.getGlobalBounds().height / 2);
+		if (m_Mesh.getPosition().y + m_Mesh.getGlobalBounds().height / 2 >= Statics::RenderWindow.getSize().y)
+		{
+			m_Mesh.setPosition(m_Mesh.getPosition().x, Statics::RenderWindow.getSize().y - m_Mesh.getGlobalBounds().height / 2);
+		}
 	}
+	// Restricting player position at top of window
 	if (m_Mesh.getPosition().y - m_Mesh.getGlobalBounds().height / 2 <= 0)
 	{
 		m_Mesh.setPosition(m_Mesh.getPosition().x, m_Mesh.getGlobalBounds().height / 2);
 	}
+	// Restricting player position at right side of window
 	if (m_Mesh.getPosition().x + m_Mesh.getGlobalBounds().width / 2 >= Statics::RenderWindow.getSize().x)
 	{
 		m_Mesh.setPosition(Statics::RenderWindow.getSize().x - m_Mesh.getGlobalBounds().width/2, m_Mesh.getPosition().y);
 	}
+	// Restricting player position at left side of window
 	if (m_Mesh.getPosition().x - m_Mesh.getGlobalBounds().width / 2 <= 0)
 	{
 		m_Mesh.setPosition(m_Mesh.getGlobalBounds().width / 2, m_Mesh.getPosition().y);

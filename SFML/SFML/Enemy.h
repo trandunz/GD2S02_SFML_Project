@@ -8,8 +8,6 @@
 // Author : Inman, Will; Frear, Stace
 
 #pragma once
-
-// Includes
 #include "Animator.h"
 
 class BoxCollider;
@@ -51,10 +49,41 @@ public:
 	/// <param name="_amount"></param>
 	void Heal(unsigned _amount);
 
+	/// <summary>
+	/// Sets the enemy to start taking damage over time
+	/// Flips a bool that runs the private function HandleDamageOverTime()
+	/// that is run through the update per tick.
+	/// Parameters set the damage per second this enemy will receive,
+	/// for how long it will receive damage, and the color to flash
+	/// while taking damage.
+	/// </summary>
+	/// <param name="_damagePerSecond"></param>
+	/// <param name="_seconds"></param>
+	/// <param name="_color"></param>
 	void ApplyDamageOverTime(unsigned _damagePerSecond, float _seconds, sf::Color _color = { 255, 23, 23 });
 
+	/// <summary>
+	/// Sets the enemy to stop moving/shooting
+	/// Flips a bool that runs the private function HandleStop()
+	/// that is run through the update per tick.
+	/// Parameters sets the amount of time to stop moving,
+	/// and the color the sprite will change to. 
+	/// Can be used for freezing or stunning enemies
+	/// </summary>
+	/// <param name="_seconds"></param>
+	/// <param name="_color"></param>
 	void ApplyStop(float _seconds, sf::Color _color = { 0, 162, 232 });
 
+	/// <summary>
+	/// Sets the enemy to slow movement/shooting
+	/// Flips a bool that runs the private function HandleSlow
+	/// that is run through the update per tick.
+	/// Parameters sets the amount of time to slow movement,
+	/// and the color the sprite will change to. 
+	/// </summary>
+	/// <param name="_seconds"></param>
+	/// <param name="_slowMovementPercentage"></param>
+	/// <param name="_color"></param>
 	void ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color = { 181, 230, 29 });
 
 	/// <summary>
@@ -64,7 +93,7 @@ public:
 	/// <returns></returns>
 	bool CheckCollision(BoxCollider& _otherCollider);
 
-	bool bDestroy{ false };
+	bool bDestroy{ false }; // Bool for holding enemies life/death status. If false, enemy manager will destroy object
 
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
@@ -130,18 +159,20 @@ private:
 	float m_fSlowTime{};
 	sf::Color m_SlowedSpriteColor;
 
-	// Changing sprite color
+	// Changing sprite color for status effects
 	bool m_bSpriteColorChanged{ false };
 	float m_fSpriteChangeColorSpeed{ 0.2f }; // Color changing speed
 	float m_fSpriteChangeColorCounter{ m_fSpriteChangeColorSpeed }; // Color changing timer
 
-	// Movement
+	// Extra variables for archer enemy.
+	// Used for setting Y position archer will move down to, before 
+	// moving left and right
 	float m_fArcherYPos{};
 	bool m_bFirstMoveComplete{ false };
 	
-	BoxCollider* m_BoxCollider{nullptr};
+	BoxCollider* m_BoxCollider{nullptr}; // Enemy box collider
 
-	Animator m_AnimatedSprite{};
+	Animator m_AnimatedSprite{}; // Enemy animation
 
 public:
 	///////////////////////////

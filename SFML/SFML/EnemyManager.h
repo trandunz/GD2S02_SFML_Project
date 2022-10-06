@@ -44,6 +44,11 @@ public:
 	void SpawnEnemies(float _rate);
 
 private:
+	/// <summary>
+	/// Drawing of enemies to window
+	/// </summary>
+	/// <param name="_target"></param>
+	/// <param name="_states"></param>
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 
 	inline EnemyManager() {}
