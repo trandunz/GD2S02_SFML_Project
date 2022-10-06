@@ -410,7 +410,12 @@ void Enemy::Attack()
 				{2.0f,2.0f},
 				false,
 				{1},
-				500.0f
+				500.0f,
+				1,
+				ELEMENTTYPE::NONE,
+				true,
+				false,
+				PROJECTILETYPE::ARROW
 			}
 		);
 

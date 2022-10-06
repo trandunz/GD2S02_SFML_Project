@@ -52,7 +52,8 @@ enum class OBSTACLETYPE
 enum class PROJECTILETYPE
 {
 	BASIC,
-	SECONDARY
+	SECONDARY,
+	ARROW
 };
 
 struct ProjectileProperties

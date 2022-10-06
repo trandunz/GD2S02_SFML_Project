@@ -142,13 +142,13 @@ void EnemyManager::SpawnEnemies(float _rate)
 		{
 			CreateEnemy(
 				{
-					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Archer_Running.png"),
-					{100.0f + (rand() % 600), 0},
-					{ENEMYTYPE::ARCHER},
-					{2.0f,2.0f},
-					{2.4f,2.4f},
-					{150.0f},
-					{250.0f}
+					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Archer_Running.png"), // Set archer running sprite
+					{100.0f + (rand() % 600), 0}, // Set random starting position
+					{ENEMYTYPE::ARCHER}, // Set enemy type - Archer
+					{2.0f,2.0f}, // Archer sprite size
+					{2.4f,2.4f}, // Archer jump sprite size
+					{150.0f}, // Archer run speed
+					{250.0f} // Archer jump speed
 				});
 		}
 		// Create Warrior
@@ -169,6 +169,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 		// Create Kamakazi
 		else
 		{
+			// Pick a random sprite for kamikaze enemy
 			int iRandomKamakazi = rand() % 5;
 			std::string sEnemyTextureLocation;
 			if (iRandomKamakazi == 0)
@@ -194,11 +195,11 @@ void EnemyManager::SpawnEnemies(float _rate)
 
 			CreateEnemy(
 				{
-					&TextureLoader::LoadTexture(sEnemyTextureLocation),
-					{100.0f + (rand() % 600), 0},
-					{ENEMYTYPE::KAMIKAZE},
-					{2.0f,2.0f},
-					{2.4f,2.4f}
+					&TextureLoader::LoadTexture(sEnemyTextureLocation), // Set kamikaze running sprite
+					{100.0f + (rand() % 600), 0}, // Set random starting position
+					{ENEMYTYPE::KAMIKAZE}, // Set enemy type - Kamikaze
+					{2.0f,2.0f}, // Kamikaze sprite size
+					{2.4f,2.4f} // Kamikaze jump sprite size
 				});
 		}
 	}

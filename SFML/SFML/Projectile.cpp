@@ -26,12 +26,31 @@ Projectile::Projectile(ProjectileProperties _properties)
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.SetPosition(_properties.v2fStartPos);
-
 	m_AnimatedSprite.StartState("Moving");
 
-	sf::Vector2f colliderSize{ 32,32 };
-	colliderSize.x *= _properties.v2fScale.x;
-	colliderSize.y *= _properties.v2fScale.y;
+	sf::Vector2f colliderSize{};
+	switch (m_Properties.eProjectileType)
+	{
+		case PROJECTILETYPE::BASIC:
+		{
+			colliderSize = { 24.0f, 48.0f };
+			break;
+		}
+		case PROJECTILETYPE::SECONDARY:
+		{
+			colliderSize.x *= _properties.v2fScale.x;
+			colliderSize.y *= _properties.v2fScale.y;
+			break;
+		}
+		case PROJECTILETYPE::ARROW:
+		{
+			colliderSize = { 8.0f, 32.0f };
+			break;
+		}
+		default:
+			break;
+	}
+	
 	m_BoxCollider = new BoxCollider(colliderSize, _properties.v2fStartPos);
 }
 
