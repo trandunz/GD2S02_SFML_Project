@@ -160,6 +160,7 @@ struct PickupProperties
 	PICKUPTYPE ePickupType{ PICKUPTYPE ::UNASSIGNED };
 	sf::Vector2f v2fStartPos{};
 	sf::Vector2f v2fVelocity{};
+	sf::Vector2f v2fScale{};
 	unsigned uNumberOfFrames{ 1 };
 	float fAnimFrameInterval{};
 };

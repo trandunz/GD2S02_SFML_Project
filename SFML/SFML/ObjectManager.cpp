@@ -84,7 +84,7 @@ void ObjectManager::CreatePickup(PickupProperties _properties)
 void ObjectManager::Update()
 {
 	SpawnObstacles(1.5f);
-	SpawnPickups(3.0f);
+	SpawnPickups(6.0f);
 
 	for (auto& obstacle : m_vecObstacles)
 	{
@@ -139,7 +139,8 @@ void ObjectManager::SpawnPickups(float _rate)
 				{
 					PICKUPTYPE::HEALTH,
 					{100.0f + (rand() % 600), -32.0f},
-					{0, Statics::fBackgroundScrollSpeed}
+					{0, Statics::fBackgroundScrollSpeed},
+					{0.5f, 0.5f}
 				});
 		}
 		else
@@ -151,7 +152,8 @@ void ObjectManager::SpawnPickups(float _rate)
 				{
 					PICKUPTYPE::MANA,
 					{100.0f + (rand() % 600), -32.0f},
-					{0, Statics::fBackgroundScrollSpeed}
+					{0, Statics::fBackgroundScrollSpeed},
+					{0.5f, 0.5f}
 				});
 		}
 	}
