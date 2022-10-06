@@ -144,6 +144,9 @@
     <ClCompile Include="EndGameMenu.cpp">
       <Filter>Source Files\Juice</Filter>
     </ClCompile>
+    <ClCompile Include="HighScores.cpp">
+      <Filter>Source Files\SceneManagement</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnemyManager.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="EndGameMenu.h">
       <Filter>Header Files\Juice</Filter>
+    </ClInclude>
+    <ClInclude Include="HighScores.h">
+      <Filter>Header Files\SceneManagement</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
