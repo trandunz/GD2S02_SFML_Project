@@ -103,11 +103,14 @@ void ProjectileManager::Update()
 							if (projectile->DoesApplyElementToTarget())
 							{
 								if (projectile->GetProjectileType() == PROJECTILETYPE::BASIC)
+								{
 									if (rand() % 2 == 0)
 										ApplyDebuff_Enemy(enemy, projectile->GetElement());
+								}
 								else
-									ApplyDebuff_Enemy(enemy, projectile->GetElement());
-									
+								{
+								ApplyDebuff_Enemy(enemy, projectile->GetElement());
+								}		
 							}
 
 							if (projectile->IsDestroyedOnCollision())

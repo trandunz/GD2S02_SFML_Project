@@ -38,8 +38,9 @@ Projectile::Projectile(ProjectileProperties _properties)
 		}
 		case PROJECTILETYPE::SECONDARY:
 		{
-			colliderSize.x *= _properties.v2fScale.x;
-			colliderSize.y *= _properties.v2fScale.y;
+			//colliderSize.x *= _properties.v2fScale.x;
+			//colliderSize.y *= _properties.v2fScale.y;
+			colliderSize = {64.0f,64.0f };
 			break;
 		}
 		case PROJECTILETYPE::ARROW:
