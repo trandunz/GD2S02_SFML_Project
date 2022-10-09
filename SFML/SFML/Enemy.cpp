@@ -115,6 +115,14 @@ Enemy::~Enemy()
 		}
 		case ENEMYTYPE::WARRIOR:
 		{
+			// Play archer death VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/Goblin_Warrior_Death.png") };
+			explosionProperties.v2fScale = { 2.0f, 2.0f };
+			explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+			explosionProperties.uNumberOfFrames = 4;
+			explosionProperties.fAnimFrameInterval = 0.5f / 4;
+			explosionProperties.v2fVelocity = { 0.0f, 0.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
 			break;
 		}
 		default:
@@ -132,9 +140,10 @@ void Enemy::Update()
 	m_AnimatedSprite.Update(); // Update animated sprite
 
 	// If enemy is damaged from fire spell, then run function to damage over time
+	// or when the player is hit with primary attack it flashes
 	if (m_bDamaged)
 	{
-		HandleDamageOverTime();
+		HandleDamageFlashFeedback();
 	}
 	// If enemy is hit from freeze spell, then run function for freezing said enemy
 	if (m_bStopped)
@@ -509,7 +518,7 @@ void Enemy::Attack()
 				// Create projectile
 				ProjectileManager::GetInstance().CreateProjectile(
 					{
-						&TextureLoader::LoadTexture("Projectiles/Water_Spell_Animated.png"),
+						&TextureLoader::LoadTexture("Projectiles/Slow_Spell_Animated.png"),
 						{GetPosition().x + 16.0f,GetPosition().y + 8.0f},
 						{1.5f,1.5f},
 						false,
@@ -528,7 +537,7 @@ void Enemy::Attack()
 				// Create projectile
 				ProjectileManager::GetInstance().CreateProjectile(
 					{
-						&TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png"),
+						&TextureLoader::LoadTexture("Projectiles/Stop_Spell_Animated.png"),
 						{GetPosition().x + 16.0f,GetPosition().y + 8.0f},
 						{1.5f,1.5f},
 						false,
@@ -548,7 +557,7 @@ void Enemy::Attack()
 	}
 }
 
-void Enemy::HandleDamageOverTime()
+void Enemy::HandleDamageFlashFeedback()
 {
 	// Change sprite color
 	m_fSpriteChangeColorCounter -= Statics::fDeltaTime; // Count down

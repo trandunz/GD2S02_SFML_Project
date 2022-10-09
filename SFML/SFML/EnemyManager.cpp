@@ -164,7 +164,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 		{
 			CreateEnemy(
 				{
-					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Archer_Running.png"), // Set archer running sprite
+					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Archer.png"), // Set archer running sprite
 					{100.0f + (rand() % 600), 0}, // Set random starting position
 					{ENEMYTYPE::ARCHER}, // Set enemy type - Archer
 					{2.0f,2.0f}, // Archer sprite size
@@ -178,14 +178,14 @@ void EnemyManager::SpawnEnemies(float _rate)
 		{
 			CreateEnemy(
 				{
-					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Warrior_Running.png"), // Set warrior running sprite
+					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Warrior.png"), // Set warrior running sprite
 					{100.0f + (rand() % 600), 0}, // Set random starting position
 					{ENEMYTYPE::WARRIOR}, // Set enemy type - Warrior
 					{2.0f,2.0f}, // Warrior sprite size
 					{0.0f,0.0f}, // Warrior does not jump
 					{300.0f}, // Faster run speed
 					{0.0f}, // Warrior does not jump
-					{10} // High health
+					{7} // High health
 				});
 		}
 		// Create Shaman
@@ -193,7 +193,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 		{
 			CreateEnemy(
 				{
-					&TextureLoader::LoadTexture("Unit/Enemy/Shaman.png"), // Set SHAMAN running sprite
+					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Shaman.png"), // Set SHAMAN running sprite
 					{100.0f + (rand() % 600), 0}, // Set random starting position
 					{ENEMYTYPE::SHAMAN}, // Set enemy type - SHAMAN
 					{0.8f,0.8f}, // SHAMAN sprite size
@@ -210,23 +210,23 @@ void EnemyManager::SpawnEnemies(float _rate)
 			std::string sEnemyTextureLocation;
 			if (iRandomKamakazi == 0)
 			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running1.png";
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi1.png";
 			}
 			else if (iRandomKamakazi == 1)
 			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running2.png";
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi2.png";
 			}
 			else if (iRandomKamakazi == 2)
 			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running3.png";
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi3.png";
 			}
 			else if (iRandomKamakazi == 3)
 			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running4.png";
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi4.png";
 			}
 			else
 			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi_Running5.png";
+				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi5.png";
 			}
 
 			CreateEnemy(

@@ -61,6 +61,12 @@ public:
 	/// <param name="_seconds"></param>
 	/// <param name="_color"></param>
 	void ApplyDamageOverTime(unsigned _damagePerSecond, float _seconds, sf::Color _color = { 255, 23, 23 });
+	
+	/// <summary>
+	/// Sets the HandleDamageFlashFeedback() values to make the enemy 
+	/// flash quickly for less than a second to give feedback to the 
+	/// player that they have hit an enemy with an attack.
+	/// </summary>
 	void FlashWhenHit();
 
 	/// <summary>
@@ -121,7 +127,7 @@ private:
 	/// Handles the damage over time of the enemy for the specified 
 	/// amount of time from the ApplyDamageOverTime function
 	/// </summary>
-	void HandleDamageOverTime();
+	void HandleDamageFlashFeedback();
 
 	/// <summary>
 	/// Handles the stopping of the enemy for the specified amount of time

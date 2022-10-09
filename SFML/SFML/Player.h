@@ -194,6 +194,20 @@ private:
 
 	void Invincibility();
 
+	/// <summary>
+	/// When a player is hurt, this function is used to give feedback, 
+	/// it flashes the heart containers.
+	/// </summary>
+	void FlashHearts();
+
+	/// <summary>
+	/// Used by the FlashHearts() function. Sets the total color of the
+	/// hearts for which player is passed in by the color thats passed in.
+	/// </summary>
+	/// <param name="_prefix"></param>
+	/// <param name="_color"></param>
+	void SetHeartColor(std::string _prefix, sf::Color _color);
+
 	ProjectileProperties m_BasicAttackProperties{};
 	ProjectileProperties m_EmpoweredBasicAttackProperties{};
 	ProjectileProperties m_SecondaryAttackProperties{};
@@ -216,6 +230,14 @@ private:
 	bool m_bRespawn{ false };
 	float m_fMoveSpeed{};
 	float m_fSlowMovementPercentage{ 0.0f };
+
+	// Heart flashing when hit
+	bool m_bFlashHearts;
+	bool m_bIsFlashing;
+	float m_fFlashTime;
+	float m_fFlashSpeed;
+	float m_fMaxFlashTime;
+	float m_fMaxFlashSpeed;
 
 	// Invincibility variables
 	float m_fInvincibleMaxTimer{ 3.0f };

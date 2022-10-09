@@ -63,6 +63,13 @@ Player::Player(PlayerProperties _properties)
 	}
 
 	CreateSpecialVFX();
+
+	// Flash hearts effect
+	m_bFlashHearts = false;
+	m_fMaxFlashTime = m_fInvincibleMaxTimer;
+	m_fMaxFlashSpeed = 0.1f;
+	m_fFlashTime = m_fMaxFlashTime;
+	m_fFlashSpeed = m_fMaxFlashSpeed;
 }
 
 Player::~Player()
@@ -169,6 +176,11 @@ void Player::Update()
 	if (m_bInvincible == true)
 	{
 		Invincibility();
+	}
+
+	if (m_bFlashHearts)
+	{
+		FlashHearts();
 	}
 }
 
@@ -490,6 +502,15 @@ void Player::TakeDamage(unsigned _amount)
 	{
 		bDestroy = true;
 	}
+
+	if (_amount > 0.0f)
+	{
+		// Set the hearts to flash
+		m_bFlashHearts = true;
+		m_bIsFlashing = true;
+		m_fFlashTime = m_fMaxFlashTime;
+		m_fFlashSpeed = m_fMaxFlashSpeed;
+	}
 }
 
 void Player::Heal(unsigned _amount)
@@ -728,6 +749,59 @@ void Player::Invincibility()
 		m_bRestrictYPosition = true;
 		m_Mesh.setColor(sf::Color(255, 255, 255));
 	}
+}
+
+void Player::FlashHearts()
+{
+	// Change sprite color
+	m_fFlashSpeed -= Statics::fDeltaTime; // Count down
+	if (m_fFlashSpeed <= 0.0f)
+	{
+		m_fFlashSpeed = m_fMaxFlashSpeed;
+		m_bIsFlashing = !m_bIsFlashing;
+	}
+
+	// m_bIsFlashing is acting as a toggle switching back and forth
+	// between 2 colours.
+	if (m_bIsFlashing)
+	{
+		if (m_Properties.bPlayerOne)
+		{
+			SetHeartColor("P1", sf::Color::Blue);
+		}
+		else 
+		{
+			SetHeartColor("P2", sf::Color::Blue);
+		}
+	}
+	else 
+	{
+		if (m_Properties.bPlayerOne)
+		{
+			SetHeartColor("P1", sf::Color::Red);
+		}
+		else
+		{
+			SetHeartColor("P2", sf::Color::Red);
+		}
+	}
+	
+	// Stop flashing when flash time runs out
+	m_fFlashTime -= Statics::fDeltaTime;
+	if (m_fFlashTime <= 0.0f)
+	{
+		m_bFlashHearts = false;
+		m_fFlashTime = m_fMaxFlashTime;
+		SetHeartColor("P1", sf::Color::White);
+		SetHeartColor("P2", sf::Color::White);
+	}
+}
+
+void Player::SetHeartColor(std::string _prefix, sf::Color _color)
+{
+	GUI::GetInstance().GetImage(_prefix + "_HP1").setColor(_color);
+	GUI::GetInstance().GetImage(_prefix + "_HP2").setColor(_color);
+	GUI::GetInstance().GetImage(_prefix + "_HP3").setColor(_color);
 }
 
 BoxCollider* Player::GetCollisionBox()
