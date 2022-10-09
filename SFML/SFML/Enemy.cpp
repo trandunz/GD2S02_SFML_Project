@@ -115,6 +115,14 @@ Enemy::~Enemy()
 		}
 		case ENEMYTYPE::WARRIOR:
 		{
+			// Play archer death VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/Goblin_Warrior_Death.png") };
+			explosionProperties.v2fScale = { 2.0f, 2.0f };
+			explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+			explosionProperties.uNumberOfFrames = 4;
+			explosionProperties.fAnimFrameInterval = 0.5f / 4;
+			explosionProperties.v2fVelocity = { 0.0f, 0.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
 			break;
 		}
 		default:
@@ -509,7 +517,7 @@ void Enemy::Attack()
 				// Create projectile
 				ProjectileManager::GetInstance().CreateProjectile(
 					{
-						&TextureLoader::LoadTexture("Projectiles/Water_Spell_Animated.png"),
+						&TextureLoader::LoadTexture("Projectiles/Slow_Spell_Animated.png"),
 						{GetPosition().x + 16.0f,GetPosition().y + 8.0f},
 						{1.5f,1.5f},
 						false,
@@ -528,7 +536,7 @@ void Enemy::Attack()
 				// Create projectile
 				ProjectileManager::GetInstance().CreateProjectile(
 					{
-						&TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png"),
+						&TextureLoader::LoadTexture("Projectiles/Stop_Spell_Animated.png"),
 						{GetPosition().x + 16.0f,GetPosition().y + 8.0f},
 						{1.5f,1.5f},
 						false,

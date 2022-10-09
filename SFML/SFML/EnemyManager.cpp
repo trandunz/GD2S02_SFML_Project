@@ -185,7 +185,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 					{0.0f,0.0f}, // Warrior does not jump
 					{300.0f}, // Faster run speed
 					{0.0f}, // Warrior does not jump
-					{10} // High health
+					{7} // High health
 				});
 		}
 		// Create Shaman
