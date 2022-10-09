@@ -58,6 +58,8 @@ public:
 	void SetTextureByElement();
 
 	bool bDestroy{ false };
+
+	bool m_bInvincible{ false };
 	
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
@@ -152,11 +154,15 @@ private:
 	sf::Vector2f GetFuturePosition(sf::Vector2f _velocity) const;
 	void RestrictToScreen();
 
+	void Respawn();
+
+	void Invincibility();
+
 	ProjectileProperties m_BasicAttackProperties{};
 	ProjectileProperties m_EmpoweredBasicAttackProperties{};
 	ProjectileProperties m_SecondaryAttackProperties{};
 	PlayerProperties m_Properties{};
-	ELEMENTTYPE m_eElement = ELEMENTTYPE::NONE;
+	ELEMENTTYPE m_eElement{ ELEMENTTYPE::NONE };
 	float m_AttackSpeed{ 0.2f };
 	float m_SpecialDuration{ 10.0f };
 	float m_CombineSpecialDelay{ 0.5f };
@@ -166,14 +172,23 @@ private:
 	float m_SecondaryCooldown{ 5.0f };
 	bool m_bCollided{ false };
 	sf::Sprite m_Mesh{};
-	sf::Vector2f m_PreviousMove{};
+	sf::Vector2f m_v2fPreviousMove{};
 	sf::Vector2f m_v2fVelocity{};
 	int m_iCurrentHealth{};
 	int m_iCurrentMana{};
 	bool m_bRestrictYPosition{ true };
+	bool m_bRespawn{ false };
+
+	// Invincibility variables
+	float m_fInvincibleMaxTimer{ 3.0f };
+	float m_fInvincibleTimer{ m_fInvincibleMaxTimer };
+	sf::Color m_InvincibleColor{ sf::Color(255, 255, 255, 50) };
+	bool m_bSpriteColorChanged{ false };
+	float m_fSpriteChangeColorSpeed{ 0.1f }; // Color changing speed
+	float m_fSpriteChangeColorCounter{ m_fSpriteChangeColorSpeed }; // Color changing timer
 
 	BoxCollider* m_BoxCollider{nullptr}; // Player  box collider
-	float fColliderOffset{}; // Y Offset position for box collider
+	float m_fColliderOffset{}; // Y Offset position for box collider
 
 	sf::Keyboard::Key m_MoveUpKey {sf::Keyboard::Key::W };
 	sf::Keyboard::Key m_MoveDownKey { sf::Keyboard::Key::S};
@@ -198,5 +213,6 @@ public:
 	sf::Sprite GetSprite() const;
 
 	sf::Vector2f GetPreviousMove() const; 
-};
 
+	void SetRestrictYPosition(bool _restrictYPosition);
+};

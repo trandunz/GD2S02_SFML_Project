@@ -85,21 +85,33 @@ void PlayerManager::Update()
 		}
 		else
 		{
-			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
+			if (player->m_bInvincible == false) // Check if player is invinsible
 			{
-				if (player->CheckCollision(*obstacle->GetCollisionBox()) == true)
+				// If not invinsible, then check collisions with obstacles
+				for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
 				{
-					// Set player position to its previous position
-					player->SetPosition(player->GetPreviousMove());
-
-					// If player is also below the obstacle
-					// start pushing player downwards at same speed as background/obstacles
-					if (player->GetCollisionBox()->GetCollider().getPosition().y - player->GetCollisionBox()->GetCollider().getSize().y/2
-						>= obstacle->GetCollisionBox()->GetCollider().getPosition().y + (obstacle->GetCollisionBox()->GetCollider().getSize().y / 2) - 1)
+					if (player->CheckCollision(*obstacle->GetCollisionBox()) == true)
 					{
-						player->SetPosition({ player->GetPosition().x,
-							obstacle->GetCollisionBox()->GetCollider().getPosition().y + (obstacle->GetCollisionBox()->GetCollider().getSize().y / 2) +
-							+(Statics::fBackgroundScrollSpeed * Statics::fDeltaTime) + 2 });
+						// Set player position to its previous position
+						player->SetPosition(player->GetPreviousMove());
+
+						// If player is also below the obstacle
+						// start pushing player downwards at same speed as background/obstacles
+						if (player->GetCollisionBox()->GetCollider().getPosition().y - player->GetCollisionBox()->GetCollider().getSize().y / 2
+							>= obstacle->GetCollisionBox()->GetCollider().getPosition().y + (obstacle->GetCollisionBox()->GetCollider().getSize().y / 2) - 1)
+						{
+							player->SetPosition({ player->GetPosition().x,
+								obstacle->GetCollisionBox()->GetCollider().getPosition().y + (obstacle->GetCollisionBox()->GetCollider().getSize().y / 2) +
+								(Statics::fBackgroundScrollSpeed * Statics::fDeltaTime) + 2 });
+
+							// Check if player is close to being pushed out of the screen
+							// If so, stop them from being able to move
+							if (player->GetCollisionBox()->GetCollider().getPosition().y + (player->GetCollisionBox()->GetCollider().getSize().y / 2) >=
+								Statics::RenderWindow.getSize().y - 10.0f)
+							{
+								player->SetRestrictYPosition(false);
+							}
+						}
 					}
 				}
 			}
