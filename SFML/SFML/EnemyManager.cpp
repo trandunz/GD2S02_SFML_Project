@@ -188,6 +188,20 @@ void EnemyManager::SpawnEnemies(float _rate)
 					{10} // High health
 				});
 		}
+		// Create Shaman
+		else if (iRandomEnemy == 3)
+		{
+			CreateEnemy(
+				{
+					&TextureLoader::LoadTexture("Unit/Enemy/Shaman.png"), // Set SHAMAN running sprite
+					{100.0f + (rand() % 600), 0}, // Set random starting position
+					{ENEMYTYPE::SHAMAN}, // Set enemy type - SHAMAN
+					{0.8f,0.8f}, // SHAMAN sprite size
+					{1.0f,1.0f}, // SHAMAN jump sprite size
+					{150.0f}, // SHAMAN run speed
+					{250.0f} // SHAMAN jump speed
+				});
+		}
 		// Create Kamakazi
 		else
 		{

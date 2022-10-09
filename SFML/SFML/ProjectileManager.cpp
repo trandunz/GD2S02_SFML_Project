@@ -105,11 +105,11 @@ void ProjectileManager::Update()
 								if (projectile->GetProjectileType() == PROJECTILETYPE::BASIC)
 								{
 									if (rand() % 2 == 0)
-										ApplyDebuff_Enemy(enemy, projectile->GetElement());
+										ApplyDebuff(enemy, projectile->GetElement());
 								}
 								else
 								{
-								ApplyDebuff_Enemy(enemy, projectile->GetElement());
+									ApplyDebuff(enemy, projectile->GetElement());
 								}		
 							}
 
@@ -131,7 +131,13 @@ void ProjectileManager::Update()
 					{
 						if (projectile->CheckCollision(*player->GetCollisionBox()))
 						{
-							player->TakeDamage( projectile->GetDamagedDealt() );
+							player->TakeDamage(projectile->GetDamagedDealt());
+
+							if (projectile->DoesApplyElementToTarget())
+							{
+								ApplyDebuff(player, projectile->GetElement());
+							}
+
 							if (projectile->IsDestroyedOnCollision())
 							{
 								projectile->bDestroy = true;
@@ -155,7 +161,7 @@ void ProjectileManager::draw(sf::RenderTarget& _target, sf::RenderStates _states
 	}
 }
 
-void ProjectileManager::ApplyDebuff_Enemy(Enemy* _target, ELEMENTTYPE _element)
+void ProjectileManager::ApplyDebuff(Enemy* _target, ELEMENTTYPE _element)
 {
 	switch (_element)
 	{
@@ -181,5 +187,29 @@ void ProjectileManager::ApplyDebuff_Enemy(Enemy* _target, ELEMENTTYPE _element)
 		}
 		default:
 			break;
+	}
+}
+
+void ProjectileManager::ApplyDebuff(Player* _target, ELEMENTTYPE _element)
+{
+	switch (_element)
+	{
+	case ELEMENTTYPE::NONE:
+	{
+		Print("WARN: Secondary projectile has no element");
+		break;
+	}
+	case ELEMENTTYPE::WATER:
+	{
+		_target->ApplySlow(DEBUFF_SLOWTIME, DEBUFF_SLOWAMOUNT);
+		break;
+	}
+	case ELEMENTTYPE::EARTH:
+	{
+		_target->ApplyStop(DEBUFF_FREEZETIME);
+		break;
+	}
+	default:
+		break;
 	}
 }

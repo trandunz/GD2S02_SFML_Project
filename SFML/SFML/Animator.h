@@ -132,6 +132,8 @@ public:
 	void SetPosition(const sf::Vector2f& _position);
 	void SetPosition(float _positionX, float _positionY);
 
+	void SetRotation(float _newRotation);
+
 	sf::Vector2f GetPosition() const;
 };
 

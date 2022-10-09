@@ -28,6 +28,8 @@ Player::Player(PlayerProperties _properties)
 	SetHPMax();
 	SetManaMax();
 
+	m_fMoveSpeed = _properties.fMoveSpeed;
+
 	// Set box collider
 	m_fColliderOffset = _properties.fBoxColliderOffsetY;
 	m_BoxCollider = new BoxCollider(_properties.v2fBoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + m_fColliderOffset));
@@ -133,11 +135,22 @@ void Player::Update()
 		}
 	}
 
+	// If player is hit from earth spell, then run function to slow enemy
+	if (m_bSlowed)
+	{
+		HandleSlow();
+	}
+	// If player is hit from freeze spell, then run function for freezing said enemy
+	if (m_bStopped)
+	{
+		HandleStop();
+	}
+
 	m_v2fVelocity = GetMoveInput();
 	m_v2fPreviousMove = m_Mesh.getPosition();
 	if (Magnitude(m_v2fVelocity) > 0)
 	{
-		m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
+		m_Mesh.move(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
 	}
 	RestrictToScreen();
 	UpdateGUI();
@@ -158,7 +171,6 @@ void Player::Update()
 		Invincibility();
 	}
 }
-	
 
 void Player::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
@@ -566,6 +578,74 @@ void Player::SetTextureByElement()
 			break;
 		}
 		}
+	}
+}
+
+void Player::ApplyStop(float _seconds, sf::Color _color)
+{
+
+	// Change sprite color
+	m_Mesh.setColor(_color);
+
+	m_bSpriteColorChanged = true;
+	m_bStopped = true;
+	m_fStopTime = _seconds;
+}
+
+void Player::HandleStop()
+{
+	// Stop enemy movement
+	m_fMoveSpeed = 0.0f;
+
+	m_fStopTime -= Statics::fDeltaTime;
+
+	if (m_fStopTime <= 0)
+	{
+		m_bStopped = false;
+		m_Mesh.setColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+		// Reset movement and jump speed
+		m_fMoveSpeed = m_Properties.fMoveSpeed;
+	}
+}
+
+void Player::ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color)
+{
+	// Slow enemy movement by percentage
+	m_fSlowMovementPercentage = _slowMovementPercentage;
+
+	m_SlowedSpriteColor = _color; // Set damage color
+	m_fSpriteChangeColorSpeed = 0.5f; // Set speed of color change
+	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+	m_bSpriteColorChanged = true;
+	m_bSlowed = true;
+	m_fSlowTime = _seconds;
+}
+
+void Player::HandleSlow()
+{
+	m_fMoveSpeed = m_Properties.fMoveSpeed * m_fSlowMovementPercentage;
+
+	// Change sprite color
+	m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
+	if (m_fSpriteChangeColorCounter <= 0)
+	{
+		m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+		m_bSpriteColorChanged = !m_bSpriteColorChanged;
+	}
+
+	if (m_bSpriteColorChanged)
+		m_Mesh.setColor(m_SlowedSpriteColor);
+	else
+		m_Mesh.setColor(sf::Color(255, 255, 255));
+
+	m_fSlowTime -= Statics::fDeltaTime; // Count down
+
+	if (m_fSlowTime <= 0)
+	{
+		m_bSlowed = false;
+		m_Mesh.setColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+		// Reset movement and jump speed
+		m_fMoveSpeed = m_Properties.fMoveSpeed;
 	}
 }
 

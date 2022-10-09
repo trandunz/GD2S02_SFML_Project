@@ -59,6 +59,7 @@ GameScene::GameScene()
 
 	// SFX
 	AudioManager::CreateAudioSource("Primary", "primary.wav");
+	AudioManager::CreateAudioSource("ShamanSpell", "secondary.wav");
 	AudioManager::CreateAudioSource("Secondary", "secondary.wav");
 	AudioManager::CreateAudioSource("Special", "special.wav");
 	AudioManager::CreateAudioSource("Bow", "bow.wav");

@@ -34,6 +34,12 @@ Projectile::Projectile(ProjectileProperties _properties)
 		case PROJECTILETYPE::BASIC:
 		{
 			colliderSize = { 24.0f, 48.0f };
+			
+			if (m_Properties.bFriendly == false)
+			{
+				m_AnimatedSprite.SetRotation(180.0f);
+			}
+			
 			break;
 		}
 		case PROJECTILETYPE::SECONDARY:
