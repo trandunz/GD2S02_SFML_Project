@@ -132,9 +132,10 @@ void Enemy::Update()
 	m_AnimatedSprite.Update(); // Update animated sprite
 
 	// If enemy is damaged from fire spell, then run function to damage over time
+	// or when the player is hit with primary attack it flashes
 	if (m_bDamaged)
 	{
-		HandleDamageOverTime();
+		HandleDamageFlashFeedback();
 	}
 	// If enemy is hit from freeze spell, then run function for freezing said enemy
 	if (m_bStopped)
@@ -548,7 +549,7 @@ void Enemy::Attack()
 	}
 }
 
-void Enemy::HandleDamageOverTime()
+void Enemy::HandleDamageFlashFeedback()
 {
 	// Change sprite color
 	m_fSpriteChangeColorCounter -= Statics::fDeltaTime; // Count down
