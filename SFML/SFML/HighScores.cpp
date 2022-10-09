@@ -5,16 +5,32 @@
 #include "Helper.h"
 #include "GUI.h"
 
-HighScores::HighScores(bool _readOnly)
+HighScores::HighScores()
 {
-	m_bReadOnly = _readOnly;
 	InitializeHighScores();
 	ReadScores();
 	DisplayScores();
+
+	if (Statics::fGameScore > 0.0f)
+	{
+		//m_bReadOnly = true;
+		unsigned currentScoreRank = CheckIfNewHighScore();
+		if ( currentScoreRank > 0)
+		{
+			StartInputModeOnRankEntry(currentScoreRank);
+			UpdateScores();
+			m_bReadOnly = true;
+		}
+	}
 }
 
 HighScores::~HighScores()
 {
+	if (!m_bReadOnly)
+	{
+
+	}
+
 	GUI::GetInstance().CleanupElements();
 }
 
@@ -44,12 +60,24 @@ void HighScores::Draw()
 	Statics::RenderWindow.draw(GUI::GetInstance());
 }
 
+int HighScores::CheckIfNewHighScore()
+{
+	for (unsigned rank = 1; rank <= MAX_SCORES_DISPLAY; rank++)
+	{
+		if (Statics::fGameScore > std::stoi(m_mapScoreList.find(rank)->second.sScore) )
+		{
+			return rank;
+		}
+	}
+	return -1;
+}
+
 void HighScores::InitializeHighScores()
 {
 	for (unsigned i = 1; i <= MAX_SCORES_DISPLAY; i++)
 	{
 		HighScoreEntry newEntry;
-		m_ScoreList.emplace(i, newEntry);
+		m_mapScoreList.emplace(i, newEntry);
 	}
 }
 
@@ -88,7 +116,7 @@ void HighScores::ReadScores()
 			name2 = GetDataString(currentLine, delimiter_First+1, delimiter_Second - delimiter_First - 1);
 			score = GetDataString(currentLine, delimiter_Second+1, std::string::npos);
 			//Store the values in the map
-			HighScoreEntry* currentEntry = &(m_ScoreList.find(currentIndex)->second);
+			HighScoreEntry* currentEntry = &(m_mapScoreList.find(currentIndex)->second);
 			currentEntry->sName1 = name1;
 			currentEntry->sName2 = name2;
 			currentEntry->sScore = score;
@@ -137,7 +165,7 @@ void HighScores::DisplayScores()
 	for (unsigned rank = 1; rank <= MAX_SCORES_DISPLAY; rank++)
 	{
 		//Load the score and name at current rank
-		HighScoreEntry currentRank = m_ScoreList.find(rank)->second;
+		HighScoreEntry currentRank = m_mapScoreList.find(rank)->second;
 
 		//Set up a unique name for each text object that makes up each that
 		//is to be displayed
@@ -157,5 +185,53 @@ void HighScores::DisplayScores()
 		newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, 85 + (rank * 40));
 		newTextProperties.String = currentRank.sScore;
 		GUI::GetInstance().CreateText(scoreKey, newTextProperties);
+	}
+}
+
+void HighScores::UpdateScores()
+{
+	for (unsigned rank = 1; rank <= MAX_SCORES_DISPLAY; rank++)
+	{
+		//Load the score and name at current rank
+		HighScoreEntry currentRank = m_mapScoreList.find(rank)->second;
+
+		//Set up a unique name for each text object that makes up each that
+		//is to be displayed
+		std::string textKey = "Rank" + std::to_string(rank);
+		std::string nameKey = "Name" + std::to_string(rank);
+		std::string scoreKey = "Score" + std::to_string(rank);
+
+		//Finally, update the text in each one
+		GUI::GetInstance().SetText(textKey, std::to_string(rank));
+
+		GUI::GetInstance().SetText(nameKey, currentRank.sName1 + "  &  " + currentRank.sName2);
+
+		GUI::GetInstance().SetText(scoreKey, currentRank.sScore);
+	}
+}
+
+void HighScores::StartInputModeOnRankEntry(unsigned _inRank)
+{
+	for (unsigned currentRankEdited = MAX_SCORES_DISPLAY-1; currentRankEdited >= _inRank; currentRankEdited-- )
+	{
+		MoveScoreDown(currentRankEdited);
+	}
+}
+
+void HighScores::MoveScoreDown(unsigned _inRankToMoveDown)
+{
+	if (_inRankToMoveDown < MAX_SCORES_DISPLAY)
+	{
+		HighScoreEntry* entryToMove = &(m_mapScoreList.find(_inRankToMoveDown)->second);
+		HighScoreEntry* destRank = &(m_mapScoreList.find(_inRankToMoveDown+1)->second);
+
+		destRank->sName1 = entryToMove->sName1;
+		destRank->sName2 = entryToMove->sName2;
+		destRank->sScore = entryToMove->sScore;
+	}
+	else
+	{
+		//sorry will
+		printf("Moving rank %i down removes it from the list", _inRankToMoveDown);
 	}
 }

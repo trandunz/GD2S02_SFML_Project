@@ -90,46 +90,46 @@ void Player::HandleEvents()
 
 void Player::Update()
 {
-	if (m_AttackTimer > 0)
+	if (m_fAttackTimer > 0)
 	{
-		m_AttackTimer -= Statics::fDeltaTime;
+		m_fAttackTimer -= Statics::fDeltaTime;
 	}
 
-	if (m_SpecialTimer > 0)
+	if (m_fSpecialTimer > 0)
 	{
-		m_SpecialTimer -= Statics::fDeltaTime;
+		m_fSpecialTimer -= Statics::fDeltaTime;
 	}
 
-	if (m_SecondaryTimer > 0)
+	if (m_fSecondaryTimer > 0)
 	{
-		m_SecondaryTimer -= Statics::fDeltaTime;
+		m_fSecondaryTimer -= Statics::fDeltaTime;
 	}
 
 	if (sf::Keyboard::isKeyPressed(m_SpecialAttackKey))
 	{
-		if (m_SpecialTimer <= 0)
+		if (m_fSpecialTimer <= 0)
 		{
-			m_SpecialTimer = m_SpecialDuration;
-			//m_AttackTimer = m_AttackSpeed;
+			m_fSpecialTimer = m_fSpecialDuration;
+			//m_fAttackTimer = m_fAttackSpeed;
 			Special();
 			AudioManager::PlayAudioSource("Special");
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
 	{
-		if (/*m_AttackTimer <= 0 && */m_SecondaryTimer <= 0)
+		if (/*m_fAttackTimer <= 0 && */m_fSecondaryTimer <= 0)
 		{
-			//m_AttackTimer = m_AttackSpeed;
-			m_SecondaryTimer = m_SecondaryCooldown;
+			//m_fAttackTimer = m_fAttackSpeed;
+			m_fSecondaryTimer = m_fSecondaryCooldown;
 			SecondaryAttack();
 			AudioManager::PlayAudioSource("Secondary");
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(m_BasicAttackKey))
 	{ 
-		if (m_AttackTimer <= 0)
+		if (m_fAttackTimer <= 0)
 		{
-			m_AttackTimer = m_AttackSpeed;
+			m_fAttackTimer = m_fAttackSpeed;
 			BasicAttack();
 			AudioManager::PlayAudioSource("Primary");
 		}
@@ -364,7 +364,7 @@ void Player::SetP2SpecialVFXPosition(sf::Vector2f _position)
 
 void Player::BasicAttack()
 {
-	if (m_SpecialTimer <= 0)
+	if (m_fSpecialTimer <= 0)
 	{
 		m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
 		ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
@@ -395,19 +395,19 @@ void Player::Special()
 		// Spawn Special Effect
 		if (m_Properties.bPlayerOne)
 		{
-			VFX::GetInstance().PlayEffect("P1_P1Special", m_SpecialDuration);
-			VFX::GetInstance().PlayEffect("P1_P2Special", m_SpecialDuration);
-			if (VFX::GetInstance().GetEffectLifetime("P2_P1Special") >= m_SpecialDuration - m_CombineSpecialDelay)
+			VFX::GetInstance().PlayEffect("P1_P1Special", m_fSpecialDuration);
+			VFX::GetInstance().PlayEffect("P1_P2Special", m_fSpecialDuration);
+			if (VFX::GetInstance().GetEffectLifetime("P2_P1Special") >= m_fSpecialDuration - m_fCombineSpecialDelay)
 			{
 				PlayerManager::GetInstance().WhipeScreenFromSpecial();
 			}
 		}
 		else
 		{
-			VFX::GetInstance().PlayEffect("P2_P1Special", m_SpecialDuration);
-			VFX::GetInstance().PlayEffect("P2_P2Special", m_SpecialDuration);
+			VFX::GetInstance().PlayEffect("P2_P1Special", m_fSpecialDuration);
+			VFX::GetInstance().PlayEffect("P2_P2Special", m_fSpecialDuration);
 
-			if (VFX::GetInstance().GetEffectLifetime("P1_P1Special") >= m_SpecialDuration - m_CombineSpecialDelay)
+			if (VFX::GetInstance().GetEffectLifetime("P1_P1Special") >= m_fSpecialDuration - m_fCombineSpecialDelay)
 			{
 				PlayerManager::GetInstance().WhipeScreenFromSpecial();
 			}
