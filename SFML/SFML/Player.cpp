@@ -28,9 +28,11 @@ Player::Player(PlayerProperties _properties)
 	SetHPMax();
 	SetManaMax();
 
+	m_fMoveSpeed = _properties.fMoveSpeed;
+
 	// Set box collider
-	fColliderOffset = _properties.fBoxColliderOffsetY;
-	m_BoxCollider = new BoxCollider(_properties.v2fBoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset));
+	m_fColliderOffset = _properties.fBoxColliderOffsetY;
+	m_BoxCollider = new BoxCollider(_properties.v2fBoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + m_fColliderOffset));
 
 	//Set up properties that are the same for both players
 	m_BasicAttackProperties.uDamage = 1;
@@ -133,20 +135,42 @@ void Player::Update()
 		}
 	}
 
+	// If player is hit from earth spell, then run function to slow enemy
+	if (m_bSlowed)
+	{
+		HandleSlow();
+	}
+	// If player is hit from freeze spell, then run function for freezing said enemy
+	if (m_bStopped)
+	{
+		HandleStop();
+	}
+
 	m_v2fVelocity = GetMoveInput();
-	m_PreviousMove = m_Mesh.getPosition();
+	m_v2fPreviousMove = m_Mesh.getPosition();
 	if (Magnitude(m_v2fVelocity) > 0)
 	{
-		m_Mesh.move(m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
+		m_Mesh.move(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
 	}
 	RestrictToScreen();
 	UpdateGUI();
 
+	// Check and run player respawning
+	if (m_bRespawn == true)
+	{
+		Respawn();
+	}
+
 	// Update position of collider
 	if (m_BoxCollider)
-		m_BoxCollider->SetPosition({ m_Mesh.getPosition().x, m_Mesh.getPosition().y + fColliderOffset });
+		m_BoxCollider->SetPosition({ m_Mesh.getPosition().x, m_Mesh.getPosition().y + m_fColliderOffset });
+
+	// Check and run player invincibility
+	if (m_bInvincible == true)
+	{
+		Invincibility();
+	}
 }
-	
 
 void Player::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
@@ -161,14 +185,17 @@ sf::Vector2f Player::GetMoveInput()
 {
 	sf::Vector2f input{};
 
-	if (sf::Keyboard::isKeyPressed(m_MoveUpKey))
-		input.y -= 1;
-	if (sf::Keyboard::isKeyPressed(m_MoveDownKey))
-		input.y += 1;
-	if (sf::Keyboard::isKeyPressed(m_MoveRightKey))
-		input.x += 1;
-	if (sf::Keyboard::isKeyPressed(m_MoveLeftKey))
-		input.x -= 1;
+	if (m_bRestrictYPosition == true)
+	{
+		if (sf::Keyboard::isKeyPressed(m_MoveUpKey))
+			input.y -= 1;
+		if (sf::Keyboard::isKeyPressed(m_MoveDownKey))
+			input.y += 1;
+		if (sf::Keyboard::isKeyPressed(m_MoveRightKey))
+			input.x += 1;
+		if (sf::Keyboard::isKeyPressed(m_MoveLeftKey))
+			input.x -= 1;
+	}
 
 	return Normalize(input);
 }
@@ -447,7 +474,12 @@ sf::Sprite Player::GetSprite() const
 
 sf::Vector2f Player::GetPreviousMove() const
 {
-	return m_PreviousMove;
+	return m_v2fPreviousMove;
+}
+
+void Player::SetRestrictYPosition(bool _restrictYPosition)
+{
+	m_bRestrictYPosition = _restrictYPosition;
 }
 
 void Player::TakeDamage(unsigned _amount)
@@ -547,7 +579,74 @@ void Player::SetTextureByElement()
 		}
 		}
 	}
+}
 
+void Player::ApplyStop(float _seconds, sf::Color _color)
+{
+
+	// Change sprite color
+	m_Mesh.setColor(_color);
+
+	m_bSpriteColorChanged = true;
+	m_bStopped = true;
+	m_fStopTime = _seconds;
+}
+
+void Player::HandleStop()
+{
+	// Stop enemy movement
+	m_fMoveSpeed = 0.0f;
+
+	m_fStopTime -= Statics::fDeltaTime;
+
+	if (m_fStopTime <= 0)
+	{
+		m_bStopped = false;
+		m_Mesh.setColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+		// Reset movement and jump speed
+		m_fMoveSpeed = m_Properties.fMoveSpeed;
+	}
+}
+
+void Player::ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color)
+{
+	// Slow enemy movement by percentage
+	m_fSlowMovementPercentage = _slowMovementPercentage;
+
+	m_SlowedSpriteColor = _color; // Set damage color
+	m_fSpriteChangeColorSpeed = 0.5f; // Set speed of color change
+	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+	m_bSpriteColorChanged = true;
+	m_bSlowed = true;
+	m_fSlowTime = _seconds;
+}
+
+void Player::HandleSlow()
+{
+	m_fMoveSpeed = m_Properties.fMoveSpeed * m_fSlowMovementPercentage;
+
+	// Change sprite color
+	m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
+	if (m_fSpriteChangeColorCounter <= 0)
+	{
+		m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+		m_bSpriteColorChanged = !m_bSpriteColorChanged;
+	}
+
+	if (m_bSpriteColorChanged)
+		m_Mesh.setColor(m_SlowedSpriteColor);
+	else
+		m_Mesh.setColor(sf::Color(255, 255, 255));
+
+	m_fSlowTime -= Statics::fDeltaTime; // Count down
+
+	if (m_fSlowTime <= 0)
+	{
+		m_bSlowed = false;
+		m_Mesh.setColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+		// Reset movement and jump speed
+		m_fMoveSpeed = m_Properties.fMoveSpeed;
+	}
 }
 
 int Player::GetCurrentHealth() const
@@ -563,7 +662,7 @@ sf::Vector2f Player::GetFuturePosition(sf::Vector2f _velocity) const
 void Player::RestrictToScreen()
 {
 	// Restricting player position at bottom of window
-	// Unless bool is flipped - Obstacle collisions
+	// Unless bool is flipped from Obstacle collisions
 	if (m_bRestrictYPosition)
 	{
 		if (m_Mesh.getPosition().y + m_Mesh.getGlobalBounds().height / 2 >= Statics::RenderWindow.getSize().y)
@@ -571,6 +670,15 @@ void Player::RestrictToScreen()
 			m_Mesh.setPosition(m_Mesh.getPosition().x, Statics::RenderWindow.getSize().y - m_Mesh.getGlobalBounds().height / 2);
 		}
 	}
+	// Otherwise stop player being able to move character, then set then respawn them.
+	else 
+	{
+		if (m_BoxCollider->GetCollider().getPosition().y >= Statics::RenderWindow.getSize().y + m_BoxCollider->GetCollider().getSize().y)
+		{
+			m_bRespawn = true; // Set player to respawn
+		}
+	}
+
 	// Restricting player position at top of window
 	if (m_Mesh.getPosition().y - m_Mesh.getGlobalBounds().height / 2 <= 0)
 	{
@@ -585,6 +693,40 @@ void Player::RestrictToScreen()
 	if (m_Mesh.getPosition().x - m_Mesh.getGlobalBounds().width / 2 <= 0)
 	{
 		m_Mesh.setPosition(m_Mesh.getGlobalBounds().width / 2, m_Mesh.getPosition().y);
+	}
+}
+
+void Player::Respawn()
+{
+	m_Mesh.setPosition(m_Properties.v2fStartPos);
+	m_bRestrictYPosition = true;
+	m_bRespawn = false; // Reset respawn bool
+	m_bInvincible = true; // Set invinsibility
+}
+
+void Player::Invincibility()
+{
+	m_fInvincibleTimer -= Statics::fDeltaTime; // Increase timer
+
+	// Change sprite color
+	m_fSpriteChangeColorCounter -= Statics::fDeltaTime; // Count down
+	if (m_fSpriteChangeColorCounter <= 0)
+	{
+		m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
+		m_bSpriteColorChanged = !m_bSpriteColorChanged;
+	}
+	if (m_bSpriteColorChanged)
+		m_Mesh.setColor(m_InvincibleColor);
+	else
+		m_Mesh.setColor(sf::Color(255, 255, 255));
+
+	// Turn off invincibility when timer ends
+	if (m_fInvincibleTimer <= 0)
+	{
+		m_fInvincibleTimer = m_fInvincibleMaxTimer;
+		m_bInvincible = false;
+		m_bRestrictYPosition = true;
+		m_Mesh.setColor(sf::Color(255, 255, 255));
 	}
 }
 

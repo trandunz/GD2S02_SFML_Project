@@ -169,6 +169,7 @@ private:
 	// Used for setting Y position archer will move down to, before 
 	// moving left and right
 	float m_fArcherYPos{};
+	float m_fShamanYPos{};
 	bool m_bFirstMoveComplete{ false };
 	
 	BoxCollider* m_BoxCollider{nullptr}; // Enemy box collider

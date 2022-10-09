@@ -191,6 +191,11 @@ void Animator::SetPosition(float _positionX, float _positionY)
 	m_Mesh.setPosition(_positionX, _positionY);
 }
 
+void Animator::SetRotation(float _newRotation)
+{
+	m_Mesh.setRotation(_newRotation);
+}
+
 sf::Vector2f Animator::GetPosition() const
 {
 	return m_Mesh.getPosition();

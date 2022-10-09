@@ -38,35 +38,50 @@ Enemy::Enemy(EnemyProperties _properties)
 		// Set related indivudual animation properties based on type
 		case ENEMYTYPE::KAMIKAZE: 
 		{
+			// Set box collider
+			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.1f;
+			animProperties.uNumberOfFrames = 4;
 			break;
 		}
 		case ENEMYTYPE::ARCHER:
 		{
+			// Set box collider
+			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.1f;
+			animProperties.uNumberOfFrames = 4;
 
 			m_fArcherYPos = (rand() % 261) + 70.0f;
 			break;
 		}
 		case ENEMYTYPE::WARRIOR:
 		{
+			// Set box collider
+			m_BoxCollider = new BoxCollider(sf::Vector2f(38, 48), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.05f;
+			animProperties.uNumberOfFrames = 4;
+			break;
+		}
+		case ENEMYTYPE::SHAMAN:
+		{
+			// Set box collider
+			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
+			animProperties.fFrameInterval = 0.04f;
+			animProperties.uNumberOfFrames = 3;
+
+			m_fShamanYPos = (rand() % 261) + 70.0f;
 			break;
 		}
 		default:
 			break;
 	}
 	// Set shared animation properties
-	animProperties.uNumberOfFrames = 4;
 	animProperties.bLoops = true;
 	animProperties.v2fScale = _properties.v2fMoveScale;
 	m_AnimatedSprite.AddState("Moving", animProperties);
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.GetSprite().setPosition(_properties.v2fStartPos);
 	m_AnimatedSprite.StartState("Moving");
-	
-	// Set box collider
-	m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 }
 
 Enemy::~Enemy()
@@ -111,8 +126,8 @@ void Enemy::Update()
 {
 	Movement(); // Update enemy movement
 
-	if (m_Properties.EnemyType == ENEMYTYPE::ARCHER)
-		Attack();
+	Attack();
+		
 
 	m_AnimatedSprite.Update(); // Update animated sprite
 
@@ -391,6 +406,54 @@ void Enemy::Movement()
 			m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime); // Move goblin
 			break;
 		}
+		case ENEMYTYPE::SHAMAN:
+		{
+			// Move enemy object down to therandom Y position determined in the constructor
+			if (m_AnimatedSprite.GetPosition().y <= m_fShamanYPos)
+			{
+				m_v2fVelocity = { 0,1 };
+			}
+			// If enemy object reaches its Y value, then start moving left or right
+			else if (m_bFirstMoveComplete == false)
+			{
+				m_v2fVelocity = { 1,0 }; // Move right
+			}
+
+			// If enemy object moves to the right side of the screen, then switch its velocity to move left
+			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			{
+				m_v2fVelocity = { -1,0 };
+				m_bFirstMoveComplete = true;
+			}
+
+			// If enemy object moves to the left side of the screen, then switch its velocity to move right
+			if (m_AnimatedSprite.GetPosition().x <= 0 + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			{
+				m_v2fVelocity = { 1,0 };
+			}
+
+			// Checking collisions with obstacles
+			m_BoxCollider->bColliding = false;
+			for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
+			{
+				if (m_BoxCollider->CheckCollision(*obstacle->GetCollisionBox()))
+					m_BoxCollider->bColliding = true;
+			}
+
+			if (m_BoxCollider->bColliding)
+			{
+				// If colliding with obstacle, then make goblin 'jump'
+				m_AnimatedSprite.SetScale(m_Properties.v2fJumpScale); // Increase sprite scale
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fJumpSpeed * Statics::fDeltaTime); // Move goblin at increased speed
+			}
+			else
+			{
+				// Normal movement
+				m_AnimatedSprite.SetScale(m_Properties.v2fMoveScale); // Reset sprite size if not colliding
+				m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime); // Move goblin
+			}
+			break;
+		}
 		default:
 			m_v2fVelocity = { 0,1 }; 
 			break;
@@ -415,24 +478,73 @@ void Enemy::Attack()
 			fAttackSpeed = m_fAttackSpeed + 0.1f;
 
 		m_fAttackTimer = fAttackSpeed; // Reset timer
-		// Create projectile
-		ProjectileManager::GetInstance().CreateProjectile(
-			{
-				&TextureLoader::LoadTexture("Projectiles/Goblin_Archer_Arrow.png"),
-				{GetPosition().x + 16.0f,GetPosition().y + 8.0f},
-				{2.0f,2.0f},
-				false,
-				{1},
-				500.0f,
-				1,
-				ELEMENTTYPE::NONE,
-				true,
-				false,
-				PROJECTILETYPE::ARROW
-			}
-		);
 
-		AudioManager::PlayAudioSource("Bow");
+		if (m_Properties.EnemyType == ENEMYTYPE::ARCHER)
+		{
+			// Create projectile
+			ProjectileManager::GetInstance().CreateProjectile(
+				{
+					&TextureLoader::LoadTexture("Projectiles/Goblin_Archer_Arrow.png"),
+					{GetPosition().x + 16.0f,GetPosition().y + 8.0f},
+					{2.0f,2.0f},
+					false,
+					{1},
+					500.0f,
+					1,
+					ELEMENTTYPE::NONE,
+					true,
+					false,
+					PROJECTILETYPE::ARROW
+				}
+			);
+
+			AudioManager::PlayAudioSource("Bow");
+		}
+		else if (m_Properties.EnemyType == ENEMYTYPE::SHAMAN)
+		{
+			int randomInt = rand() % 4;
+
+			if (randomInt < 2)
+			{
+				// Create projectile
+				ProjectileManager::GetInstance().CreateProjectile(
+					{
+						&TextureLoader::LoadTexture("Projectiles/Water_Spell_Animated.png"),
+						{GetPosition().x + 16.0f,GetPosition().y + 8.0f},
+						{1.5f,1.5f},
+						false,
+						{0},
+						500.0f,
+						3,
+						ELEMENTTYPE::WATER,
+						true,
+						true,
+						PROJECTILETYPE::BASIC
+					}
+				);
+			}
+			else
+			{
+				// Create projectile
+				ProjectileManager::GetInstance().CreateProjectile(
+					{
+						&TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png"),
+						{GetPosition().x + 16.0f,GetPosition().y + 8.0f},
+						{1.5f,1.5f},
+						false,
+						{0},
+						500.0f,
+						3,
+						ELEMENTTYPE::EARTH,
+						true,
+						true,
+						PROJECTILETYPE::BASIC
+					}
+				);
+			}
+
+			AudioManager::PlayAudioSource("ShamanSpell");
+		}
 	}
 }
 

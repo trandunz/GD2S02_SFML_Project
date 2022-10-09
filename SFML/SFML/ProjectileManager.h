@@ -16,6 +16,7 @@ constexpr float DEBUFF_SLOWAMOUNT	{ 0.5f };
 constexpr float DEBUFF_BURNTIME		{ 2.0f };
 constexpr unsigned DEBUFF_BURNAMOUNT{ 1 };
 
+class Player;
 class Projectile;
 class Enemy;
 class ProjectileManager : public sf::Drawable
@@ -38,7 +39,8 @@ private:
 	inline ProjectileManager(const ProjectileManager&) {};
 	inline ~ProjectileManager() {}
 
-	void ApplyDebuff_Enemy(Enemy* _target, ELEMENTTYPE _element);
+	void ApplyDebuff(Enemy* _target, ELEMENTTYPE _element);
+	void ApplyDebuff(Player* _target, ELEMENTTYPE _element);
 
 	std::vector<Projectile*> m_Projectiles{};
 

@@ -14,6 +14,7 @@
 #include "TextureLoader.h"
 #include "Helper.h"
 #include "AudioManager.h"
+#include "BoxCollider.h"
 
 EnemyManager& EnemyManager::GetInstance()
 {
@@ -56,7 +57,7 @@ void EnemyManager::Update()
 
 	for(auto& enemy : m_Enemies)
 	{
-		// bDestroy enemy if its health is equal or less than 0
+		// Destroy enemy if its health is equal or less than 0
 		if (enemy->GetCurrentHealth() <= 0)
 		{
 			Statics::fGameScore += 20.0f; // Increase game score
@@ -75,29 +76,50 @@ void EnemyManager::Update()
 			{
 				if (player)
 				{
-					if (enemy->CheckCollision(*player->GetCollisionBox()))
+					if (player->m_bInvincible == false)
 					{
-						switch (enemy->GetType())
+						if (enemy->CheckCollision(*player->GetCollisionBox()))
 						{
+							switch (enemy->GetType())
+							{
 							// If player collides with kamikazi, then kamikazi explodes, killing both
 							case ENEMYTYPE::KAMIKAZE:
 							{
 								player->TakeDamage(1);
 								enemy->bDestroy = true;
 								AudioManager::PlayAudioSource("EnemyDeath");
+
+								// Give player invincibility after enemy collision
+								player->m_bInvincible = true;
 								break;
 							}
 							// If player collides with warrior, then player dies, but warrior keeps going
 							case ENEMYTYPE::WARRIOR:
 							{
-								player->TakeDamage(1);
+								if (player->GetCollisionBox()->GetCollider().getPosition().y - player->GetCollisionBox()->GetCollider().getSize().y / 2
+									>= enemy->GetCollisionBox()->GetCollider().getPosition().y - 1)
+								{
+									player->SetPosition({ player->GetPosition().x,
+										enemy->GetCollisionBox()->GetCollider().getPosition().y + (enemy->GetCollisionBox()->GetCollider().getSize().y / 2) +
+										(Statics::fBackgroundScrollSpeed * Statics::fDeltaTime) + 2 });
+
+									player->SetRestrictYPosition(false);
+								}
+								else
+								{
+									// Give player invincibility after enemy collision
+									player->m_bInvincible = true;
+								}
 								break;
 							}
 							default:
 								break;
-						}
+							}
 
-						break;
+							
+
+							break;
+						}
 					}
 				}
 			}
@@ -164,6 +186,20 @@ void EnemyManager::SpawnEnemies(float _rate)
 					{300.0f}, // Faster run speed
 					{0.0f}, // Warrior does not jump
 					{10} // High health
+				});
+		}
+		// Create Shaman
+		else if (iRandomEnemy == 3)
+		{
+			CreateEnemy(
+				{
+					&TextureLoader::LoadTexture("Unit/Enemy/Shaman.png"), // Set SHAMAN running sprite
+					{100.0f + (rand() % 600), 0}, // Set random starting position
+					{ENEMYTYPE::SHAMAN}, // Set enemy type - SHAMAN
+					{0.8f,0.8f}, // SHAMAN sprite size
+					{1.0f,1.0f}, // SHAMAN jump sprite size
+					{150.0f}, // SHAMAN run speed
+					{250.0f} // SHAMAN jump speed
 				});
 		}
 		// Create Kamakazi

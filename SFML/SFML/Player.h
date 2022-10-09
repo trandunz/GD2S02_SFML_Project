@@ -57,11 +57,49 @@ public:
 
 	void SetTextureByElement();
 
+	/// <summary>
+	/// Sets the enemy to stop moving/shooting
+	/// Flips a bool that runs the private function HandleStop()
+	/// that is run through the update per tick.
+	/// Parameters sets the amount of time to stop moving,
+	/// and the color the sprite will change to. 
+	/// Can be used for freezing or stunning enemies
+	/// </summary>
+	/// <param name="_seconds"></param>
+	/// <param name="_color"></param>
+	void ApplyStop(float _seconds, sf::Color _color = { 0, 162, 232 });
+
+	/// <summary>
+	/// Sets the enemy to slow movement/shooting
+	/// Flips a bool that runs the private function HandleSlow
+	/// that is run through the update per tick.
+	/// Parameters sets the amount of time to slow movement,
+	/// and the color the sprite will change to. 
+	/// </summary>
+	/// <param name="_seconds"></param>
+	/// <param name="_slowMovementPercentage"></param>
+	/// <param name="_color"></param>
+	void ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color = { 181, 230, 29 });
+
 	bool bDestroy{ false };
+
+	bool m_bInvincible{ false };
 	
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 	
+	/// <summary>
+	/// Handles the stopping of the enemy for the specified amount of time
+	/// from the ApplyFreeze function (example freeze or stun)
+	/// </summary>
+	void HandleStop();
+
+	/// <summary>
+	/// Handles the slowing of the enemy for the specified amount of time
+	/// from the ApplySlow function
+	/// </summary>
+	void HandleSlow();
+
 	/// <summary>
 	/// Returns a 2d vector corresponding too movement input
 	/// </summary>
@@ -152,11 +190,15 @@ private:
 	sf::Vector2f GetFuturePosition(sf::Vector2f _velocity) const;
 	void RestrictToScreen();
 
+	void Respawn();
+
+	void Invincibility();
+
 	ProjectileProperties m_BasicAttackProperties{};
 	ProjectileProperties m_EmpoweredBasicAttackProperties{};
 	ProjectileProperties m_SecondaryAttackProperties{};
 	PlayerProperties m_Properties{};
-	ELEMENTTYPE m_eElement = ELEMENTTYPE::NONE;
+	ELEMENTTYPE m_eElement{ ELEMENTTYPE::NONE };
 	float m_AttackSpeed{ 0.2f };
 	float m_SpecialDuration{ 10.0f };
 	float m_CombineSpecialDelay{ 0.5f };
@@ -166,14 +208,33 @@ private:
 	float m_SecondaryCooldown{ 5.0f };
 	bool m_bCollided{ false };
 	sf::Sprite m_Mesh{};
-	sf::Vector2f m_PreviousMove{};
+	sf::Vector2f m_v2fPreviousMove{};
 	sf::Vector2f m_v2fVelocity{};
 	int m_iCurrentHealth{};
 	int m_iCurrentMana{};
 	bool m_bRestrictYPosition{ true };
+	bool m_bRespawn{ false };
+	float m_fMoveSpeed{};
+	float m_fSlowMovementPercentage{ 0.0f };
+
+	// Invincibility variables
+	float m_fInvincibleMaxTimer{ 3.0f };
+	float m_fInvincibleTimer{ m_fInvincibleMaxTimer };
+	sf::Color m_InvincibleColor{ sf::Color(255, 255, 255, 50) };
+	bool m_bSpriteColorChanged{ false };
+	float m_fSpriteChangeColorSpeed{ 0.1f }; // Color changing speed
+	float m_fSpriteChangeColorCounter{ m_fSpriteChangeColorSpeed }; // Color changing timer
 
 	BoxCollider* m_BoxCollider{nullptr}; // Player  box collider
-	float fColliderOffset{}; // Y Offset position for box collider
+	float m_fColliderOffset{}; // Y Offset position for box collider
+
+		// -Enemy being frozen variables (unable to move)-
+	bool m_bStopped{ false };
+	float m_fStopTime{};
+	// -Enemy being slowed variables-
+	bool m_bSlowed{ false };
+	float m_fSlowTime{};
+	sf::Color m_SlowedSpriteColor;
 
 	sf::Keyboard::Key m_MoveUpKey {sf::Keyboard::Key::W };
 	sf::Keyboard::Key m_MoveDownKey { sf::Keyboard::Key::S};
@@ -198,5 +259,6 @@ public:
 	sf::Sprite GetSprite() const;
 
 	sf::Vector2f GetPreviousMove() const; 
-};
 
+	void SetRestrictYPosition(bool _restrictYPosition);
+};
