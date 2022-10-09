@@ -38,11 +38,15 @@ Enemy::Enemy(EnemyProperties _properties)
 		// Set related indivudual animation properties based on type
 		case ENEMYTYPE::KAMIKAZE: 
 		{
+			// Set box collider
+			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.1f;
 			break;
 		}
 		case ENEMYTYPE::ARCHER:
 		{
+			// Set box collider
+			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.1f;
 
 			m_fArcherYPos = (rand() % 261) + 70.0f;
@@ -50,6 +54,8 @@ Enemy::Enemy(EnemyProperties _properties)
 		}
 		case ENEMYTYPE::WARRIOR:
 		{
+			// Set box collider
+			m_BoxCollider = new BoxCollider(sf::Vector2f(38, 48), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.05f;
 			break;
 		}
@@ -65,8 +71,7 @@ Enemy::Enemy(EnemyProperties _properties)
 	m_AnimatedSprite.GetSprite().setPosition(_properties.v2fStartPos);
 	m_AnimatedSprite.StartState("Moving");
 	
-	// Set box collider
-	m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
+	
 }
 
 Enemy::~Enemy()
