@@ -190,8 +190,18 @@ private:
 	sf::Vector2f GetFuturePosition(sf::Vector2f _velocity) const;
 	void RestrictToScreen();
 
+	/// <summary>
+	/// Sets a player to respawn at starting position
+	/// and then runs Invincibility function
+	/// </summary>
 	void Respawn();
 
+	/// <summary>
+	/// Sets player to be invincible for a specific amount
+	/// of time, which also turns off the box collider
+	/// Stops players from receiving damage again after
+	/// respawning
+	/// </summary>
 	void Invincibility();
 
 	/// <summary>

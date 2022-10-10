@@ -503,10 +503,6 @@ void Player::TakeDamage(unsigned _amount)
 {
 	m_iCurrentHealth -= _amount;
 	AudioManager::PlayAudioSource("Hit");
-	if (m_iCurrentHealth <= 0)
-	{
-		bDestroy = true;
-	}
 
 	if (_amount > 0.0f)
 	{
@@ -515,6 +511,15 @@ void Player::TakeDamage(unsigned _amount)
 		m_bIsFlashing = true;
 		m_fFlashTime = m_fMaxFlashTime;
 		m_fFlashSpeed = m_fMaxFlashSpeed;
+	}
+
+	if (m_iCurrentHealth <= 0)
+	{
+		m_bFlashHearts = false;
+		m_bIsFlashing = false;
+		SetHeartColor("P1", sf::Color::White);
+		SetHeartColor("P2", sf::Color::White);
+		bDestroy = true;
 	}
 }
 
