@@ -179,7 +179,8 @@ void GameScene::ScrollBackground()
 		if (background.getPosition().y - Statics::RenderWindow.getView().getCenter().y
 			>= background.getGlobalBounds().height)
 		{
-			background.move({ 0,- 2 *background.getGlobalBounds().height });
+			std::cout << -2 * background.getGlobalBounds().height << "\n" << std::endl;
+			background.move({ 0, -2 * background.getGlobalBounds().height + 1 });
 		}
 	}
 }

@@ -197,7 +197,7 @@ sf::Vector2f Player::GetMoveInput()
 {
 	sf::Vector2f input{};
 
-	if (m_bRestrictYPosition == true)
+	if (m_bStopInput == false)
 	{
 		if (sf::Keyboard::isKeyPressed(m_MoveUpKey))
 			input.y -= 1;
@@ -494,6 +494,11 @@ void Player::SetRestrictYPosition(bool _restrictYPosition)
 	m_bRestrictYPosition = _restrictYPosition;
 }
 
+void Player::SetStopInput(bool _stopInput)
+{
+	m_bStopInput = _stopInput;
+}
+
 void Player::TakeDamage(unsigned _amount)
 {
 	m_iCurrentHealth -= _amount;
@@ -719,8 +724,10 @@ void Player::RestrictToScreen()
 
 void Player::Respawn()
 {
-	m_Mesh.setPosition(m_Properties.v2fStartPos);
-	m_bRestrictYPosition = true;
+	m_Mesh.setPosition(m_Properties.v2fStartPos); // Reset player position to start position
+	TakeDamage(1); // Take damage
+	m_bRestrictYPosition = true; // Reset bool so player is locked to inside of window
+	m_bStopInput = false; // Reset bool so player can move character again
 	m_bRespawn = false; // Reset respawn bool
 	m_bInvincible = true; // Set invinsibility
 }

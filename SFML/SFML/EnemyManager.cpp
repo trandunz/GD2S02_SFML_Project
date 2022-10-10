@@ -104,11 +104,11 @@ void EnemyManager::Update()
 										(Statics::fBackgroundScrollSpeed * Statics::fDeltaTime) + 2 });
 
 									player->SetRestrictYPosition(false);
+									player->SetStopInput(true);
 								}
 								else
 								{
-									// Give player invincibility after enemy collision
-									player->m_bInvincible = true;
+									
 								}
 								break;
 							}

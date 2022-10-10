@@ -227,6 +227,7 @@ private:
 	int m_iCurrentHealth{};
 	int m_iCurrentMana{};
 	bool m_bRestrictYPosition{ true };
+	bool m_bStopInput{ false };
 	bool m_bRespawn{ false };
 	float m_fMoveSpeed{};
 	float m_fSlowMovementPercentage{ 0.0f };
@@ -283,4 +284,6 @@ public:
 	sf::Vector2f GetPreviousMove() const; 
 
 	void SetRestrictYPosition(bool _restrictYPosition);
+
+	void SetStopInput(bool _stopInput);
 };
