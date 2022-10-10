@@ -48,7 +48,9 @@ GameScene::GameScene()
 
 	GUI::GetInstance().CreateText("Score",
 		{
-			{Statics::RenderWindow.getView().getCenter().x,20}
+			{Statics::RenderWindow.getView().getCenter().x,20}, // Position
+			"", // Text / string
+			{255, 215, 0} // Colour (Gold)
 		}
 		);
 

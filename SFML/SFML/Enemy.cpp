@@ -86,6 +86,16 @@ Enemy::Enemy(EnemyProperties _properties)
 
 Enemy::~Enemy()
 {
+	VFX::GetInstance().CreateAndPlayTextEffect(
+		{
+			GetPosition(), // position
+			"+" + FloatToString(GetPoints(),0), // text / string
+			{255, 215, 0}, // Fill colour (gold)
+			36, // font size
+			sf::Color::Black, // Outline colour
+			{0, Statics::fBackgroundScrollSpeed } // Velocity
+		}, 0.5f); // Liftime
+
 	switch (m_Properties.EnemyType)
 	{
 		// Set VFX for enemy death based on type

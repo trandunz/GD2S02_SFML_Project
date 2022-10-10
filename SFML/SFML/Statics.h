@@ -144,6 +144,16 @@ struct SpecialEffectProperties
 	sf::Vector2f v2fVelocity{};
 };
 
+struct TextEffectProperties
+{
+	sf::Vector2f v2fStartPos{};
+	std::string String{};
+	sf::Color Color{ sf::Color::Black };
+	int iCharacterSize{ 36 };
+	sf::Color OutlineColor{ sf::Color::Black };
+	sf::Vector2f v2fVelocity{};
+};
+
 struct AnimStateProperties
 {
 	sf::Texture* StateTexture{ nullptr };

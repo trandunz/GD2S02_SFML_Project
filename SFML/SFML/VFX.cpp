@@ -19,6 +19,7 @@ VFX& VFX::GetInstance()
 void VFX::CleanupElements()
 {
 	CleanupMap(m_Effects);
+	CleanupMap(m_TextEffects);
 }
 
 void VFX::Update()
@@ -29,6 +30,20 @@ void VFX::Update()
 		{
 			effect.second.Animator.Update();
 			effect.second.Animator.MoveSprite(effect.second.Properties.v2fVelocity * Statics::fDeltaTime);
+			effect.second.LifeTime -= Statics::fDeltaTime;
+		}
+	}
+
+	for (auto& effect : m_TextEffects)
+	{
+		if (effect.second.LifeTime > 0)
+		{
+			auto& velocity = effect.second.Properties.v2fVelocity;
+			auto& position = effect.second.TextLabel.getPosition();
+			if (Magnitude(velocity) > 0.01f)
+			{
+				effect.second.TextLabel.setPosition(position + velocity * Statics::fDeltaTime);
+			}
 			effect.second.LifeTime -= Statics::fDeltaTime;
 		}
 	}
@@ -85,8 +100,36 @@ std::string VFX::CreateAndPlayEffect(SpecialEffectProperties _properties, float 
 	m_Effects[uniqueKeyAsString].Animator.StartState("Default");
 	m_Effects[uniqueKeyAsString].LifeTime = _lifeTime;
 
-	if (Statics::bDebugMode)
-		Print(m_Effects.size());
+	return uniqueKeyAsString;
+}
+
+std::string VFX::CreateAndPlayTextEffect(TextEffectProperties _properties, float _lifeTime)
+{
+	int uniqueKey{};
+	auto it = m_TextEffects.find(std::to_string(uniqueKey));
+	while (it != m_TextEffects.end())
+	{
+		if (it->second.LifeTime <= 0.0f)
+			break;
+		else
+			it = m_TextEffects.find(std::to_string(++uniqueKey));
+	}
+	std::string uniqueKeyAsString = std::to_string(uniqueKey);
+
+	m_TextEffects.insert_or_assign(uniqueKeyAsString, TextEffect{});
+	m_TextEffects[uniqueKeyAsString].Properties = _properties;
+	m_TextEffects[uniqueKeyAsString].TextLabel.setCharacterSize(_properties.iCharacterSize);
+	m_TextEffects[uniqueKeyAsString].TextLabel.setFillColor(_properties.Color);
+	m_TextEffects[uniqueKeyAsString].TextLabel.setString(_properties.String);
+	m_TextEffects[uniqueKeyAsString].TextLabel.setFont(Statics::MetalMania);
+	m_TextEffects[uniqueKeyAsString].TextLabel.setPosition(_properties.v2fStartPos);
+	if (_properties.OutlineColor != _properties.Color)
+	{
+		m_TextEffects[uniqueKeyAsString].TextLabel.setOutlineColor(_properties.OutlineColor);
+		m_TextEffects[uniqueKeyAsString].TextLabel.setOutlineThickness(2.0f);
+	}
+	SetOriginCenter(m_TextEffects[uniqueKeyAsString].TextLabel);
+	m_TextEffects[uniqueKeyAsString].LifeTime = _lifeTime;
 
 	return uniqueKeyAsString;
 }
@@ -113,9 +156,6 @@ std::string VFX::CreateEffect(SpecialEffectProperties _properties)
 	m_Effects[uniqueKeyAsString].Animator.AddState("Default", animatorProperties);
 	m_Effects[uniqueKeyAsString].Animator.SetPosition(_properties.v2fStartPos);
 	m_Effects[uniqueKeyAsString].Animator.StartState("Default");
-
-	if (Statics::bDebugMode)
-		Print(m_Effects.size());
 
 	return uniqueKeyAsString;
 }
@@ -154,5 +194,11 @@ void VFX::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 	{
 		if (effect.second.LifeTime > 0)
 			_target.draw(effect.second.Animator);
+	}
+
+	for (auto& effect : m_TextEffects)
+	{
+		if (effect.second.LifeTime > 0)
+			_target.draw(effect.second.TextLabel);
 	}
 }
