@@ -86,6 +86,16 @@ Enemy::Enemy(EnemyProperties _properties)
 
 Enemy::~Enemy()
 {
+	VFX::GetInstance().CreateAndPlayTextEffect(
+		{
+			GetPosition(), // position
+			"+" + FloatToString(GetPoints(),0), // text / string
+			{255, 215, 0}, // Fill colour (gold)
+			36, // font size
+			sf::Color::Black, // Outline colour
+			{0, Statics::fBackgroundScrollSpeed } // Velocity
+		}, 0.5f); // Liftime
+
 	switch (m_Properties.EnemyType)
 	{
 		// Set VFX for enemy death based on type
@@ -121,6 +131,18 @@ Enemy::~Enemy()
 			explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
 			explosionProperties.uNumberOfFrames = 4;
 			explosionProperties.fAnimFrameInterval = 0.5f / 4;
+			explosionProperties.v2fVelocity = { 0.0f, 0.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+			break;
+		}
+		case ENEMYTYPE::SHAMAN:
+		{
+			// Play archer death VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/Goblin_Shaman_Death.png") };
+			explosionProperties.v2fScale = { 1.0f, 1.0f };
+			explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+			explosionProperties.uNumberOfFrames = 3;
+			explosionProperties.fAnimFrameInterval = 0.5f / 3;
 			explosionProperties.v2fVelocity = { 0.0f, 0.0f };
 			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
 			break;
@@ -272,9 +294,14 @@ Animator Enemy::GetAnimation() const
 	return m_AnimatedSprite;
 }
 
-BoxCollider* Enemy::GetCollisionBox()
+BoxCollider* Enemy::GetCollisionBox() const
 {
 	return m_BoxCollider;
+}
+
+int Enemy::GetPoints() const
+{
+	return m_Properties.iPoints;
 }
 
 bool Enemy::CheckCollision(BoxCollider& _otherCollider)

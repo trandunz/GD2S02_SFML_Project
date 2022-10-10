@@ -48,7 +48,9 @@ GameScene::GameScene()
 
 	GUI::GetInstance().CreateText("Score",
 		{
-			{Statics::RenderWindow.getView().getCenter().x,20}
+			{Statics::RenderWindow.getView().getCenter().x,20}, // Position
+			"", // Text / string
+			{255, 215, 0} // Colour (Gold)
 		}
 		);
 
@@ -163,8 +165,7 @@ void GameScene::CreateScrollingBackground()
 	m_Backgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
 	for (auto& background : m_Backgrounds)
 	{
-		SetOriginCenter(background);
-		//background.setScale({ 2.66666666f,2.666666666f }); 
+		SetOriginCenter(background); 
 	}
 	m_Backgrounds[0].setPosition(400, 0);
 	m_Backgrounds[1].setPosition(400, 9600);
@@ -179,7 +180,7 @@ void GameScene::ScrollBackground()
 		if (background.getPosition().y - Statics::RenderWindow.getView().getCenter().y
 			>= background.getGlobalBounds().height)
 		{
-			background.move({ 0,- 2 *background.getGlobalBounds().height });
+			background.move({ 0, -2 * background.getGlobalBounds().height + 1 });
 		}
 	}
 }

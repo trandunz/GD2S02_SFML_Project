@@ -60,7 +60,7 @@ void EnemyManager::Update()
 		// Destroy enemy if its health is equal or less than 0
 		if (enemy->GetCurrentHealth() <= 0)
 		{
-			Statics::fGameScore += 20.0f; // Increase game score
+			Statics::fGameScore += enemy->GetPoints(); // Increase game score
 			enemy->bDestroy = true; // Set enemy to die
 			
 			AudioManager::PlayAudioSource("EnemyDeath"); // Play enemy death SFX
@@ -104,11 +104,11 @@ void EnemyManager::Update()
 										(Statics::fBackgroundScrollSpeed * Statics::fDeltaTime) + 2 });
 
 									player->SetRestrictYPosition(false);
+									player->SetStopInput(true);
 								}
 								else
 								{
-									// Give player invincibility after enemy collision
-									player->m_bInvincible = true;
+									
 								}
 								break;
 							}
@@ -170,7 +170,9 @@ void EnemyManager::SpawnEnemies(float _rate)
 					{2.0f,2.0f}, // Archer sprite size
 					{2.4f,2.4f}, // Archer jump sprite size
 					{150.0f}, // Archer run speed
-					{250.0f} // Archer jump speed
+					{250.0f}, // Archer jump speed
+					{4}, // Archer health
+					{40} // Points received on archer death
 				});
 		}
 		// Create Warrior
@@ -185,7 +187,8 @@ void EnemyManager::SpawnEnemies(float _rate)
 					{0.0f,0.0f}, // Warrior does not jump
 					{300.0f}, // Faster run speed
 					{0.0f}, // Warrior does not jump
-					{7} // High health
+					{7}, // High health compared to other enemies
+					{100} // Points received on warrior death - higher points due to hard to kill
 				});
 		}
 		// Create Shaman
@@ -195,11 +198,13 @@ void EnemyManager::SpawnEnemies(float _rate)
 				{
 					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Shaman.png"), // Set SHAMAN running sprite
 					{100.0f + (rand() % 600), 0}, // Set random starting position
-					{ENEMYTYPE::SHAMAN}, // Set enemy type - SHAMAN
-					{0.8f,0.8f}, // SHAMAN sprite size
-					{1.0f,1.0f}, // SHAMAN jump sprite size
-					{150.0f}, // SHAMAN run speed
-					{250.0f} // SHAMAN jump speed
+					{ENEMYTYPE::SHAMAN}, // Set enemy type - Shaman
+					{0.8f,0.8f}, // Shaman sprite size
+					{1.0f,1.0f}, // Shaman jump sprite size
+					{150.0f}, // Shaman run speed
+					{250.0f}, // Shaman jump speed
+					{3}, // Shaman health
+					{50} // Points received on shamans death
 				});
 		}
 		// Create Kamakazi
@@ -235,7 +240,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 					{100.0f + (rand() % 600), 0}, // Set random starting position
 					{ENEMYTYPE::KAMIKAZE}, // Set enemy type - Kamikaze
 					{2.0f,2.0f}, // Kamikaze sprite size
-					{2.4f,2.4f} // Kamikaze jump sprite size
+					{2.4f,2.4f}, // Kamikaze jump sprite size
 				});
 		}
 	}

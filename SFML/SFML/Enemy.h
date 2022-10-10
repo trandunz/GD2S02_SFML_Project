@@ -200,5 +200,7 @@ public:
 
 	Animator GetAnimation() const;
 
-	BoxCollider* GetCollisionBox();
+	BoxCollider* GetCollisionBox() const;
+
+	int GetPoints() const;
 };

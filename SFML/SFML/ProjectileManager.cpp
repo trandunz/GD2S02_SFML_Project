@@ -201,12 +201,12 @@ void ProjectileManager::ApplyDebuff(Player* _target, ELEMENTTYPE _element)
 	}
 	case ELEMENTTYPE::WATER:
 	{
-		_target->ApplySlow(DEBUFF_SLOWTIME, DEBUFF_SLOWAMOUNT);
+		_target->ApplySlow(DEBUFF_SLOWTIME, DEBUFF_SLOWAMOUNT, { 117, 0, 114 });
 		break;
 	}
 	case ELEMENTTYPE::EARTH:
 	{
-		_target->ApplyStop(DEBUFF_FREEZETIME);
+		_target->ApplyStop(DEBUFF_FREEZETIME, { 30, 30, 30 });
 		break;
 	}
 	default:

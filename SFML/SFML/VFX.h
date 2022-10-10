@@ -50,6 +50,15 @@ public:
 	std::string CreateAndPlayEffect(SpecialEffectProperties _properties, float _lifeTime);
 
 	/// <summary>
+	/// Creates a text effect with a unique key, properties and lifetime and then starts/plays it.
+	/// Returns the unique key
+	/// </summary>
+	/// <param name="_properties"></param>
+	/// <param name="_lifeTime"></param>
+	/// <returns></returns>
+	std::string CreateAndPlayTextEffect(TextEffectProperties _properties, float _lifeTime);
+
+	/// <summary>
 	/// Creates an effect with a unique key and properties too be used later on.
 	/// Returns the unique key
 	/// </summary>
@@ -77,6 +86,13 @@ private:
 		SpecialEffectProperties Properties{};
 	};
 
+	struct TextEffect
+	{
+		float LifeTime{};
+		sf::Text TextLabel{};
+		TextEffectProperties Properties{};
+	};
+
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 
 	inline VFX() {}
@@ -84,6 +100,7 @@ private:
 	inline ~VFX() {}
 
 	std::map<std::string, SpecialEffect> m_Effects{};
+	std::map<std::string, TextEffect> m_TextEffects{};
 
 public:
 	///////////////////////////

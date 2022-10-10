@@ -110,6 +110,7 @@ void PlayerManager::Update()
 								Statics::RenderWindow.getSize().y - 10.0f)
 							{
 								player->SetRestrictYPosition(false);
+								player->SetStopInput(true);
 							}
 						}
 					}
