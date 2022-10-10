@@ -104,7 +104,8 @@ struct EnemyProperties
 	sf::Vector2f v2fJumpScale{ 1.2f,1.2f };
 	float fMoveSpeed{ 200.0f };
 	float fJumpSpeed{ 300.0f };
-	int iMaxHealth{ 3 };
+	int iMaxHealth{ 2 };
+	int iPoints{ 20 };
 };
 
 struct ButtonProperties

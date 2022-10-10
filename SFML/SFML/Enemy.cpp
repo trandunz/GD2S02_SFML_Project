@@ -125,6 +125,18 @@ Enemy::~Enemy()
 			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
 			break;
 		}
+		case ENEMYTYPE::SHAMAN:
+		{
+			// Play archer death VFX animation
+			SpecialEffectProperties explosionProperties{ &TextureLoader::LoadTexture("VFX/Goblin_Shaman_Death.png") };
+			explosionProperties.v2fScale = { 1.0f, 1.0f };
+			explosionProperties.v2fStartPos = m_AnimatedSprite.GetPosition();
+			explosionProperties.uNumberOfFrames = 3;
+			explosionProperties.fAnimFrameInterval = 0.5f / 3;
+			explosionProperties.v2fVelocity = { 0.0f, 0.0f };
+			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+			break;
+		}
 		default:
 			break;
 	}
@@ -272,9 +284,14 @@ Animator Enemy::GetAnimation() const
 	return m_AnimatedSprite;
 }
 
-BoxCollider* Enemy::GetCollisionBox()
+BoxCollider* Enemy::GetCollisionBox() const
 {
 	return m_BoxCollider;
+}
+
+int Enemy::GetPoints() const
+{
+	return m_Properties.iPoints;
 }
 
 bool Enemy::CheckCollision(BoxCollider& _otherCollider)
