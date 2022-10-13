@@ -442,7 +442,7 @@ void Player::SetElement_Fire()
 	m_BasicAttackProperties.Element = ELEMENTTYPE::FIRE;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
-	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/7_firespin_spritesheet.png");// ("Fire_Spell.png");
+	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/16_sunburn_spritesheet.png");// ("Fire_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.50f,1.50f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 61;
 	m_SecondaryAttackProperties.Element = ELEMENTTYPE::FIRE;
@@ -456,7 +456,7 @@ void Player::SetElement_Water()
 	m_BasicAttackProperties.Element = ELEMENTTYPE::WATER;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
-	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/18_midnight_spritesheet.png");//("Earth_Spell.png");
+	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/12_nebula_spritesheet.png");//("Earth_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 61;
 	m_SecondaryAttackProperties.Element = ELEMENTTYPE::WATER;
