@@ -135,5 +135,7 @@ public:
 	void SetRotation(float _newRotation);
 
 	sf::Vector2f GetPosition() const;
+
+	void SetColor(sf::Color _newColor);
 };
 

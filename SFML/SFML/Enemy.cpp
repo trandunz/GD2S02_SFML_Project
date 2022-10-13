@@ -86,15 +86,6 @@ Enemy::Enemy(EnemyProperties _properties)
 
 Enemy::~Enemy()
 {
-	VFX::GetInstance().CreateAndPlayTextEffect(
-		{
-			GetPosition(), // position
-			"+" + FloatToString(GetPoints(),0), // text / string
-			{255, 215, 0}, // Fill colour (gold)
-			36, // font size
-			sf::Color::Black, // Outline colour
-			{0, Statics::fBackgroundScrollSpeed } // Velocity
-		}, 0.5f); // Liftime
 
 	switch (m_Properties.EnemyType)
 	{
@@ -209,6 +200,16 @@ void Enemy::TakeDamage(unsigned _amount)
 	// bDestroy enemy if health is <= 0
 	if (m_iCurrentHealth <= 0)
 	{
+		VFX::GetInstance().CreateAndPlayTextEffect(
+			{
+				GetPosition(), // position
+				"+" + FloatToString(GetPoints(),0), // text / string
+				{255, 215, 0}, // Fill colour (gold)
+				36, // font size
+				sf::Color::Black, // Outline colour
+				{0, Statics::fBackgroundScrollSpeed } // Velocity
+			}, 0.5f); // Liftime
+
 		bDestroy = true;
 	}
 
@@ -436,7 +437,7 @@ void Enemy::Movement()
 				// Destroy kamikaze and archer goblins if collide
 				if (m_BoxCollider->CheckCollision(*enemy->GetCollisionBox()) &&
 					enemy->GetType() != ENEMYTYPE::WARRIOR)
-					enemy->TakeDamage(50);
+					enemy->bDestroy = true;
 			}
 
 			m_AnimatedSprite.MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime); // Move goblin
