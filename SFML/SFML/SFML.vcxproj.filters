@@ -147,6 +147,9 @@
     <ClCompile Include="HighScores.cpp">
       <Filter>Source Files\SceneManagement</Filter>
     </ClCompile>
+    <ClCompile Include="Level.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnemyManager.h">

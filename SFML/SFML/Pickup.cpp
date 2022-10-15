@@ -73,12 +73,14 @@ bool Pickup::CheckForPickup(Player& _player)
 	
 		if (pickedUp)
 		{
-			GivePlayerPickupEffect(_player);
-			if (m_Properties.ePickupType == PICKUPTYPE::HEALTH)
+			if (m_Properties.ePickupType == PICKUPTYPE::HEALTH && _player.HasLostHP())
 			{
+				GivePlayerPickupEffect(_player);
 				AudioManager::PlayAudioSource("PickupHeart");
 			}
-			else {
+			else if (_player.HasLostMana())
+			{
+				GivePlayerPickupEffect(_player);
 				AudioManager::PlayAudioSource("PickupMana");
 			}
 		}

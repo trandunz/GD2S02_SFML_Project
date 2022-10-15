@@ -60,6 +60,10 @@ private:
 
 	float m_fDestroyDistanceY{ 64.0f }; // The distance below the game window of when to destroy enemies
 
+	int m_iShamanCount{};
+	int m_iWarriorCount{};
+	int m_iArcherCount{};
+	int m_iKamikazeCount{};
 public:
 	///////////////////////////
 	/// Getters and Setters	///
@@ -67,5 +71,10 @@ public:
 
 	std::vector<sf::Sprite> GetEnemySprites() const;
 	std::vector<Enemy*>& GetEnemies();
+
+	int GetShamanCount();
+	int GetWarriorCount();
+	int GetArcherCount();
+	int GetKamikazeCount();
 };
 

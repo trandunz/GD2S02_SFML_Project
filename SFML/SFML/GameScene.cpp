@@ -144,6 +144,8 @@ void GameScene::Update()
 		m_bGameOver = true;
 		m_EndGameMenu = new EndGameMenu;
 	}
+
+	m_fElaspedTime += Statics::fDeltaTime;
 }
 
 void GameScene::Draw()

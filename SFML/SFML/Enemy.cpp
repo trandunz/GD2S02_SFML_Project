@@ -38,6 +38,10 @@ Enemy::Enemy(EnemyProperties _properties)
 		// Set related indivudual animation properties based on type
 		case ENEMYTYPE::KAMIKAZE: 
 		{
+			// Pick a random sprite for kamikaze enemy
+			int iRandomKamakazi = rand() % 5;
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Enemy/Goblin_Kamakazi" + FloatToString(iRandomKamakazi + 1, 0) + ".png");
+
 			// Set box collider
 			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.1f;
@@ -46,6 +50,8 @@ Enemy::Enemy(EnemyProperties _properties)
 		}
 		case ENEMYTYPE::ARCHER:
 		{
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Enemy/Goblin_Archer.png");
+
 			// Set box collider
 			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.1f;
@@ -56,6 +62,8 @@ Enemy::Enemy(EnemyProperties _properties)
 		}
 		case ENEMYTYPE::WARRIOR:
 		{
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Enemy/Goblin_Warrior.png");
+
 			// Set box collider
 			m_BoxCollider = new BoxCollider(sf::Vector2f(38, 48), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.05f;
@@ -64,6 +72,8 @@ Enemy::Enemy(EnemyProperties _properties)
 		}
 		case ENEMYTYPE::SHAMAN:
 		{
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Enemy/Goblin_Shaman.png");
+
 			// Set box collider
 			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
 			animProperties.fFrameInterval = 0.04f;
@@ -82,6 +92,8 @@ Enemy::Enemy(EnemyProperties _properties)
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.GetSprite().setPosition(_properties.v2fStartPos);
 	m_AnimatedSprite.StartState("Moving");
+
+
 }
 
 Enemy::~Enemy()
