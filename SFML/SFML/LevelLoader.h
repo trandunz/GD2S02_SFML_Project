@@ -29,6 +29,8 @@ public:
 	static void SwitchToLoadedLevel();
 	static void LoadLevel(LEVELS _newLevel);
 	static void CleanupLevel();
+
+	static float GetElaspedTime();
 private:
 	static Level* CurrentLevel;
 	static LEVELS LevelToLoad;

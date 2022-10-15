@@ -88,3 +88,13 @@ void LevelLoader::CleanupLevel()
 		CurrentLevel = nullptr;
 	}
 }
+
+float LevelLoader::GetElaspedTime()
+{
+	if (CurrentLevel != nullptr)
+	{
+		return CurrentLevel->GetElaspedTime();
+	}
+
+	return 0.0f;
+}

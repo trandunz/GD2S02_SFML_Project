@@ -15,6 +15,7 @@
 #include "Helper.h"
 #include "AudioManager.h"
 #include "BoxCollider.h"
+#include "LevelLoader.h"
 
 EnemyManager& EnemyManager::GetInstance()
 {
@@ -31,6 +32,31 @@ void EnemyManager::CleanupDestroyed()
 		{
 			if ((*enemyIt) != nullptr)
 			{
+				switch ((*enemyIt)->GetType())
+				{
+				case ENEMYTYPE::ARCHER:
+				{
+					m_iArcherCount--;
+					break;
+				}
+				case ENEMYTYPE::WARRIOR:
+				{
+					m_iWarriorCount--;
+					break;
+				}
+				case ENEMYTYPE::SHAMAN:
+				{
+					m_iShamanCount--;
+					break;
+				}
+				case ENEMYTYPE::KAMIKAZE:
+				{
+					m_iKamikazeCount--;
+					break;
+				}
+				default:
+					break;
+				}
 				delete (*enemyIt);
 				(*enemyIt) = nullptr;
 			}
@@ -151,92 +177,103 @@ void EnemyManager::draw(sf::RenderTarget& _target, sf::RenderStates _states) con
 	}
 }
 
+int EnemyManager::GetShamanCount()
+{
+	return m_iShamanCount;
+}
+
+int EnemyManager::GetWarriorCount()
+{
+	return m_iWarriorCount;
+}
+
+int EnemyManager::GetArcherCount()
+{
+	return m_iArcherCount;
+}
+
+int EnemyManager::GetKamikazeCount()
+{
+	return m_iKamikazeCount;
+}
+
 void EnemyManager::SpawnEnemies(float _rate)
 {
 	m_fSpawnTimer -= Statics::fDeltaTime;
+	float elapsedTime = LevelLoader::GetElaspedTime();
 	if (m_fSpawnTimer <= 0)
 	{
 		m_fSpawnTimer = _rate;
 
-		int iRandomEnemy = rand() % 6;
-		// Create Archer
-		if (iRandomEnemy == 0)
+		int iRandomEnemy = rand() % 4;
+		if (elapsedTime > 90.0f && m_iShamanCount < 3)
 		{
-			CreateEnemy(
-				{
-					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Archer.png"), // Set archer running sprite
-					{100.0f + (rand() % 600), 0}, // Set random starting position
-					{ENEMYTYPE::ARCHER}, // Set enemy type - Archer
-					{2.0f,2.0f}, // Archer sprite size
-					{2.4f,2.4f}, // Archer jump sprite size
-					{150.0f}, // Archer run speed
-					{250.0f}, // Archer jump speed
-					{4}, // Archer health
-					{40} // Points received on archer death
-				});
+			// Create Shaman
+			if (iRandomEnemy == 3)
+			{
+				m_iShamanCount++;
+				CreateEnemy(
+					{
+						nullptr, // Set SHAMAN running sprite
+						{100.0f + (rand() % 600), 0}, // Set random starting position
+						{ENEMYTYPE::SHAMAN}, // Set enemy type - Shaman
+						{0.8f,0.8f}, // Shaman sprite size
+						{1.0f,1.0f}, // Shaman jump sprite size
+						{150.0f}, // Shaman run speed
+						{250.0f}, // Shaman jump speed
+						{3}, // Shaman health
+						{50} // Points received on shamans death
+					});
+			}
 		}
-		// Create Warrior
-		else if (iRandomEnemy == 1 || iRandomEnemy == 2)
+		if (elapsedTime > 60.0f && m_iWarriorCount < 20)
 		{
-			CreateEnemy(
-				{
-					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Warrior.png"), // Set warrior running sprite
-					{100.0f + (rand() % 600), 0}, // Set random starting position
-					{ENEMYTYPE::WARRIOR}, // Set enemy type - Warrior
-					{2.0f,2.0f}, // Warrior sprite size
-					{0.0f,0.0f}, // Warrior does not jump
-					{300.0f}, // Faster run speed
-					{0.0f}, // Warrior does not jump
-					{7}, // High health compared to other enemies
-					{100} // Points received on warrior death - higher points due to hard to kill
-				});
+			// Create Warrior
+			if (iRandomEnemy == 2)
+			{
+				m_iWarriorCount++;
+				int randomIndex = rand() % PlayerManager::GetInstance().GetPlayers().size();
+				float randomX = PlayerManager::GetInstance().GetPlayerFromIndex(randomIndex)->GetPosition().x;
+				CreateEnemy(
+					{
+						nullptr, // Set warrior running sprite
+						{randomX, 0}, // Set random starting position
+						{ENEMYTYPE::WARRIOR}, // Set enemy type - Warrior
+						{2.0f,2.0f}, // Warrior sprite size
+						{0.0f,0.0f}, // Warrior does not jump
+						{300.0f}, // Faster run speed
+						{0.0f}, // Warrior does not jump
+						{7}, // High health compared to other enemies
+						{100} // Points received on warrior death - higher points due to hard to kill
+					});
+			}
 		}
-		// Create Shaman
-		else if (iRandomEnemy == 3)
+		if (elapsedTime > 30.0f && m_iArcherCount < 3)
 		{
-			CreateEnemy(
-				{
-					&TextureLoader::LoadTexture("Unit/Enemy/Goblin_Shaman.png"), // Set SHAMAN running sprite
-					{100.0f + (rand() % 600), 0}, // Set random starting position
-					{ENEMYTYPE::SHAMAN}, // Set enemy type - Shaman
-					{0.8f,0.8f}, // Shaman sprite size
-					{1.0f,1.0f}, // Shaman jump sprite size
-					{150.0f}, // Shaman run speed
-					{250.0f}, // Shaman jump speed
-					{3}, // Shaman health
-					{50} // Points received on shamans death
-				});
+			// Create Archer
+			if (iRandomEnemy == 1)
+			{
+				m_iArcherCount++;
+				CreateEnemy(
+					{
+						nullptr, // Set archer running sprite
+						{100.0f + (rand() % 600), 0}, // Set random starting position
+						{ENEMYTYPE::ARCHER}, // Set enemy type - Archer
+						{2.0f,2.0f}, // Archer sprite size
+						{2.4f,2.4f}, // Archer jump sprite size
+						{150.0f}, // Archer run speed
+						{250.0f}, // Archer jump speed
+						{4}, // Archer health
+						{40} // Points received on archer death
+					});
+			}
 		}
-		// Create Kamakazi
-		else
+		if (elapsedTime > 5.0f && m_iKamikazeCount < 20)
 		{
-			// Pick a random sprite for kamikaze enemy
-			int iRandomKamakazi = rand() % 5;
-			std::string sEnemyTextureLocation;
-			if (iRandomKamakazi == 0)
-			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi1.png";
-			}
-			else if (iRandomKamakazi == 1)
-			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi2.png";
-			}
-			else if (iRandomKamakazi == 2)
-			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi3.png";
-			}
-			else if (iRandomKamakazi == 3)
-			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi4.png";
-			}
-			else
-			{
-				sEnemyTextureLocation = "Unit/Enemy/Goblin_Kamakazi5.png";
-			}
-
+			m_iKamikazeCount++;
 			CreateEnemy(
 				{
-					&TextureLoader::LoadTexture(sEnemyTextureLocation), // Set kamikaze running sprite
+					nullptr, // Set kamikaze running sprite
 					{100.0f + (rand() % 600), 0}, // Set random starting position
 					{ENEMYTYPE::KAMIKAZE}, // Set enemy type - Kamikaze
 					{2.0f,2.0f}, // Kamikaze sprite size

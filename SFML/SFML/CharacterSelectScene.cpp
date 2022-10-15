@@ -18,9 +18,9 @@
 CharacterSelectScene::CharacterSelectScene()
 {
 	sf::Vector2f windowSize(Statics::RenderWindow.getSize());
-	m_sFireElement =  "Unit/Player/Fire_Mage.png" ;
-	m_sEarthElement = "Unit/Player/Earth_Mage.png";
-	m_sWaterElement = "Unit/Player/Water_Mage.png";
+	m_sFireElement =  "Unit/Player/Fire_Mage_Static.png" ;
+	m_sEarthElement = "Unit/Player/Earth_Mage_Static.png";
+	m_sWaterElement = "Unit/Player/Water_Mage_Static.png";
 
 	GUI::GetInstance().CreateButton("Start",
 		{

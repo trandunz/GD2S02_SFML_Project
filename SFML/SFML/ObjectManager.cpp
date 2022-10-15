@@ -13,6 +13,7 @@
 #include "Helper.h"
 #include "Pickup.h"
 #include "PlayerManager.h"
+#include "Player.h"
 
 ObjectManager& ObjectManager::GetInstance()
 {
@@ -129,12 +130,43 @@ void ObjectManager::SpawnPickups(float _rate)
 	{
 		m_PickupSpawnTimer = _rate;
 
-		int iRandomNum = rand() % 2;
-		if (iRandomNum == 1)
+		auto& playerList = PlayerManager::GetInstance().GetPlayers();
+		bool playerHasLostHP = false;
+		bool playerHasLostMANA = false;
+		for (auto& player : playerList)
 		{
-			if (Statics::bDebugMode)
-				Print("Spawned Health Pickup!");
+			if (player->HasLostMana())
+				playerHasLostMANA = true;
+			if (player->HasLostHP())
+				playerHasLostHP = true;
+		}
 
+		if (playerHasLostHP && playerHasLostMANA)
+		{
+			int iRandomNum = rand() % 4;
+			if (iRandomNum == 1)
+			{
+				CreatePickup(
+					{
+						PICKUPTYPE::HEALTH,
+						{100.0f + (rand() % 600), -32.0f},
+						{0, Statics::fBackgroundScrollSpeed},
+						{0.5f, 0.5f}
+					});
+			}
+			else
+			{
+				CreatePickup(
+					{
+						PICKUPTYPE::MANA,
+						{100.0f + (rand() % 600), -32.0f},
+						{0, Statics::fBackgroundScrollSpeed},
+						{0.5f, 0.5f}
+					});
+			}
+		}
+		else if (playerHasLostHP)
+		{
 			CreatePickup(
 				{
 					PICKUPTYPE::HEALTH,
@@ -143,11 +175,8 @@ void ObjectManager::SpawnPickups(float _rate)
 					{0.5f, 0.5f}
 				});
 		}
-		else
+		else if (playerHasLostMANA)
 		{
-			if (Statics::bDebugMode)
-				Print("Spawned Mana Pickup!");
-
 			CreatePickup(
 				{
 					PICKUPTYPE::MANA,
@@ -156,6 +185,8 @@ void ObjectManager::SpawnPickups(float _rate)
 					{0.5f, 0.5f}
 				});
 		}
+
+		
 	}
 }
 

@@ -201,6 +201,11 @@ sf::Vector2f Animator::GetPosition() const
 	return m_Mesh.getPosition();
 }
 
+void Animator::SetColor(sf::Color _newColor)
+{
+	m_Mesh.setColor(_newColor);
+}
+
 void Animator::MoveSprite(const sf::Vector2f& _offset)
 {
 	m_Mesh.move(_offset);

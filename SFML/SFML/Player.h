@@ -10,6 +10,7 @@
 #pragma once
 #include "Statics.h"
 
+class Animator;
 class BoxCollider;
 class Player : public sf::Drawable
 {
@@ -231,7 +232,7 @@ private:
 	float m_fSecondaryTimer{ };
 	float m_fSecondaryCooldown{ 5.0f };
 	bool m_bCollided{ false };
-	sf::Sprite m_Mesh{};
+	Animator* m_Mesh{nullptr};
 	sf::Vector2f m_v2fPreviousMove{};
 	sf::Vector2f m_v2fVelocity{};
 	int m_iCurrentHealth{};
@@ -289,11 +290,15 @@ public:
 	sf::Vector2f GetPosition() const;
 	void SetPosition(sf::Vector2f _newPosition);
 
-	sf::Sprite GetSprite() const;
+	sf::Sprite& GetSprite();
 
 	sf::Vector2f GetPreviousMove() const; 
 
 	void SetRestrictYPosition(bool _restrictYPosition);
 
 	void SetStopInput(bool _stopInput);
+
+	bool HasLostMana();
+
+	bool HasLostHP();
 };

@@ -16,6 +16,7 @@
 #include "TextureLoader.h"
 #include "BoxCollider.h"
 #include "AudioManager.h"
+#include "Animator.h"
 
 Player::Player(PlayerProperties _properties)
 {
@@ -23,8 +24,7 @@ Player::Player(PlayerProperties _properties)
 	m_Properties = _properties;
 	SetTextureByElement();
 	SetPosition(_properties.v2fStartPos);
-	m_Mesh.setScale(_properties.v2fScale);
-	SetOriginCenter(m_Mesh);
+	m_Mesh->SetScale(_properties.v2fScale);
 	SetHPMax();
 	SetManaMax();
 
@@ -32,7 +32,7 @@ Player::Player(PlayerProperties _properties)
 
 	// Set box collider
 	m_fColliderOffset = _properties.fBoxColliderOffsetY;
-	m_BoxCollider = new BoxCollider(_properties.v2fBoxColliderSize, sf::Vector2f(m_Mesh.getPosition().x, m_Mesh.getPosition().y + m_fColliderOffset));
+	m_BoxCollider = new BoxCollider(_properties.v2fBoxColliderSize, sf::Vector2f(m_Mesh->GetPosition().x, m_Mesh->GetPosition().y + m_fColliderOffset));
 
 	//Set up properties that are the same for both players
 	m_BasicAttackProperties.uDamage = 1;
@@ -74,6 +74,10 @@ Player::Player(PlayerProperties _properties)
 
 Player::~Player()
 {
+	if (m_Mesh)
+		delete m_Mesh;
+	m_Mesh = nullptr;
+
 	if (m_Properties.bPlayerOne)
 	{
 
@@ -154,10 +158,10 @@ void Player::Update()
 	}
 
 	m_v2fVelocity = GetMoveInput();
-	m_v2fPreviousMove = m_Mesh.getPosition();
+	m_v2fPreviousMove = m_Mesh->GetPosition();
 	if (Magnitude(m_v2fVelocity) > 0)
 	{
-		m_Mesh.move(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
+		m_Mesh->MoveSprite(m_v2fVelocity * m_fMoveSpeed * Statics::fDeltaTime);
 	}
 	RestrictToScreen();
 	UpdateGUI();
@@ -170,7 +174,7 @@ void Player::Update()
 
 	// Update position of collider
 	if (m_BoxCollider)
-		m_BoxCollider->SetPosition({ m_Mesh.getPosition().x, m_Mesh.getPosition().y + m_fColliderOffset });
+		m_BoxCollider->SetPosition({ m_Mesh->GetPosition().x, m_Mesh->GetPosition().y + m_fColliderOffset });
 
 	// Check and run player invincibility
 	if (m_bInvincible == true)
@@ -182,11 +186,14 @@ void Player::Update()
 	{
 		FlashHearts();
 	}
+
+	if (m_Mesh)
+		m_Mesh->Update();
 }
 
 void Player::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
-	_target.draw(m_Mesh);
+	_target.draw(*m_Mesh);
 
 	// Draw box collider if debug mode turned on
 	if (m_BoxCollider)
@@ -435,7 +442,7 @@ void Player::SetElement_Fire()
 	m_BasicAttackProperties.Element = ELEMENTTYPE::FIRE;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
-	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/7_firespin_spritesheet.png");// ("Fire_Spell.png");
+	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/16_sunburn_spritesheet.png");// ("Fire_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.50f,1.50f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 61;
 	m_SecondaryAttackProperties.Element = ELEMENTTYPE::FIRE;
@@ -449,7 +456,7 @@ void Player::SetElement_Water()
 	m_BasicAttackProperties.Element = ELEMENTTYPE::WATER;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
-	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/18_midnight_spritesheet.png");//("Earth_Spell.png");
+	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/12_nebula_spritesheet.png");//("Earth_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 61;
 	m_SecondaryAttackProperties.Element = ELEMENTTYPE::WATER;
@@ -471,17 +478,17 @@ void Player::SetElement_Earth()
 
 sf::Vector2f Player::GetPosition() const
 {
-	return m_Mesh.getPosition();
+	return m_Mesh->GetPosition();
 }
 
 void Player::SetPosition(sf::Vector2f _newPosition)
 {
-	m_Mesh.setPosition(_newPosition);
+	m_Mesh->SetPosition(_newPosition);
 }
 
-sf::Sprite Player::GetSprite() const
+sf::Sprite& Player::GetSprite()
 {
-	return m_Mesh;
+	return m_Mesh->GetSprite();
 }
 
 sf::Vector2f Player::GetPreviousMove() const
@@ -497,6 +504,16 @@ void Player::SetRestrictYPosition(bool _restrictYPosition)
 void Player::SetStopInput(bool _stopInput)
 {
 	m_bStopInput = _stopInput;
+}
+
+bool Player::HasLostMana()
+{
+	return m_iCurrentMana < m_Properties.iMaxMana;
+}
+
+bool Player::HasLostHP()
+{
+	return m_iCurrentHealth < m_Properties.iMaxHealth;
 }
 
 void Player::TakeDamage(unsigned _amount)
@@ -553,25 +570,30 @@ bool Player::CheckCollision(BoxCollider& _otherCollider)
 
 void Player::SetTextureByElement()
 {
+	AnimStateProperties animProperties;
+	animProperties.uNumberOfFrames = 4;
+	animProperties.fFrameInterval = 0.1f;
+	animProperties.bLoops = true;
+
 	if (m_Properties.bPlayerOne == true)
 	{
 		switch (PlayerManager::GetInstance().ePlayer1Element)
 		{
 		case ELEMENTTYPE::EARTH:
 		{
-			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png"), true);
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png");
 			SetElement_Earth();
 			break;
 		}
 		case ELEMENTTYPE::FIRE:
 		{
-			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png"), true);
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png");
 			SetElement_Fire();
 			break;
 		}
 		case ELEMENTTYPE::WATER:
 		{
-			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Water_Mage.png"), true);
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Player/Water_Mage.png");
 			SetElement_Water();
 			break;
 		}
@@ -587,19 +609,19 @@ void Player::SetTextureByElement()
 		{
 		case ELEMENTTYPE::EARTH:
 		{
-			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png"), true);
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Player/Earth_Mage.png");
 			SetElement_Earth();
 			break;
 		}
 		case ELEMENTTYPE::FIRE:
 		{
-			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png"), true);
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Player/Fire_Mage.png");
 			SetElement_Fire();
 			break;
 		}
 		case ELEMENTTYPE::WATER:
 		{
-			m_Mesh.setTexture(TextureLoader::LoadTexture("Unit/Player/Water_Mage.png"), true);
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Player/Water_Mage.png");
 			SetElement_Water();
 			break;
 		}
@@ -610,13 +632,19 @@ void Player::SetTextureByElement()
 		}
 		}
 	}
+
+	if (!m_Mesh)
+		m_Mesh = new Animator;
+	m_Mesh->AddState("Moving", animProperties);
+	m_Mesh->SetDefaultState("Moving");
+	m_Mesh->StartState("Moving");
 }
 
 void Player::ApplyStop(float _seconds, sf::Color _color)
 {
 
 	// Change sprite color
-	m_Mesh.setColor(_color);
+	m_Mesh->SetColor(_color);
 
 	m_bSpriteColorChanged = true;
 	m_bStopped = true;
@@ -633,7 +661,7 @@ void Player::HandleStop()
 	if (m_fStopTime <= 0)
 	{
 		m_bStopped = false;
-		m_Mesh.setColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+		m_Mesh->SetColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
 		// Reset movement and jump speed
 		m_fMoveSpeed = m_Properties.fMoveSpeed;
 	}
@@ -665,16 +693,16 @@ void Player::HandleSlow()
 	}
 
 	if (m_bSpriteColorChanged)
-		m_Mesh.setColor(m_SlowedSpriteColor);
+		m_Mesh->SetColor(m_SlowedSpriteColor);
 	else
-		m_Mesh.setColor(sf::Color(255, 255, 255));
+		m_Mesh->SetColor(sf::Color(255, 255, 255));
 
 	m_fSlowTime -= Statics::fDeltaTime; // Count down
 
 	if (m_fSlowTime <= 0)
 	{
 		m_bSlowed = false;
-		m_Mesh.setColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
+		m_Mesh->SetColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
 		// Reset movement and jump speed
 		m_fMoveSpeed = m_Properties.fMoveSpeed;
 	}
@@ -687,7 +715,7 @@ int Player::GetCurrentHealth() const
 
 sf::Vector2f Player::GetFuturePosition(sf::Vector2f _velocity) const
 {
-	return m_Mesh.getPosition() + (m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
+	return m_Mesh->GetPosition() + (m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 }
 
 void Player::RestrictToScreen()
@@ -696,9 +724,9 @@ void Player::RestrictToScreen()
 	// Unless bool is flipped from Obstacle collisions
 	if (m_bRestrictYPosition)
 	{
-		if (m_Mesh.getPosition().y + m_Mesh.getGlobalBounds().height / 2 >= Statics::RenderWindow.getSize().y)
+		if (m_Mesh->GetPosition().y + m_Mesh->GetGlobalBounds().height / 2 >= Statics::RenderWindow.getSize().y)
 		{
-			m_Mesh.setPosition(m_Mesh.getPosition().x, Statics::RenderWindow.getSize().y - m_Mesh.getGlobalBounds().height / 2);
+			m_Mesh->SetPosition(m_Mesh->GetPosition().x, Statics::RenderWindow.getSize().y - m_Mesh->GetGlobalBounds().height / 2);
 		}
 	}
 	// Otherwise stop player being able to move character, then set then respawn them.
@@ -711,25 +739,25 @@ void Player::RestrictToScreen()
 	}
 
 	// Restricting player position at top of window
-	if (m_Mesh.getPosition().y - m_Mesh.getGlobalBounds().height / 2 <= 0)
+	if (m_Mesh->GetPosition().y - m_Mesh->GetGlobalBounds().height / 2 <= 0)
 	{
-		m_Mesh.setPosition(m_Mesh.getPosition().x, m_Mesh.getGlobalBounds().height / 2);
+		m_Mesh->SetPosition(m_Mesh->GetPosition().x, m_Mesh->GetGlobalBounds().height / 2);
 	}
 	// Restricting player position at right side of window
-	if (m_Mesh.getPosition().x + m_Mesh.getGlobalBounds().width / 2 >= Statics::RenderWindow.getSize().x)
+	if (m_Mesh->GetPosition().x + m_Mesh->GetGlobalBounds().width / 2 >= Statics::RenderWindow.getSize().x)
 	{
-		m_Mesh.setPosition(Statics::RenderWindow.getSize().x - m_Mesh.getGlobalBounds().width/2, m_Mesh.getPosition().y);
+		m_Mesh->SetPosition(Statics::RenderWindow.getSize().x - m_Mesh->GetGlobalBounds().width/2, m_Mesh->GetPosition().y);
 	}
 	// Restricting player position at left side of window
-	if (m_Mesh.getPosition().x - m_Mesh.getGlobalBounds().width / 2 <= 0)
+	if (m_Mesh->GetPosition().x - m_Mesh->GetGlobalBounds().width / 2 <= 0)
 	{
-		m_Mesh.setPosition(m_Mesh.getGlobalBounds().width / 2, m_Mesh.getPosition().y);
+		m_Mesh->SetPosition(m_Mesh->GetGlobalBounds().width / 2, m_Mesh->GetPosition().y);
 	}
 }
 
 void Player::Respawn()
 {
-	m_Mesh.setPosition(m_Properties.v2fStartPos); // Reset player position to start position
+	m_Mesh->SetPosition(m_Properties.v2fStartPos); // Reset player position to start position
 	TakeDamage(1); // Take damage
 	m_bRestrictYPosition = true; // Reset bool so player is locked to inside of window
 	m_bStopInput = false; // Reset bool so player can move character again
@@ -749,9 +777,9 @@ void Player::Invincibility()
 		m_bSpriteColorChanged = !m_bSpriteColorChanged;
 	}
 	if (m_bSpriteColorChanged)
-		m_Mesh.setColor(m_InvincibleColor);
+		m_Mesh->SetColor(m_InvincibleColor);
 	else
-		m_Mesh.setColor(sf::Color(255, 255, 255));
+		m_Mesh->SetColor(sf::Color(255, 255, 255));
 
 	// Turn off invincibility when timer ends
 	if (m_fInvincibleTimer <= 0)
@@ -759,7 +787,7 @@ void Player::Invincibility()
 		m_fInvincibleTimer = m_fInvincibleMaxTimer;
 		m_bInvincible = false;
 		m_bRestrictYPosition = true;
-		m_Mesh.setColor(sf::Color(255, 255, 255));
+		m_Mesh->SetColor(sf::Color(255, 255, 255));
 	}
 }
 
