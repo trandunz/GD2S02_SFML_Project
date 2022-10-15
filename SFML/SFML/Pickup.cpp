@@ -3,10 +3,29 @@
 #include "Player.h"
 #include "TextureLoader.h"
 #include "AudioManager.h"
+#include "Helper.h"
 
 Pickup::Pickup(PickupProperties _properties)
 {
 	m_Properties = _properties;
+
+	switch (m_Properties.ePickupType)
+	{
+	case PICKUPTYPE::HEALTH:
+	{
+		if (Statics::bDebugMode)
+			Print("Spawned Health Pickup!");
+		break;
+	}
+	case PICKUPTYPE::MANA:
+	{
+		if (Statics::bDebugMode)
+			Print("Spawned Mana Pickup!");
+		break;
+	}
+	default:
+		break;
+	}
 
 	AnimStateProperties animProperties;
 	SetAnimStateTextureBasedOnType(animProperties);

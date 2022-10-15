@@ -297,4 +297,8 @@ public:
 	void SetRestrictYPosition(bool _restrictYPosition);
 
 	void SetStopInput(bool _stopInput);
+
+	bool HasLostMana();
+
+	bool HasLostHP();
 };

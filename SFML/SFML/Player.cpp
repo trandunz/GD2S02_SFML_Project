@@ -506,6 +506,16 @@ void Player::SetStopInput(bool _stopInput)
 	m_bStopInput = _stopInput;
 }
 
+bool Player::HasLostMana()
+{
+	return m_iCurrentMana < m_Properties.iMaxMana;
+}
+
+bool Player::HasLostHP()
+{
+	return m_iCurrentHealth < m_Properties.iMaxHealth;
+}
+
 void Player::TakeDamage(unsigned _amount)
 {
 	m_iCurrentHealth -= _amount;
