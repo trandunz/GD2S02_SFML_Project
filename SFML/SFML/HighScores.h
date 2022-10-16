@@ -17,17 +17,10 @@
 #define MAX_SCORES_DISPLAY 15
 #define SEPERATOR ","
 
-struct HighScoreEntry
-{
-	std::string sName1{};
-	std::string sName2{};
-	std::string sScore{};};
-
-
 class HighScores : public Level
 {
 public:
-	HighScores(bool _readOnly = true);
+	HighScores();
 	virtual ~HighScores();
 
 	/// <summary>
@@ -44,6 +37,14 @@ public:
 	virtual void Draw() override;
 
 private:
+
+	struct HighScoreEntry
+	{
+		std::string sName1{ "   " };
+		std::string sName2{ "   " };
+		std::string sScore{ '0' };
+	};
+
 	/// <summary>
 	/// Sets up the intial list of high scores
 	/// </summary>
@@ -53,13 +54,55 @@ private:
 	/// </summary>
 	void ReadScores();
 	/// <summary>
+	/// Writes the current scores into the data file
+	/// </summary>
+	void RecordScores();
+	/// <summary>
 	/// Create the text objects that will help to display
 	/// the list of high scores
 	/// </summary>
-	void DisplayScores();
+	void CreateScoreDisplay();
+	/// <summary>
+	/// Update the text objects to reflect the new scores
+	/// </summary>
+	void UpdateScores();
+	/// <summary>
+	/// Checks if the provided score is a new high score.
+	/// returns the its rank if it is. Otherwiser returns -1
+	/// </summary>
+	/// <param name="_inScore"></param>
+	/// <returns></returns>
+	virtual int CheckIfNewHighScore();
+	/// <summary>
+	/// Setup recognizing input for adding new entry to high score.
+	/// Takes in the rank of the new entry
+	/// </summary>
+	/// <param name="_inRank"></param>
+	virtual void StartInputModeOnRankEntry(unsigned _inRank);
+	/// <summary>
+	/// Meant to handle player inputs when attempting to create their initials
+	/// for aa new high scores
+	/// </summary>
+	/// <param name="_inRank"></param>
+	virtual void ParsePlayerCharacterInputs();
+	/// <summary>
+	/// Moves the entry (at the given rank) one rank down
+	/// </summary>
+	/// <param name="_inRankToMoveDown"></param>
+	void MoveScoreDown(unsigned _inRankToMoveDown);
 
-	bool m_bReadOnly = true;
-	std::map<unsigned, HighScoreEntry> m_ScoreList;
+	bool m_bReadOnly{ true };
+	std::map<unsigned, HighScoreEntry> m_mapScoreList;
+
+	unsigned m_uCharIndex_P1{0};
+	unsigned m_uCharIndex_P2{0};
+	unsigned m_uNewScoreRank = 0;
+
+	bool m_bPlayer1_Finish{false};
+	bool m_bPlayer2_Finish{false};
+
+	char m_cNameInput_P1[3]{'A','A','A'};
+	char m_cNameInput_P2[3]{'A','A','A'};
 
 	const std::string m_ksFileLocation = "Resources/Data/HighScores.csv";
 
