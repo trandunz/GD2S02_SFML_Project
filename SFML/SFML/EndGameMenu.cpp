@@ -39,7 +39,7 @@ void EndGameMenu::CreateMenuButtons()
 			{ ScreenCentre.x,ScreenCentre.y + 200}, // Position
 			[this]()
 			{
-				LevelLoader::LoadLevel(LEVELS::MENUSCENE); // On Press Lambda
+				LevelLoader::LoadLevel(LEVELS::HIGHSCORE); // On Press Lambda
 			},
 			nullptr,
 			{1.0f,1.0f}, // Scale

@@ -40,9 +40,9 @@ private:
 
 	struct HighScoreEntry
 	{
-		std::string sName1{};
-		std::string sName2{};
-		std::string sScore{};
+		std::string sName1{ "   " };
+		std::string sName2{ "   " };
+		std::string sScore{ '0' };
 	};
 
 	/// <summary>
@@ -54,10 +54,14 @@ private:
 	/// </summary>
 	void ReadScores();
 	/// <summary>
+	/// Writes the current scores into the data file
+	/// </summary>
+	void RecordScores();
+	/// <summary>
 	/// Create the text objects that will help to display
 	/// the list of high scores
 	/// </summary>
-	void DisplayScores();
+	void CreateScoreDisplay();
 	/// <summary>
 	/// Update the text objects to reflect the new scores
 	/// </summary>
@@ -76,6 +80,12 @@ private:
 	/// <param name="_inRank"></param>
 	virtual void StartInputModeOnRankEntry(unsigned _inRank);
 	/// <summary>
+	/// Meant to handle player inputs when attempting to create their initials
+	/// for aa new high scores
+	/// </summary>
+	/// <param name="_inRank"></param>
+	virtual void ParsePlayerCharacterInputs();
+	/// <summary>
 	/// Moves the entry (at the given rank) one rank down
 	/// </summary>
 	/// <param name="_inRankToMoveDown"></param>
@@ -86,9 +96,13 @@ private:
 
 	unsigned m_uCharIndex_P1{0};
 	unsigned m_uCharIndex_P2{0};
+	unsigned m_uNewScoreRank = 0;
 
-	char m_cNameInput_P1[3]{' '};
-	char m_cNameInput_P2[3]{' '};
+	bool m_bPlayer1_Finish{false};
+	bool m_bPlayer2_Finish{false};
+
+	char m_cNameInput_P1[3]{'A','A','A'};
+	char m_cNameInput_P2[3]{'A','A','A'};
 
 	const std::string m_ksFileLocation = "Resources/Data/HighScores.csv";
 
