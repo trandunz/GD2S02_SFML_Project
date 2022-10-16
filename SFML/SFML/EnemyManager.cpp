@@ -131,6 +131,10 @@ void EnemyManager::Update()
 
 									player->SetRestrictYPosition(false);
 									player->SetStopInput(true);
+
+								if (!(AudioManager::GetAudioSourceStatus("Warrior") == sf::SoundSource::Status::Playing)) {
+									AudioManager::PlayAudioSource("Warrior");
+								}
 								}
 								else
 								{

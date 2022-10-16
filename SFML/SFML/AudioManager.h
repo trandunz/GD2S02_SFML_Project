@@ -125,6 +125,8 @@ public:
 	/// <param name="_sound"></param>
 	static void SetSound(std::string _audioSource, std::string _sound);
 
+	static sf::SoundSource::Status GetAudioSourceStatus(std::string _audioSource);
+
 	/// <summary>
 	/// Cleanup all audio sources and loaded audio clips
 	/// </summary>

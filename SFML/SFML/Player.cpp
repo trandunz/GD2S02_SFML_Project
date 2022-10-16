@@ -123,7 +123,9 @@ void Player::Update()
 			m_fSpecialTimer = m_fSpecialDuration;
 			//m_fAttackTimer = m_fAttackSpeed;
 			Special();
-			AudioManager::PlayAudioSource("Special");
+		}
+		else if(!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
+			AudioManager::PlayAudioSource("CantCast");
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
@@ -133,7 +135,9 @@ void Player::Update()
 			//m_fAttackTimer = m_fAttackSpeed;
 			m_fSecondaryTimer = m_fSecondaryCooldown;
 			SecondaryAttack();
-			AudioManager::PlayAudioSource("Secondary");
+		}
+		else if (!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
+			AudioManager::PlayAudioSource("CantCast");
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(m_BasicAttackKey))
@@ -399,10 +403,14 @@ void Player::SecondaryAttack()
 {
 	if (m_iCurrentMana >= 1)
 	{
+		AudioManager::PlayAudioSource("Secondary");
 		m_iCurrentMana--;
 		// Spawn Secondary Projectile
 		m_SecondaryAttackProperties.v2fStartPos = GetPosition(); // Get player position
 		ProjectileManager::GetInstance().CreateProjectile(m_SecondaryAttackProperties);
+	}
+	else if (!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
+		AudioManager::PlayAudioSource("CantCast");
 	}
 }
 
@@ -410,6 +418,8 @@ void Player::Special()
 {
 	if (m_iCurrentMana >= 3)
 	{
+		AudioManager::PlayAudioSource("Special");
+
 		m_iCurrentMana -= 3;
 		// Spawn Special Effect
 		if (m_Properties.bPlayerOne)
@@ -431,6 +441,9 @@ void Player::Special()
 				PlayerManager::GetInstance().WhipeScreenFromSpecial();
 			}
 		}
+	}
+	else if (!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
+		AudioManager::PlayAudioSource("CantCast");
 	}
 }
 

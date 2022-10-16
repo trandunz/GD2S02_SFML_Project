@@ -211,6 +211,15 @@ void AudioManager::SetSound(std::string _audioSource, std::string _sound)
 	}
 }
 
+sf::SoundSource::Status AudioManager::GetAudioSourceStatus(std::string _audioSource)
+{
+	if (m_AudioSources[_audioSource] != nullptr)
+	{
+		return m_AudioSources[_audioSource]->getStatus();
+	}
+	return sf::SoundSource::Status();
+}
+
 void AudioManager::Cleanup()
 {
 	// Cleanup all audio sources

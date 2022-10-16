@@ -61,7 +61,7 @@ GameScene::GameScene()
 
 	// SFX
 	AudioManager::CreateAudioSource("Primary", "primary.wav");
-	AudioManager::CreateAudioSource("ShamanSpell", "secondary.wav");
+	AudioManager::CreateAudioSource("ShamanSpell", "shaman.wav");
 	AudioManager::CreateAudioSource("Secondary", "secondary.wav");
 	AudioManager::CreateAudioSource("Special", "special.wav");
 	AudioManager::CreateAudioSource("Bow", "bow.wav");
@@ -70,6 +70,9 @@ GameScene::GameScene()
 	AudioManager::CreateAudioSource("PickupHeart", "pickup_heart.wav");
 	AudioManager::CreateAudioSource("PickupMana", "pickup_mana.wav");
 	AudioManager::CreateAudioSource("Hit", "hit.wav");
+	AudioManager::CreateAudioSource("Warrior", "warrior.wav");
+	AudioManager::CreateAudioSource("CantCast", "cant_cast.wav");
+
 }
 
 GameScene::~GameScene()
