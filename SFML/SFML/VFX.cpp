@@ -175,6 +175,15 @@ void VFX::StopEffect(std::string _key)
 	m_Effects[_key].LifeTime = 0.0f;
 }
 
+void VFX::CleanupEffect(std::string _key)
+{
+	auto it = m_Effects.find(_key);
+	if (it != m_Effects.end())
+	{
+		it = m_Effects.erase(it);
+	}
+}
+
 float VFX::GetEffectLifetime(std::string _key)
 {
 	auto it = m_Effects.find(_key);

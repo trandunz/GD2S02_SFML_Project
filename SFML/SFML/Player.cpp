@@ -84,13 +84,13 @@ Player::~Player()
 	if (m_Properties.bPlayerOne)
 	{
 
-		VFX::GetInstance().StopEffect("P1_P1Special");
-		VFX::GetInstance().StopEffect("P2_P1Special");
+		VFX::GetInstance().CleanupEffect("P1_P1Special");
+		VFX::GetInstance().CleanupEffect("P2_P1Special");
 	}
 	else
 	{
-		VFX::GetInstance().StopEffect("P1_P2Special");
-		VFX::GetInstance().StopEffect("P2_P2Special");
+		VFX::GetInstance().CleanupEffect("P1_P2Special");
+		VFX::GetInstance().CleanupEffect("P2_P2Special");
 	}
 }
 
@@ -342,16 +342,37 @@ void Player::CreateSpecialVFX()
 {
 	if (m_Properties.bPlayerOne)
 	{
+		sf::Texture* texture{ nullptr };
+		switch (PlayerManager::GetInstance().ePlayer1Element)
+		{
+		case ELEMENTTYPE::FIRE:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Fire.png");
+			break;
+		}
+		case ELEMENTTYPE::WATER:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Water.png");
+			break;
+		}
+		case ELEMENTTYPE::EARTH:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Earth.png");
+			break;
+		}
+		default:
+			break;
+		}
 		VFX::GetInstance().CreateEffect("P1_P1Special",
 			{
-				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				texture,
 				{0,0},
 				{ 0.25f,0.25f },
 				{0,255,0}
 			});
 		VFX::GetInstance().CreateEffect("P1_P2Special",
 			{
-				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				texture,
 				{0,0},
 				{ 0.25f,0.25f },
 				{0,255,0}
@@ -359,16 +380,37 @@ void Player::CreateSpecialVFX()
 	}
 	else
 	{ 
+		sf::Texture* texture{ nullptr };
+		switch (PlayerManager::GetInstance().ePlayer2Element)
+		{
+		case ELEMENTTYPE::FIRE:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Fire.png");
+			break;
+		}
+		case ELEMENTTYPE::WATER:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Water.png");
+			break;
+		}
+		case ELEMENTTYPE::EARTH:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Earth.png");
+			break;
+		}
+		default:
+			break;
+		}
 		VFX::GetInstance().CreateEffect("P2_P1Special",
 			{
-				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				texture,
 				{0,0},
 				{ 0.25f,0.25f },
 				{255,0,0}
 			});
 		VFX::GetInstance().CreateEffect("P2_P2Special",
 			{
-				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				texture,
 				{0,0},
 				{ 0.25f,0.25f },
 				{255,0,0}
@@ -390,15 +432,26 @@ void Player::SetP2SpecialVFXPosition(sf::Vector2f _position)
 
 void Player::BasicAttack()
 {
-	if (m_fSpecialTimer <= 0)
+	float p1SpecialLifetime = VFX::GetInstance().GetEffectLifetime("P1_P1Special");
+	float p2SpecialLifetime = VFX::GetInstance().GetEffectLifetime("P2_P1Special");
+	if (p1SpecialLifetime > 0)
 	{
-		m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
-		ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
+		ProjectileProperties playerOneSpecial = m_EmpoweredBasicAttackProperties;
+		playerOneSpecial.Element = PlayerManager::GetInstance().ePlayer1Element;
+		playerOneSpecial.v2fStartPos = GetPosition(); // Get player position
+		ProjectileManager::GetInstance().CreateProjectile(playerOneSpecial);
+	}
+	else if (p2SpecialLifetime > 0)
+	{
+		ProjectileProperties playerTwoSpecial = m_EmpoweredBasicAttackProperties;
+		playerTwoSpecial.Element = PlayerManager::GetInstance().ePlayer2Element;
+		playerTwoSpecial.v2fStartPos = GetPosition(); // Get player position
+		ProjectileManager::GetInstance().CreateProjectile(playerTwoSpecial);
 	}
 	else
 	{
-		m_EmpoweredBasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
-		ProjectileManager::GetInstance().CreateProjectile(m_EmpoweredBasicAttackProperties);
+		m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
+		ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
 	}
 }
 
