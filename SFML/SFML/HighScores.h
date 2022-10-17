@@ -106,8 +106,8 @@ private:
 	void AdjustDisplayForInput(unsigned _inRank, int _inOffset);
 
 	const std::string m_ksFileLocation = "Resources/Data/HighScores.csv";
-	const std::string m_ksSelectorFileLocation_P1 = "CharacterSelector_P1.png";
-	const std::string m_ksSelectorFileLocation_P2 = "CharacterSelector_P2.png";
+	const std::string m_ksSelectorFileLocation_P1 = "GUI/CharacterSelector_P1.png";
+	const std::string m_ksSelectorFileLocation_P2 = "GUI/CharacterSelector_P2.png";
 
 	bool m_bReadOnly{ true };
 	std::map<unsigned, HighScoreEntry> m_mapScoreList;
@@ -124,8 +124,6 @@ private:
 
 	char m_cNameInput_P1[3]{'A','A','A'};
 	char m_cNameInput_P2[3]{'A','A','A'};
-
-
 
 public:
 	///////////////////////////

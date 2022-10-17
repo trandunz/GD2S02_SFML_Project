@@ -153,7 +153,7 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-	for (auto& background : m_Backgrounds)
+	for (auto& background : m_vecBackgrounds)
 		Statics::RenderWindow.draw(background);
 
 	Statics::RenderWindow.draw(ObjectManager::GetInstance());
@@ -166,20 +166,20 @@ void GameScene::Draw()
 
 void GameScene::CreateScrollingBackground()
 {
-	m_Backgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
-	m_Backgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
-	for (auto& background : m_Backgrounds)
+	m_vecBackgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
+	m_vecBackgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
+	for (auto& background : m_vecBackgrounds)
 	{
 		SetOriginCenter(background); 
 	}
-	m_Backgrounds[0].setPosition(400, 0);
-	m_Backgrounds[1].setPosition(400, 9600);
+	m_vecBackgrounds[0].setPosition(400, 0);
+	m_vecBackgrounds[1].setPosition(400, 9600);
 }
 
 void GameScene::ScrollBackground()
 {
 	m_fDistanceTravelled += Statics::fBackgroundScrollSpeed * Statics::fDeltaTime;
-	for (auto& background : m_Backgrounds)
+	for (auto& background : m_vecBackgrounds)
 	{
 		background.move({ 0,Statics::fBackgroundScrollSpeed * Statics::fDeltaTime });
 		if (background.getPosition().y - Statics::RenderWindow.getView().getCenter().y

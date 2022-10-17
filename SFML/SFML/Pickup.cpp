@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : Pickup.cpp 
+// Description : Pickup Implementation File		
+// Author : 
+
 #include "Pickup.h"
 #include "BoxCollider.h"
 #include "Player.h"
@@ -116,12 +125,12 @@ void Pickup::SetAnimStateTextureBasedOnType(AnimStateProperties& _animProperties
 	{
 	case PICKUPTYPE::HEALTH:
 	{
-		_animProperties.StateTexture = &TextureLoader::LoadTexture("FullHeart.png");
+		_animProperties.StateTexture = &TextureLoader::LoadTexture("GUI/FullHeart.png");
 		break;
 	}
 	case PICKUPTYPE::MANA:
 	{
-		_animProperties.StateTexture = &TextureLoader::LoadTexture("FullMana.png");
+		_animProperties.StateTexture = &TextureLoader::LoadTexture("GUI/FullMana.png");
 		break;
 	}
 	default:

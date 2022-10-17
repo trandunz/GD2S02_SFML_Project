@@ -28,9 +28,23 @@ public:
 		return instance;
 	}
 
+	/// <summary>
+	/// Cleans up any projectiles marked for destroy
+	/// </summary>
 	void CleanupDestroyed();
+	/// <summary>
+	/// Force cleans up all projectiles
+	/// </summary>
 	void CleanupProjectiles();
+	/// <summary>
+	/// Create a projectile with the specified properties
+	/// </summary>
+	/// <param name="_properties"></param>
 	void CreateProjectile(ProjectileProperties _properties);
+
+	/// <summary>
+	/// Update all projectiles
+	/// </summary>
 	void Update();
 
 private:
@@ -39,7 +53,17 @@ private:
 	inline ProjectileManager(const ProjectileManager&) {};
 	inline ~ProjectileManager() {}
 
+	/// <summary>
+	/// Apply the specified element debuff to an enemy
+	/// </summary>
+	/// <param name="_target"></param>
+	/// <param name="_element"></param>
 	void ApplyDebuff(Enemy* _target, ELEMENTTYPE _element);
+	/// <summary>
+	/// Apply the specified element debuff to a player
+	/// </summary>
+	/// <param name="_target"></param>
+	/// <param name="_element"></param>
 	void ApplyDebuff(Player* _target, ELEMENTTYPE _element);
 
 	std::vector<Projectile*> m_Projectiles{};

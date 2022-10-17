@@ -25,7 +25,7 @@ Button::Button(ButtonProperties _properties)
 	m_Properties = _properties;
 	if (_properties.Texture == nullptr)
 	{
-		SetTexture("Button.png");
+		SetTexture("GUI/Button.png");
 	}
 	else
 	{

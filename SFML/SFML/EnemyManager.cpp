@@ -207,6 +207,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 	float elapsedTime = LevelLoader::GetElaspedTime();
 	if (m_fSpawnTimer <= 0)
 	{
+		srand((unsigned)Statics::Time.getElapsedTime().asSeconds());
 		m_fSpawnTimer = _rate;
 
 		int iRandomEnemy = rand() % 4;

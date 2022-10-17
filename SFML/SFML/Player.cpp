@@ -36,10 +36,13 @@ Player::Player(PlayerProperties _properties)
 
 	//Set up properties that are the same for both players
 	m_BasicAttackProperties.uDamage = 1;
+	
 	m_SecondaryAttackProperties.bDestroyOnCollision = false;
 	m_SecondaryAttackProperties.fMoveSpeed = 250.0f;
 	m_SecondaryAttackProperties.bApplyElementToTarget = true;
 	m_SecondaryAttackProperties.eProjectileType = PROJECTILETYPE::SECONDARY;
+	
+	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 	m_EmpoweredBasicAttackProperties.bApplyElementToTarget = true;
 
 	if (m_Properties.bPlayerOne == false)
@@ -81,13 +84,13 @@ Player::~Player()
 	if (m_Properties.bPlayerOne)
 	{
 
-		VFX::GetInstance().StopEffect("P1_P1Special");
-		VFX::GetInstance().StopEffect("P2_P1Special");
+		VFX::GetInstance().CleanupEffect("P1_P1Special");
+		VFX::GetInstance().CleanupEffect("P2_P1Special");
 	}
 	else
 	{
-		VFX::GetInstance().StopEffect("P1_P2Special");
-		VFX::GetInstance().StopEffect("P2_P2Special");
+		VFX::GetInstance().CleanupEffect("P1_P2Special");
+		VFX::GetInstance().CleanupEffect("P2_P2Special");
 	}
 }
 
@@ -118,7 +121,7 @@ void Player::Update()
 
 	if (sf::Keyboard::isKeyPressed(m_SpecialAttackKey))
 	{
-		if (m_fSpecialTimer <= 0)
+		if (m_fSpecialTimer <= 0 && m_iCurrentMana >= 3)
 		{
 			m_fSpecialTimer = m_fSpecialDuration;
 			//m_fAttackTimer = m_fAttackSpeed;
@@ -130,7 +133,7 @@ void Player::Update()
 	}
 	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
 	{
-		if (/*m_fAttackTimer <= 0 && */m_fSecondaryTimer <= 0)
+		if (m_fSecondaryTimer <= 0 && m_iCurrentMana >= 1)
 		{
 			//m_fAttackTimer = m_fAttackSpeed;
 			m_fSecondaryTimer = m_fSecondaryCooldown;
@@ -253,21 +256,21 @@ void Player::CreateHeartsUI(std::string _prefix, sf::Vector2f _heartPos1, sf::Ve
 {
 	GUI::GetInstance().CreateImage(_prefix + "_HP1",
 		{
-			&TextureLoader::LoadTexture("FullHeart.png"),
+			&TextureLoader::LoadTexture("GUI/FullHeart.png"),
 			_heartPos1,
 			{0.5f, 0.5f}
 		}
 	);
 	GUI::GetInstance().CreateImage(_prefix + "_HP2",
 		{
-			&TextureLoader::LoadTexture("FullHeart.png"),
+			&TextureLoader::LoadTexture("GUI/FullHeart.png"),
 			_heartPos2,
 			{0.5f, 0.5f}
 		}
 	);
 	GUI::GetInstance().CreateImage(_prefix + "_HP3",
 		{
-			&TextureLoader::LoadTexture("FullHeart.png"),
+			&TextureLoader::LoadTexture("GUI/FullHeart.png"),
 			_heartPos3,
 			{0.5f, 0.5f}
 		}
@@ -278,21 +281,21 @@ void Player::CreateManaUI(std::string _prefix, sf::Vector2f _potPos1, sf::Vector
 {
 	GUI::GetInstance().CreateImage(_prefix + "_AP1",
 		{
-			&TextureLoader::LoadTexture("FullMana.png"),
+			&TextureLoader::LoadTexture("GUI/FullMana.png"),
 			_potPos1,
 			{0.5f, 0.5f}
 		}
 	);
 	GUI::GetInstance().CreateImage(_prefix + "_AP2",
 		{
-			&TextureLoader::LoadTexture("FullMana.png"),
+			&TextureLoader::LoadTexture("GUI/FullMana.png"),
 			_potPos2,
 			{0.5f, 0.5f}
 		}
 	);
 	GUI::GetInstance().CreateImage(_prefix + "_AP3",
 		{
-			&TextureLoader::LoadTexture("FullMana.png"),
+			&TextureLoader::LoadTexture("GUI/FullMana.png"),
 			_potPos3,
 			{0.5f, 0.5f}
 		}
@@ -302,53 +305,74 @@ void Player::CreateManaUI(std::string _prefix, sf::Vector2f _potPos1, sf::Vector
 void Player::UpdateHeartsUI(std::string _prefix)
 {
 	if (m_iCurrentHealth >= 1)
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP1", TextureLoader::LoadTexture("FullHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP1", TextureLoader::LoadTexture("GUI/FullHeart.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP1", TextureLoader::LoadTexture("EmptyHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP1", TextureLoader::LoadTexture("GUI/EmptyHeart.png"));
 
 	if (m_iCurrentHealth >= 2)
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP2", TextureLoader::LoadTexture("FullHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP2", TextureLoader::LoadTexture("GUI/FullHeart.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP2", TextureLoader::LoadTexture("EmptyHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP2", TextureLoader::LoadTexture("GUI/EmptyHeart.png"));
 
 	if (m_iCurrentHealth >= 3)
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP3", TextureLoader::LoadTexture("FullHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP3", TextureLoader::LoadTexture("GUI/FullHeart.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP3", TextureLoader::LoadTexture("EmptyHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP3", TextureLoader::LoadTexture("GUI/EmptyHeart.png"));
 }
 
 void Player::UpdateManaUI(std::string _prefix)
 {
 	if (m_iCurrentMana >= 1)
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP1", TextureLoader::LoadTexture("FullMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP1", TextureLoader::LoadTexture("GUI/FullMana.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP1", TextureLoader::LoadTexture("EmptyMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP1", TextureLoader::LoadTexture("GUI/EmptyMana.png"));
 
 	if (m_iCurrentMana >= 2)
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP2", TextureLoader::LoadTexture("FullMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP2", TextureLoader::LoadTexture("GUI/FullMana.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP2", TextureLoader::LoadTexture("EmptyMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP2", TextureLoader::LoadTexture("GUI/EmptyMana.png"));
 
 	if (m_iCurrentMana >= 3)
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP3", TextureLoader::LoadTexture("FullMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP3", TextureLoader::LoadTexture("GUI/FullMana.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP3", TextureLoader::LoadTexture("EmptyMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP3", TextureLoader::LoadTexture("GUI/EmptyMana.png"));
 }
 
 void Player::CreateSpecialVFX()
 {
 	if (m_Properties.bPlayerOne)
 	{
+		sf::Texture* texture{ nullptr };
+		switch (PlayerManager::GetInstance().ePlayer1Element)
+		{
+		case ELEMENTTYPE::FIRE:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Fire.png");
+			break;
+		}
+		case ELEMENTTYPE::WATER:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Water.png");
+			break;
+		}
+		case ELEMENTTYPE::EARTH:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Earth.png");
+			break;
+		}
+		default:
+			break;
+		}
 		VFX::GetInstance().CreateEffect("P1_P1Special",
 			{
-				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				texture,
 				{0,0},
 				{ 0.25f,0.25f },
 				{0,255,0}
 			});
 		VFX::GetInstance().CreateEffect("P1_P2Special",
 			{
-				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				texture,
 				{0,0},
 				{ 0.25f,0.25f },
 				{0,255,0}
@@ -356,16 +380,37 @@ void Player::CreateSpecialVFX()
 	}
 	else
 	{ 
+		sf::Texture* texture{ nullptr };
+		switch (PlayerManager::GetInstance().ePlayer2Element)
+		{
+		case ELEMENTTYPE::FIRE:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Fire.png");
+			break;
+		}
+		case ELEMENTTYPE::WATER:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Water.png");
+			break;
+		}
+		case ELEMENTTYPE::EARTH:
+		{
+			texture = &TextureLoader::LoadTexture("VFX/Earth.png");
+			break;
+		}
+		default:
+			break;
+		}
 		VFX::GetInstance().CreateEffect("P2_P1Special",
 			{
-				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				texture,
 				{0,0},
 				{ 0.25f,0.25f },
 				{255,0,0}
 			});
 		VFX::GetInstance().CreateEffect("P2_P2Special",
 			{
-				&TextureLoader::LoadTexture("SpecialEffect_Temp.png"),
+				texture,
 				{0,0},
 				{ 0.25f,0.25f },
 				{255,0,0}
@@ -387,15 +432,26 @@ void Player::SetP2SpecialVFXPosition(sf::Vector2f _position)
 
 void Player::BasicAttack()
 {
-	if (m_fSpecialTimer <= 0)
+	float p1SpecialLifetime = VFX::GetInstance().GetEffectLifetime("P1_P1Special");
+	float p2SpecialLifetime = VFX::GetInstance().GetEffectLifetime("P2_P1Special");
+	if (p1SpecialLifetime > 0)
 	{
-		m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
-		ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
+		ProjectileProperties playerOneSpecial = m_EmpoweredBasicAttackProperties;
+		playerOneSpecial.eElement = PlayerManager::GetInstance().ePlayer1Element;
+		playerOneSpecial.v2fStartPos = GetPosition(); // Get player position
+		ProjectileManager::GetInstance().CreateProjectile(playerOneSpecial);
+	}
+	else if (p2SpecialLifetime > 0)
+	{
+		ProjectileProperties playerTwoSpecial = m_EmpoweredBasicAttackProperties;
+		playerTwoSpecial.eElement = PlayerManager::GetInstance().ePlayer2Element;
+		playerTwoSpecial.v2fStartPos = GetPosition(); // Get player position
+		ProjectileManager::GetInstance().CreateProjectile(playerTwoSpecial);
 	}
 	else
 	{
-		m_EmpoweredBasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
-		ProjectileManager::GetInstance().CreateProjectile(m_EmpoweredBasicAttackProperties);
+		m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
+		ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
 	}
 }
 
@@ -408,9 +464,6 @@ void Player::SecondaryAttack()
 		// Spawn Secondary Projectile
 		m_SecondaryAttackProperties.v2fStartPos = GetPosition(); // Get player position
 		ProjectileManager::GetInstance().CreateProjectile(m_SecondaryAttackProperties);
-	}
-	else if (!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
-		AudioManager::PlayAudioSource("CantCast");
 	}
 }
 
@@ -442,9 +495,6 @@ void Player::Special()
 			}
 		}
 	}
-	else if (!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
-		AudioManager::PlayAudioSource("CantCast");
-	}
 }
 
 void Player::SetElement_Fire()
@@ -452,13 +502,13 @@ void Player::SetElement_Fire()
 	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 	m_BasicAttackProperties.uNumberOfFrames = 3;
-	m_BasicAttackProperties.Element = ELEMENTTYPE::FIRE;
+	m_BasicAttackProperties.eElement = ELEMENTTYPE::FIRE;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
 	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/16_sunburn_spritesheet.png");// ("Fire_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.50f,1.50f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 61;
-	m_SecondaryAttackProperties.Element = ELEMENTTYPE::FIRE;
+	m_SecondaryAttackProperties.eElement = ELEMENTTYPE::FIRE;
 }
 
 void Player::SetElement_Water()
@@ -466,13 +516,13 @@ void Player::SetElement_Water()
 	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Water_Spell_Animated.png");//("Earth_Spell.png");
 	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 	m_BasicAttackProperties.uNumberOfFrames = 3;
-	m_BasicAttackProperties.Element = ELEMENTTYPE::WATER;
+	m_BasicAttackProperties.eElement = ELEMENTTYPE::WATER;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
 	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/12_nebula_spritesheet.png");//("Earth_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 61;
-	m_SecondaryAttackProperties.Element = ELEMENTTYPE::WATER;
+	m_SecondaryAttackProperties.eElement = ELEMENTTYPE::WATER;
 }
 
 void Player::SetElement_Earth()
@@ -480,13 +530,13 @@ void Player::SetElement_Earth()
 	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
 	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 	m_BasicAttackProperties.uNumberOfFrames = 3;
-	m_BasicAttackProperties.Element = ELEMENTTYPE::EARTH;
+	m_BasicAttackProperties.eElement = ELEMENTTYPE::EARTH;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
 	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/17_felspell_spritesheet.png");//("Earth_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.0f,1.0f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 91;
-	m_SecondaryAttackProperties.Element = ELEMENTTYPE::EARTH;
+	m_SecondaryAttackProperties.eElement = ELEMENTTYPE::EARTH;
 }
 
 sf::Vector2f Player::GetPosition() const
@@ -724,11 +774,6 @@ void Player::HandleSlow()
 int Player::GetCurrentHealth() const
 {
 	return m_iCurrentHealth;
-}
-
-sf::Vector2f Player::GetFuturePosition(sf::Vector2f _velocity) const
-{
-	return m_Mesh->GetPosition() + (m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 }
 
 void Player::RestrictToScreen()

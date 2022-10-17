@@ -12,24 +12,48 @@
 
 enum class LEVELS
 {
-	UNASSIGNED,
+	UNASSIGNED = 0,
+
 	MENUSCENE,
 	CHARACTERSELECTSCENE,
 	GAMESCENE,
-	HIGHSCORE
+	HIGHSCORESCENE
 };
 
 class LevelLoader
 {
 public:
+	/// <summary>
+	/// Calls handle events on active seen if available
+	/// </summary>
 	static void HandleEvents();
+	/// <summary>
+	/// Calls Update on active seen if available
+	/// </summary>
 	static void Update();
+	/// <summary>
+	/// Calls Draw on active seen if available
+	/// </summary>
 	static void Draw();
 	
+	/// <summary>
+	/// Switches to the currently loaded level if one is available
+	/// </summary>
 	static void SwitchToLoadedLevel();
+
+	/// <summary>
+	/// Proposes a level to be loaded at end of frame
+	/// </summary>
 	static void LoadLevel(LEVELS _newLevel);
+
+	/// <summary>
+	/// Cleans up the current level if available
+	/// </summary>
 	static void CleanupLevel();
 
+	/// <summary>
+	/// Returns the elapsed time of the current level
+	/// </summary>
 	static float GetElaspedTime();
 private:
 	static Level* CurrentLevel;

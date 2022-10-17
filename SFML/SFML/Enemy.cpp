@@ -33,14 +33,14 @@ Enemy::Enemy(EnemyProperties _properties)
 	AnimStateProperties animProperties;
 	animProperties.StateTexture = _properties.Texture;
 
-	switch (m_Properties.EnemyType)
+	switch (m_Properties.eEnemyType)
 	{
 		// Set related indivudual animation properties based on type
 		case ENEMYTYPE::KAMIKAZE: 
 		{
 			// Pick a random sprite for kamikaze enemy
 			int iRandomKamakazi = rand() % 5;
-			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Enemy/Goblin_Kamakazi" + FloatToString(iRandomKamakazi + 1, 0) + ".png");
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Enemy/Goblin_Kamakazi" + FloatToString(iRandomKamakazi + 1.0f, 0) + ".png");
 
 			// Set box collider
 			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
@@ -99,7 +99,7 @@ Enemy::Enemy(EnemyProperties _properties)
 Enemy::~Enemy()
 {
 
-	switch (m_Properties.EnemyType)
+	switch (m_Properties.eEnemyType)
 	{
 		// Set VFX for enemy death based on type
 		case ENEMYTYPE::KAMIKAZE:
@@ -187,7 +187,7 @@ void Enemy::Update()
 
 ENEMYTYPE Enemy::GetType()
 {
-	return m_Properties.EnemyType;
+	return m_Properties.eEnemyType;
 }
 
 sf::Vector2f Enemy::GetPosition() const
@@ -215,7 +215,7 @@ void Enemy::TakeDamage(unsigned _amount)
 		VFX::GetInstance().CreateAndPlayTextEffect(
 			{
 				GetPosition(), // position
-				"+" + FloatToString(GetPoints(),0), // text / string
+				"+" + FloatToString((float)GetPoints(),0), // text / string
 				{255, 215, 0}, // Fill colour (gold)
 				36, // font size
 				sf::Color::Black, // Outline colour
@@ -255,7 +255,7 @@ void Enemy::FlashWhenHit()
 	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
 	m_bSpriteColorChanged = true;
 	m_bDamaged = true;
-	m_uDamageOverTime = 0.0f;
+	m_uDamageOverTime = 0;
 	m_fDamageTime = 0.05f;
 }
 
@@ -279,8 +279,8 @@ void Enemy::ApplyStop(float _seconds, sf::Color _color)
 void Enemy::ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color)
 {
 	// Slow enemy movement by percentage
-	m_fMoveSpeed = m_fMoveSpeed * _slowMovementPercentage;
-	m_fJumpSpeed = m_fJumpSpeed * _slowMovementPercentage;
+	m_fMoveSpeed = m_Properties.fMoveSpeed * _slowMovementPercentage;
+	m_fJumpSpeed = m_Properties.fJumpSpeed * _slowMovementPercentage;
 
 	m_SlowedSpriteColor = _color; // Set damage color
 	m_fSpriteChangeColorSpeed = 0.5f; // Set speed of color change
@@ -350,7 +350,7 @@ void Enemy::SetHPMax()
 
 void Enemy::Movement()
 {
-	switch (m_Properties.EnemyType)
+	switch (m_Properties.eEnemyType)
 	{
 		// Movement of Kamikaze enemy
 		// Runs straight down, and jumps over obstacles 
@@ -528,7 +528,7 @@ void Enemy::Attack()
 
 		m_fAttackTimer = fAttackSpeed; // Reset timer
 
-		if (m_Properties.EnemyType == ENEMYTYPE::ARCHER)
+		if (m_Properties.eEnemyType == ENEMYTYPE::ARCHER)
 		{
 			// Create projectile
 			ProjectileManager::GetInstance().CreateProjectile(
@@ -549,7 +549,7 @@ void Enemy::Attack()
 
 			AudioManager::PlayAudioSource("Bow");
 		}
-		else if (m_Properties.EnemyType == ENEMYTYPE::SHAMAN)
+		else if (m_Properties.eEnemyType == ENEMYTYPE::SHAMAN)
 		{
 			int randomInt = rand() % 4;
 

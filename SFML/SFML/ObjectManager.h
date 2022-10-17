@@ -27,8 +27,14 @@ public:
 	/// </summary>
 	void CleanupPickups();
 
+	/// <summary>
+	/// Cleans up all objects that are marked for destroy
+	/// </summary>
 	void CleanupDestroyed();
 
+	/// <summary>
+	/// Force clean up everything including obstacles
+	/// </summary>
 	void CleanupEverything();
 
 	/// <summary>
