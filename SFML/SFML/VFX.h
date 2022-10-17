@@ -78,6 +78,7 @@ public:
 	/// <param name="_key"></param>
 	void StopEffect(std::string _key);
 
+	void CleanupEffect(std::string _key);
 private:
 	struct SpecialEffect
 	{
