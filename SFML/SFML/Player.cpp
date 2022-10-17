@@ -256,21 +256,21 @@ void Player::CreateHeartsUI(std::string _prefix, sf::Vector2f _heartPos1, sf::Ve
 {
 	GUI::GetInstance().CreateImage(_prefix + "_HP1",
 		{
-			&TextureLoader::LoadTexture("FullHeart.png"),
+			&TextureLoader::LoadTexture("GUI/FullHeart.png"),
 			_heartPos1,
 			{0.5f, 0.5f}
 		}
 	);
 	GUI::GetInstance().CreateImage(_prefix + "_HP2",
 		{
-			&TextureLoader::LoadTexture("FullHeart.png"),
+			&TextureLoader::LoadTexture("GUI/FullHeart.png"),
 			_heartPos2,
 			{0.5f, 0.5f}
 		}
 	);
 	GUI::GetInstance().CreateImage(_prefix + "_HP3",
 		{
-			&TextureLoader::LoadTexture("FullHeart.png"),
+			&TextureLoader::LoadTexture("GUI/FullHeart.png"),
 			_heartPos3,
 			{0.5f, 0.5f}
 		}
@@ -281,21 +281,21 @@ void Player::CreateManaUI(std::string _prefix, sf::Vector2f _potPos1, sf::Vector
 {
 	GUI::GetInstance().CreateImage(_prefix + "_AP1",
 		{
-			&TextureLoader::LoadTexture("FullMana.png"),
+			&TextureLoader::LoadTexture("GUI/FullMana.png"),
 			_potPos1,
 			{0.5f, 0.5f}
 		}
 	);
 	GUI::GetInstance().CreateImage(_prefix + "_AP2",
 		{
-			&TextureLoader::LoadTexture("FullMana.png"),
+			&TextureLoader::LoadTexture("GUI/FullMana.png"),
 			_potPos2,
 			{0.5f, 0.5f}
 		}
 	);
 	GUI::GetInstance().CreateImage(_prefix + "_AP3",
 		{
-			&TextureLoader::LoadTexture("FullMana.png"),
+			&TextureLoader::LoadTexture("GUI/FullMana.png"),
 			_potPos3,
 			{0.5f, 0.5f}
 		}
@@ -305,37 +305,37 @@ void Player::CreateManaUI(std::string _prefix, sf::Vector2f _potPos1, sf::Vector
 void Player::UpdateHeartsUI(std::string _prefix)
 {
 	if (m_iCurrentHealth >= 1)
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP1", TextureLoader::LoadTexture("FullHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP1", TextureLoader::LoadTexture("GUI/FullHeart.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP1", TextureLoader::LoadTexture("EmptyHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP1", TextureLoader::LoadTexture("GUI/EmptyHeart.png"));
 
 	if (m_iCurrentHealth >= 2)
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP2", TextureLoader::LoadTexture("FullHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP2", TextureLoader::LoadTexture("GUI/FullHeart.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP2", TextureLoader::LoadTexture("EmptyHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP2", TextureLoader::LoadTexture("GUI/EmptyHeart.png"));
 
 	if (m_iCurrentHealth >= 3)
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP3", TextureLoader::LoadTexture("FullHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP3", TextureLoader::LoadTexture("GUI/FullHeart.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_HP3", TextureLoader::LoadTexture("EmptyHeart.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_HP3", TextureLoader::LoadTexture("GUI/EmptyHeart.png"));
 }
 
 void Player::UpdateManaUI(std::string _prefix)
 {
 	if (m_iCurrentMana >= 1)
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP1", TextureLoader::LoadTexture("FullMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP1", TextureLoader::LoadTexture("GUI/FullMana.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP1", TextureLoader::LoadTexture("EmptyMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP1", TextureLoader::LoadTexture("GUI/EmptyMana.png"));
 
 	if (m_iCurrentMana >= 2)
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP2", TextureLoader::LoadTexture("FullMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP2", TextureLoader::LoadTexture("GUI/FullMana.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP2", TextureLoader::LoadTexture("EmptyMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP2", TextureLoader::LoadTexture("GUI/EmptyMana.png"));
 
 	if (m_iCurrentMana >= 3)
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP3", TextureLoader::LoadTexture("FullMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP3", TextureLoader::LoadTexture("GUI/FullMana.png"));
 	else
-		GUI::GetInstance().SetImageSprite(_prefix + "_AP3", TextureLoader::LoadTexture("EmptyMana.png"));
+		GUI::GetInstance().SetImageSprite(_prefix + "_AP3", TextureLoader::LoadTexture("GUI/EmptyMana.png"));
 }
 
 void Player::CreateSpecialVFX()

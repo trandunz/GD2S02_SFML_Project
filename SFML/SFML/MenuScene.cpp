@@ -143,7 +143,7 @@ void MenuScene::CreateElements()
 			{
 				LevelLoader::LoadLevel(LEVELS::CHARACTERSELECTSCENE);
 			},
-			&TextureLoader::LoadTexture("StartButton.png")
+			&TextureLoader::LoadTexture("GUI/StartButton.png")
 		}
 	);
 
@@ -156,7 +156,7 @@ void MenuScene::CreateElements()
 			{
 				m_SettingsMenu = new SettingsMenu;
 			},
-			&TextureLoader::LoadTexture("OptionsButton.png")
+			&TextureLoader::LoadTexture("GUI/OptionsButton.png")
 		}
 	);
 
@@ -170,7 +170,7 @@ void MenuScene::CreateElements()
 				//Statics::fGameScore = 9000;
 				LevelLoader::LoadLevel(LEVELS::HIGHSCORESCENE);
 			},
-			&TextureLoader::LoadTexture("HighScoreButton.png")
+			&TextureLoader::LoadTexture("GUI/HighScoreButton.png")
 		}
 	);
 
@@ -183,13 +183,13 @@ void MenuScene::CreateElements()
 			{
 				Statics::RenderWindow.close();
 			},
-			&TextureLoader::LoadTexture("QuitButton.png")
+			&TextureLoader::LoadTexture("GUI/QuitButton.png")
 		}
 	);
 
 	GUI::GetInstance().CreateImage("Title",
 		{
-			&TextureLoader::LoadTexture("Title.png"),
+			&TextureLoader::LoadTexture("GUI/Title.png"),
 			{windowSize.x / 2.0f, (windowSize.y / 4.0f)},
 			{1.5f, 1.5f}
 		});
