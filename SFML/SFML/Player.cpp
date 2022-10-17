@@ -36,10 +36,13 @@ Player::Player(PlayerProperties _properties)
 
 	//Set up properties that are the same for both players
 	m_BasicAttackProperties.uDamage = 1;
+	
 	m_SecondaryAttackProperties.bDestroyOnCollision = false;
 	m_SecondaryAttackProperties.fMoveSpeed = 250.0f;
 	m_SecondaryAttackProperties.bApplyElementToTarget = true;
 	m_SecondaryAttackProperties.eProjectileType = PROJECTILETYPE::SECONDARY;
+	
+	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 	m_EmpoweredBasicAttackProperties.bApplyElementToTarget = true;
 
 	if (m_Properties.bPlayerOne == false)
@@ -118,7 +121,7 @@ void Player::Update()
 
 	if (sf::Keyboard::isKeyPressed(m_SpecialAttackKey))
 	{
-		if (m_fSpecialTimer <= 0)
+		if (m_fSpecialTimer <= 0 && m_iCurrentMana >= 3)
 		{
 			m_fSpecialTimer = m_fSpecialDuration;
 			//m_fAttackTimer = m_fAttackSpeed;
@@ -130,7 +133,7 @@ void Player::Update()
 	}
 	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
 	{
-		if (/*m_fAttackTimer <= 0 && */m_fSecondaryTimer <= 0)
+		if (m_fSecondaryTimer <= 0 && m_iCurrentMana >= 1)
 		{
 			//m_fAttackTimer = m_fAttackSpeed;
 			m_fSecondaryTimer = m_fSecondaryCooldown;
@@ -409,9 +412,6 @@ void Player::SecondaryAttack()
 		m_SecondaryAttackProperties.v2fStartPos = GetPosition(); // Get player position
 		ProjectileManager::GetInstance().CreateProjectile(m_SecondaryAttackProperties);
 	}
-	else if (!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
-		AudioManager::PlayAudioSource("CantCast");
-	}
 }
 
 void Player::Special()
@@ -441,9 +441,6 @@ void Player::Special()
 				PlayerManager::GetInstance().WhipeScreenFromSpecial();
 			}
 		}
-	}
-	else if (!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
-		AudioManager::PlayAudioSource("CantCast");
 	}
 }
 

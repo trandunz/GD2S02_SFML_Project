@@ -80,7 +80,7 @@ public:
 	/// <param name="_seconds"></param>
 	/// <param name="_slowMovementPercentage"></param>
 	/// <param name="_color"></param>
-	void ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color = { 181, 230, 29 });
+	void ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color = sf::Color::Blue);
 
 	bool bDestroy{ false };
 
@@ -268,7 +268,7 @@ private:
 	// -Enemy being slowed variables-
 	bool m_bSlowed{ false };
 	float m_fSlowTime{};
-	sf::Color m_SlowedSpriteColor;
+	sf::Color m_SlowedSpriteColor{sf::Color::Blue};
 
 	sf::Keyboard::Key m_MoveUpKey {sf::Keyboard::Key::W };
 	sf::Keyboard::Key m_MoveDownKey { sf::Keyboard::Key::S};

@@ -279,8 +279,8 @@ void Enemy::ApplyStop(float _seconds, sf::Color _color)
 void Enemy::ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color)
 {
 	// Slow enemy movement by percentage
-	m_fMoveSpeed = m_fMoveSpeed * _slowMovementPercentage;
-	m_fJumpSpeed = m_fJumpSpeed * _slowMovementPercentage;
+	m_fMoveSpeed = m_Properties.fMoveSpeed * _slowMovementPercentage;
+	m_fJumpSpeed = m_Properties.fJumpSpeed * _slowMovementPercentage;
 
 	m_SlowedSpriteColor = _color; // Set damage color
 	m_fSpriteChangeColorSpeed = 0.5f; // Set speed of color change
