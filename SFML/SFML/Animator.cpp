@@ -32,6 +32,8 @@ Animator::~Animator()
 
 void Animator::AddState(std::string _stateName, AnimStateProperties _properties)
 {
+	//Regret doing this. makes it so we can't use single spritesheets that contain sprites for different
+	//uses, like indicators for each player.
 	_properties.iFrameHeight = _properties.StateTexture->getSize().y;
 	_properties.iFrameWidth = _properties.StateTexture->getSize().x / _properties.uNumberOfFrames;
 	m_mapAnimationStates.insert_or_assign(_stateName, _properties);

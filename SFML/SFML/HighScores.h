@@ -13,9 +13,16 @@
 #include "Level.h"
 #include "Statics.h"
 
-
-#define MAX_SCORES_DISPLAY 15
+#define MAX_SCORES_DISPLAY 10
+#define RECORD_FONTSIZE 36
+//Value obtained through trial and error
+//to get the correct change in position when moving
+//the indicator
+#define NEWRECORD_FONTWIDTH 26
+#define INPUTMODE_POSITIONOFFSET 42
 #define SEPERATOR ","
+
+class Animator;
 
 class HighScores : public Level
 {
@@ -90,6 +97,17 @@ private:
 	/// </summary>
 	/// <param name="_inRankToMoveDown"></param>
 	void MoveScoreDown(unsigned _inRankToMoveDown);
+	/// <summary>
+	/// Move other rank entries down by an offset, 
+	/// and move the new entry down slightly and increase its size
+	/// </summary>
+	/// <param name="_inRank"></param>
+	/// <param name="_inOffset"></param>
+	void AdjustDisplayForInput(unsigned _inRank, int _inOffset);
+
+	const std::string m_ksFileLocation = "Resources/Data/HighScores.csv";
+	const std::string m_ksSelectorFileLocation_P1 = "CharacterSelector_P1.png";
+	const std::string m_ksSelectorFileLocation_P2 = "CharacterSelector_P2.png";
 
 	bool m_bReadOnly{ true };
 	std::map<unsigned, HighScoreEntry> m_mapScoreList;
@@ -98,13 +116,16 @@ private:
 	unsigned m_uCharIndex_P2{0};
 	unsigned m_uNewScoreRank = 0;
 
+	Animator* m_pIndicator_P1 = nullptr;
+	Animator* m_pIndicator_P2 = nullptr;
+
 	bool m_bPlayer1_Finish{false};
 	bool m_bPlayer2_Finish{false};
 
 	char m_cNameInput_P1[3]{'A','A','A'};
 	char m_cNameInput_P2[3]{'A','A','A'};
 
-	const std::string m_ksFileLocation = "Resources/Data/HighScores.csv";
+
 
 public:
 	///////////////////////////
