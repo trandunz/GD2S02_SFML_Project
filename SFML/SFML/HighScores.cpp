@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : HighScores.cpp 
+// Description : HighScores Implementation File		
+// Author : 
+
 #include <fstream>
 #include "HighScores.h"
 #include "LevelLoader.h"
@@ -236,15 +245,15 @@ void HighScores::CreateScoreDisplay()
 		std::string scoreKey = "Score" + std::to_string(rank);
 
 		//Finally, set up the 3 text objects for the current rank
-		newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, 100 + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, 100.0f + (rank * 40));
 		newTextProperties.String = std::to_string(rank);
 		GUI::GetInstance().CreateText(textKey, newTextProperties);
 
-		newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 100 + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 100.0f + (rank * 40));
 		newTextProperties.String = currentRank.sName1 + "  &  " + currentRank.sName2;
 		GUI::GetInstance().CreateText(nameKey, newTextProperties);
 
-		newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, 100 + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, 100.0f + (rank * 40));
 		newTextProperties.String = currentRank.sScore;
 		GUI::GetInstance().CreateText(scoreKey, newTextProperties);
 	}
@@ -327,7 +336,7 @@ void HighScores::StartInputModeOnRankEntry(unsigned _inRank)
 
 	//Get the position of the name text object and and move both indicators to positions relative to 
 	//this text object
-	std::string nameKey = "Name" + std::to_string(_inRank);
+	nameKey = "Name" + std::to_string(_inRank);
 	sf::Vector2f textPosition = GUI::GetInstance().GetText(nameKey).getPosition();
 	m_pIndicator_P1->SetPosition({ textPosition.x - (NEWRECORD_FONTWIDTH * 4), textPosition.y });
 	m_pIndicator_P2->SetPosition({ textPosition.x + (NEWRECORD_FONTWIDTH * 2), textPosition.y });

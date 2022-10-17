@@ -125,8 +125,6 @@ private:
 	char m_cNameInput_P1[3]{'A','A','A'};
 	char m_cNameInput_P2[3]{'A','A','A'};
 
-
-
 public:
 	///////////////////////////
 	/// Getters and Setters	///

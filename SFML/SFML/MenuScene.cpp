@@ -168,7 +168,7 @@ void MenuScene::CreateElements()
 			[]()
 			{
 				//Statics::fGameScore = 9000;
-				LevelLoader::LoadLevel(LEVELS::HIGHSCORE);
+				LevelLoader::LoadLevel(LEVELS::HIGHSCORESCENE);
 			},
 			&TextureLoader::LoadTexture("HighScoreButton.png")
 		}

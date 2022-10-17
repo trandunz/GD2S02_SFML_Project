@@ -437,14 +437,14 @@ void Player::BasicAttack()
 	if (p1SpecialLifetime > 0)
 	{
 		ProjectileProperties playerOneSpecial = m_EmpoweredBasicAttackProperties;
-		playerOneSpecial.Element = PlayerManager::GetInstance().ePlayer1Element;
+		playerOneSpecial.eElement = PlayerManager::GetInstance().ePlayer1Element;
 		playerOneSpecial.v2fStartPos = GetPosition(); // Get player position
 		ProjectileManager::GetInstance().CreateProjectile(playerOneSpecial);
 	}
 	else if (p2SpecialLifetime > 0)
 	{
 		ProjectileProperties playerTwoSpecial = m_EmpoweredBasicAttackProperties;
-		playerTwoSpecial.Element = PlayerManager::GetInstance().ePlayer2Element;
+		playerTwoSpecial.eElement = PlayerManager::GetInstance().ePlayer2Element;
 		playerTwoSpecial.v2fStartPos = GetPosition(); // Get player position
 		ProjectileManager::GetInstance().CreateProjectile(playerTwoSpecial);
 	}
@@ -502,13 +502,13 @@ void Player::SetElement_Fire()
 	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Fire_Spell_Animated.png");// ("Fire_Spell.png");
 	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 	m_BasicAttackProperties.uNumberOfFrames = 3;
-	m_BasicAttackProperties.Element = ELEMENTTYPE::FIRE;
+	m_BasicAttackProperties.eElement = ELEMENTTYPE::FIRE;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
 	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/16_sunburn_spritesheet.png");// ("Fire_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.50f,1.50f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 61;
-	m_SecondaryAttackProperties.Element = ELEMENTTYPE::FIRE;
+	m_SecondaryAttackProperties.eElement = ELEMENTTYPE::FIRE;
 }
 
 void Player::SetElement_Water()
@@ -516,13 +516,13 @@ void Player::SetElement_Water()
 	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Water_Spell_Animated.png");//("Earth_Spell.png");
 	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 	m_BasicAttackProperties.uNumberOfFrames = 3;
-	m_BasicAttackProperties.Element = ELEMENTTYPE::WATER;
+	m_BasicAttackProperties.eElement = ELEMENTTYPE::WATER;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
 	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/12_nebula_spritesheet.png");//("Earth_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.5f,1.5f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 61;
-	m_SecondaryAttackProperties.Element = ELEMENTTYPE::WATER;
+	m_SecondaryAttackProperties.eElement = ELEMENTTYPE::WATER;
 }
 
 void Player::SetElement_Earth()
@@ -530,13 +530,13 @@ void Player::SetElement_Earth()
 	m_BasicAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/Earth_Spell_Animated.png");//("Earth_Spell.png");
 	m_BasicAttackProperties.v2fScale = { 2.00f,2.00f };
 	m_BasicAttackProperties.uNumberOfFrames = 3;
-	m_BasicAttackProperties.Element = ELEMENTTYPE::EARTH;
+	m_BasicAttackProperties.eElement = ELEMENTTYPE::EARTH;
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 
 	m_SecondaryAttackProperties.Texture = &TextureLoader::LoadTexture("Projectiles/17_felspell_spritesheet.png");//("Earth_Spell.png");
 	m_SecondaryAttackProperties.v2fScale = { 1.0f,1.0f };
 	m_SecondaryAttackProperties.uNumberOfFrames = 91;
-	m_SecondaryAttackProperties.Element = ELEMENTTYPE::EARTH;
+	m_SecondaryAttackProperties.eElement = ELEMENTTYPE::EARTH;
 }
 
 sf::Vector2f Player::GetPosition() const
@@ -774,11 +774,6 @@ void Player::HandleSlow()
 int Player::GetCurrentHealth() const
 {
 	return m_iCurrentHealth;
-}
-
-sf::Vector2f Player::GetFuturePosition(sf::Vector2f _velocity) const
-{
-	return m_Mesh->GetPosition() + (m_v2fVelocity * m_Properties.fMoveSpeed * Statics::fDeltaTime);
 }
 
 void Player::RestrictToScreen()

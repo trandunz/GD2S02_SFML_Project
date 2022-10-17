@@ -28,7 +28,7 @@ Obstacle::Obstacle(ObstacleProperties _properties)
 
 Obstacle::~Obstacle()
 {
-	switch (m_Properties.ObstacleType)
+	switch (m_Properties.eObstacleType)
 	{
 		case OBSTACLETYPE::ROCK:
 		{	

@@ -329,5 +329,9 @@ ELEMENTTYPE CharacterSelectScene::SetPlayerElement(int _player)
 			return ELEMENTTYPE::WATER;
 			break;
 		}
+		default:
+			break;
 	}
+
+	return ELEMENTTYPE::NONE;
 }

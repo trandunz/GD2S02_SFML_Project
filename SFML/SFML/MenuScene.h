@@ -53,7 +53,13 @@ public:
 	/// <param name="_button"></param>
 	void ScaleSelectedButton(std::string _button);
 private:
+	/// <summary>
+	/// Force clean up all GUI elements
+	/// </summary>
 	void CleanupElements();
+	/// <summary>
+	/// Creates all GUI elements
+	/// </summary>
 	void CreateElements();
 
 	std::string m_sHighLighted{};

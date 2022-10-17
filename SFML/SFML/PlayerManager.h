@@ -20,16 +20,31 @@ public:
 		return instance;
 	}
 
+	/// <summary>
+	/// Cleans up any player marked for destroy
+	/// </summary>
 	void CleanupDestroyed();
+	/// <summary>
+	/// Force cleans up all players
+	/// </summary>
 	void CleanupPlayers();
+	/// <summary>
+	/// Creates a player with the specified properties
+	/// </summary>
+	/// <param name="_properties"></param>
 	void CreatePlayer(PlayerProperties _properties);
+	/// <summary>
+	/// Handles all key and mouse events
+	/// </summary>
 	void HandleEvents();
+	/// <summary>
+	/// Player update
+	/// </summary>
 	void Update();
 
-	std::vector<sf::Sprite> GetPlayerSprites() const;
-	std::vector<Player*>& GetPlayers();
-	Player* GetPlayerFromIndex(unsigned _index);
-
+	/// <summary>
+	/// Create the screen wipe vfx
+	/// </summary>
 	void WhipeScreenFromSpecial();
 
 	ELEMENTTYPE ePlayer1Element{ ELEMENTTYPE::NONE };
@@ -52,5 +67,9 @@ public:
 	///////////////////////////
 	/// Getters and Setters	///
 	/////////////////////////// 
+
+	std::vector<sf::Sprite> GetPlayerSprites() const;
+	std::vector<Player*>& GetPlayers();
+	Player* GetPlayerFromIndex(unsigned _index);
 };
 

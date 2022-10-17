@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : EndGameMenu.cpp 
+// Description : EndGameMenu Implementation File		
+// Author : 
+
 #include "EndGameMenu.h"
 #include "GUI.h"
 #include "TextureLoader.h"
@@ -39,7 +48,7 @@ void EndGameMenu::CreateMenuButtons()
 			{ ScreenCentre.x,ScreenCentre.y + 200}, // Position
 			[this]()
 			{
-				LevelLoader::LoadLevel(LEVELS::HIGHSCORE); // On Press Lambda
+				LevelLoader::LoadLevel(LEVELS::HIGHSCORESCENE); // On Press Lambda
 			},
 			nullptr,
 			{1.0f,1.0f}, // Scale
@@ -52,7 +61,7 @@ void EndGameMenu::CreateMenuText()
 	GUI::GetInstance().CreateText("FinalScoreText",
 		{
 			ScreenCentre,
-			"Score: " + FloatToString(Statics::fGameScore, 0.0f),
+			"Score: " + FloatToString(Statics::fGameScore, 0),
 			{92, 92, 92},
 			128,
 			sf::Color::White

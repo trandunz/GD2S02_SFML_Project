@@ -117,7 +117,7 @@ unsigned Projectile::GetDamagedDealt() const
 
 ELEMENTTYPE Projectile::GetElement() const
 {
-	return m_Properties.Element;
+	return m_Properties.eElement;
 }
 
 PROJECTILETYPE Projectile::GetProjectileType() const

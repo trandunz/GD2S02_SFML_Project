@@ -17,19 +17,43 @@ class EndGameMenu;
 class GameScene : public Level
 {
 public:
+	/// <summary>
+	/// GameScene Constructor
+	/// </summary>
 	GameScene();
+	/// <summary>
+	/// GameScene Destructor
+	/// </summary>
 	virtual ~GameScene();
 
+	/// <summary>
+	/// Handles all events like keys and mouse
+	/// </summary>
 	virtual void HandleEvents() override;
+	/// <summary>
+	/// Update all objects
+	/// </summary>
 	virtual void Update() override;
+	/// <summary>
+	/// Draw all objects
+	/// </summary>
 	virtual void Draw() override;
 
 private:
+	/// <summary>
+	/// Create the scrolling background
+	/// </summary>
 	void CreateScrollingBackground();
+	/// <summary>
+	/// Scroll the background
+	/// </summary>
 	void ScrollBackground();
+	/// <summary>
+	/// Cleanup the pause menu if its marked for destroy
+	/// </summary>
 	void CleanupPauseMenuIfDestroyed();
 
-	std::vector<sf::Sprite> m_Backgrounds{};
+	std::vector<sf::Sprite> m_vecBackgrounds{};
 	float m_fDistanceTravelled{};
 	bool m_bGameOver{ false };
 

@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : PauseMenu.cpp 
+// Description : PauseMenu Implementation File		
+// Author : 
+
 #include "PauseMenu.h"
 #include "GUI.h"
 #include "TextureLoader.h"

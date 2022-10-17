@@ -78,6 +78,10 @@ public:
 	/// <param name="_key"></param>
 	void StopEffect(std::string _key);
 
+	/// <summary>
+	/// Cleans up the given effect if its present
+	/// </summary>
+	/// <param name="_key"></param>
 	void CleanupEffect(std::string _key);
 private:
 	struct SpecialEffect

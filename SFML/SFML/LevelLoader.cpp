@@ -62,7 +62,7 @@ void LevelLoader::SwitchToLoadedLevel()
 			CurrentLevel = new GameScene();
 			break;
 		}
-		case LEVELS::HIGHSCORE:
+		case LEVELS::HIGHSCORESCENE:
 		{
 			CurrentLevel = new HighScores();
 			break;
