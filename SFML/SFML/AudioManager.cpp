@@ -220,6 +220,14 @@ sf::SoundSource::Status AudioManager::GetAudioSourceStatus(std::string _audioSou
 	return sf::SoundSource::Status();
 }
 
+bool AudioManager::HasAudioSource(std::string _audioSource)
+{
+	if (m_AudioSources.find(_audioSource) != m_AudioSources.end())
+		return true;
+	else
+		return false;
+}
+
 void AudioManager::Cleanup()
 {
 	// Cleanup all audio sources

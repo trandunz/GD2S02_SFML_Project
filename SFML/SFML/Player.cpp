@@ -438,32 +438,35 @@ void Player::SetP2SpecialVFXPosition(sf::Vector2f _position)
 
 void Player::BasicAttack()
 {
-	float p1SpecialLifetime = VFX::GetInstance().GetEffectLifetime("P1_P1Special");
-	float p2SpecialLifetime = VFX::GetInstance().GetEffectLifetime("P2_P1Special");
-	if (p1SpecialLifetime > 0)
+	if (!Statics::IsPaused())
 	{
-		ProjectileProperties playerOneSpecial = m_EmpoweredBasicAttackProperties;
-		playerOneSpecial.eElement = PlayerManager::GetInstance().ePlayer1Element;
-		playerOneSpecial.v2fStartPos = GetPosition(); // Get player position
-		ProjectileManager::GetInstance().CreateProjectile(playerOneSpecial);
-	}
-	else if (p2SpecialLifetime > 0)
-	{
-		ProjectileProperties playerTwoSpecial = m_EmpoweredBasicAttackProperties;
-		playerTwoSpecial.eElement = PlayerManager::GetInstance().ePlayer2Element;
-		playerTwoSpecial.v2fStartPos = GetPosition(); // Get player position
-		ProjectileManager::GetInstance().CreateProjectile(playerTwoSpecial);
-	}
-	else
-	{
-		m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
-		ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
+		float p1SpecialLifetime = VFX::GetInstance().GetEffectLifetime("P1_P1Special");
+		float p2SpecialLifetime = VFX::GetInstance().GetEffectLifetime("P2_P1Special");
+		if (p1SpecialLifetime > 0)
+		{
+			ProjectileProperties playerOneSpecial = m_EmpoweredBasicAttackProperties;
+			playerOneSpecial.eElement = PlayerManager::GetInstance().ePlayer1Element;
+			playerOneSpecial.v2fStartPos = GetPosition(); // Get player position
+			ProjectileManager::GetInstance().CreateProjectile(playerOneSpecial);
+		}
+		else if (p2SpecialLifetime > 0)
+		{
+			ProjectileProperties playerTwoSpecial = m_EmpoweredBasicAttackProperties;
+			playerTwoSpecial.eElement = PlayerManager::GetInstance().ePlayer2Element;
+			playerTwoSpecial.v2fStartPos = GetPosition(); // Get player position
+			ProjectileManager::GetInstance().CreateProjectile(playerTwoSpecial);
+		}
+		else
+		{
+			m_BasicAttackProperties.v2fStartPos = GetPosition(); // Get player position
+			ProjectileManager::GetInstance().CreateProjectile(m_BasicAttackProperties);
+		}
 	}
 }
 
 void Player::SecondaryAttack()
 {
-	if (m_iCurrentMana >= 1)
+	if (m_iCurrentMana >= 1 && !Statics::IsPaused())
 	{
 		AudioManager::PlayAudioSource("Secondary");
 		m_iCurrentMana--;
@@ -475,7 +478,7 @@ void Player::SecondaryAttack()
 
 void Player::Special()
 {
-	if (m_iCurrentMana >= 3)
+	if (m_iCurrentMana >= 3 && !Statics::IsPaused())
 	{
 		AudioManager::PlayAudioSource("Special");
 
