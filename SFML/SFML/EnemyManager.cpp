@@ -132,6 +132,9 @@ void EnemyManager::Update()
 									player->SetRestrictYPosition(false);
 									player->SetStopInput(true);
 
+									// To fix bug where player couldn't move if warrior died while pushing the player.
+									player->SetWarriorCollided(enemy);
+
 								if (!(AudioManager::GetAudioSourceStatus("Warrior") == sf::SoundSource::Status::Playing)) {
 									AudioManager::PlayAudioSource("Warrior");
 								}
