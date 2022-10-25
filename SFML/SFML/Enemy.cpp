@@ -136,6 +136,18 @@ Enemy::~Enemy()
 			explosionProperties.fAnimFrameInterval = 0.5f / 4;
 			explosionProperties.v2fVelocity = { 0.0f, 0.0f };
 			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+
+			// Fix bug where player can't move after warrior collision
+			for (auto& player : PlayerManager::GetInstance().GetPlayers())
+			{
+				if (player)
+				{
+					if (player->GetWarriorCollided() == this) 
+					{
+						player->SetWarriorCollided(nullptr);
+					}
+				}
+			}
 			break;
 		}
 		case ENEMYTYPE::SHAMAN:
@@ -159,8 +171,7 @@ void Enemy::Update()
 {
 	Movement(); // Update enemy movement
 
-	Attack();
-		
+	Attack();		
 
 	m_AnimatedSprite.Update(); // Update animated sprite
 

@@ -40,7 +40,15 @@ void MenuScene::HandleEvents()
 	{
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
 		{
-			Statics::RenderWindow.close();
+			if (m_SettingsMenu)
+			{
+				delete m_SettingsMenu;
+				m_SettingsMenu = nullptr;
+
+				CreateElements();
+			}
+			else
+				Statics::RenderWindow.close();
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::W ||
 			Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
@@ -167,10 +175,10 @@ void MenuScene::CreateElements()
 			{ windowSize.x / 2.0f, (windowSize.y / 1.3f) },
 			[]()
 			{
-				//Statics::fGameScore = 9000;
-				LevelLoader::LoadLevel(LEVELS::HIGHSCORESCENE);
-			},
-			&TextureLoader::LoadTexture("GUI/HighScoreButton.png")
+			//Statics::fGameScore = 9000;
+			LevelLoader::LoadLevel(LEVELS::HIGHSCORESCENE);
+		},
+		&TextureLoader::LoadTexture("GUI/HighScoreButton.png")
 		}
 	);
 
@@ -196,8 +204,14 @@ void MenuScene::CreateElements()
 
 	// SFX
 	AudioManager::CreateAudioSource("MenuMove", "menu_move.wav");
-	AudioManager::CreateAudioSource("Abracadabros", "Abracadabrooooos.wav");
-	AudioManager::PlayAudioSource("Abracadabros");
+	if (!AudioManager::HasAudioSource("Abracadabros"))
+	{
+		AudioManager::CreateAudioSource("Abracadabros", "Abracadabrooooos.wav");
+	}
+
+	if (AudioManager::GetAudioSourceStatus("Abracadabros") != sf::SoundSource::Status::Playing)
+		AudioManager::PlayAudioSource("Abracadabros");
+
 	AudioManager::StopMusic();
 
 }

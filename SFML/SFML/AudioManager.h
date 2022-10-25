@@ -132,6 +132,8 @@ public:
 	/// <returns></returns>
 	static sf::SoundSource::Status GetAudioSourceStatus(std::string _audioSource);
 
+	static bool HasAudioSource(std::string _audioSource);
+
 	/// <summary>
 	/// Cleanup all audio sources and loaded audio clips
 	/// </summary>

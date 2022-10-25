@@ -26,9 +26,12 @@ CharacterSelectScene::CharacterSelectScene()
 		{
 			"",
 			{windowSize.x / 2.0f, windowSize.y / 1.3f},
-			[]()
+			[this]()
 			{
-				LevelLoader::LoadLevel(LEVELS::GAMESCENE);
+				if (m_bPlayer1Selected && m_bPlayer2Selected)
+				{
+					LevelLoader::LoadLevel(LEVELS::GAMESCENE);
+				}
 			},
 			&TextureLoader::LoadTexture("GUI/StartButton.png")
 		}
