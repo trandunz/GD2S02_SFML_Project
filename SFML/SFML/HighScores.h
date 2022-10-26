@@ -19,10 +19,16 @@
 //to get the correct change in position when moving
 //the indicator
 #define NEWRECORD_FONTWIDTH 26
-#define INPUTMODE_POSITIONOFFSET 42
+#define INPUTMODE_POSITIONOFFSET 80
 #define SEPERATOR ","
 
-class Animator;
+#define YPOS_TITLE 40.0f
+#define YPOS_HEADER 110.0f
+#define YPOS_RANKSTART 135.0f
+#define YPOS_RANKOFFSET 50.0f
+
+//class Animator;
+class InputIndicator;
 
 class HighScores : public Level
 {
@@ -116,8 +122,11 @@ private:
 	unsigned m_uCharIndex_P2{0};
 	unsigned m_uNewScoreRank = 0;
 
-	Animator* m_pIndicator_P1 = nullptr;
-	Animator* m_pIndicator_P2 = nullptr;
+	//Animator* m_pIndicator_P1 = nullptr;
+	//Animator* m_pIndicator_P2 = nullptr;
+	 
+	InputIndicator* m_pIndicator_P1 = nullptr;
+	InputIndicator* m_pIndicator_P2 = nullptr;
 
 	bool m_bPlayer1_Finish{false};
 	bool m_bPlayer2_Finish{false};

@@ -11,7 +11,8 @@
 #include "HighScores.h"
 #include "LevelLoader.h"
 #include "TextureLoader.h"
-#include "Animator.h"
+#include "InputIndicator.h"
+//#include "Animator.h"
 #include "Helper.h"
 #include "GUI.h"
 
@@ -211,22 +212,22 @@ void HighScores::CreateScoreDisplay()
 	float lastColumnCoordinate = (Statics::RenderWindow.getView().getCenter().x) * 5/ 3;
 
 	TextProperties newTextProperties;
-	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 40);
+	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, YPOS_TITLE);
 	newTextProperties.String = "HIGHSCORE";
 	newTextProperties.OutlineColor = sf::Color::White;
 	newTextProperties.iCharacterSize = 52;
 	GUI::GetInstance().CreateText("SceneTitle", newTextProperties);
 
-	newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, 85);
+	newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, YPOS_HEADER);
 	newTextProperties.iCharacterSize = 42;
 	newTextProperties.String = "Rank";
 	GUI::GetInstance().CreateText("Rank_Label", newTextProperties);
 
-	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 85);
+	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, YPOS_HEADER);
 	newTextProperties.String = "Name";
 	GUI::GetInstance().CreateText("Name_Label", newTextProperties);
 
-	newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, 85);
+	newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, YPOS_HEADER);
 	newTextProperties.String = "Score";
 	GUI::GetInstance().CreateText("Score_Label", newTextProperties);
 	
@@ -245,15 +246,15 @@ void HighScores::CreateScoreDisplay()
 		std::string scoreKey = "Score" + std::to_string(rank);
 
 		//Finally, set up the 3 text objects for the current rank
-		newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, 100.0f + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, YPOS_RANKSTART + (rank * YPOS_RANKOFFSET));
 		newTextProperties.String = std::to_string(rank);
 		GUI::GetInstance().CreateText(textKey, newTextProperties);
 
-		newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 100.0f + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, YPOS_RANKSTART + (rank * YPOS_RANKOFFSET));
 		newTextProperties.String = currentRank.sName1 + "  &  " + currentRank.sName2;
 		GUI::GetInstance().CreateText(nameKey, newTextProperties);
 
-		newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, 100.0f + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, YPOS_RANKSTART + (rank * YPOS_RANKOFFSET));
 		newTextProperties.String = currentRank.sScore;
 		GUI::GetInstance().CreateText(scoreKey, newTextProperties);
 	}
@@ -312,27 +313,8 @@ void HighScores::StartInputModeOnRankEntry(unsigned _inRank)
 	entryToChange->sName2 = std::string(m_cNameInput_P2, sizeof(m_cNameInput_P2));
 	entryToChange->sScore = std::to_string(int(Statics::fGameScore));
 
-	AnimStateProperties indicatorTexProp;
-	indicatorTexProp.StateTexture = &TextureLoader::LoadTexture(m_ksSelectorFileLocation_P1);
-	indicatorTexProp.bLoops = true;
-	indicatorTexProp.fFrameInterval = 1.0f;
-	//Scale is an attempt to scale the size to the set font size
-	indicatorTexProp.v2fScale = { 0.9f, 1.3f };
-
-	//Create the sprite for the player 1's indicator
-	m_pIndicator_P1 = new Animator();
-	m_pIndicator_P1->AddState("Default", indicatorTexProp);
-	m_pIndicator_P1->SetDefaultState("Default");
-	
-	//Modify the animProperties and then use it to create the sprite for player 2's indicator
-	indicatorTexProp.StateTexture = &TextureLoader::LoadTexture(m_ksSelectorFileLocation_P2);
-	m_pIndicator_P2 = new Animator();
-	m_pIndicator_P2->AddState("Default", indicatorTexProp);
-	m_pIndicator_P2->SetDefaultState("Default");
-	
-	//Start anims for both to get the sprites displayed
-	m_pIndicator_P1->StartState("Default");
-	m_pIndicator_P2->StartState("Default");
+	m_pIndicator_P1 = new InputIndicator("P1", m_ksSelectorFileLocation_P1);
+	m_pIndicator_P2 = new InputIndicator("P2", m_ksSelectorFileLocation_P2);
 
 	//Get the position of the name text object and and move both indicators to positions relative to 
 	//this text object
@@ -340,6 +322,9 @@ void HighScores::StartInputModeOnRankEntry(unsigned _inRank)
 	sf::Vector2f textPosition = GUI::GetInstance().GetText(nameKey).getPosition();
 	m_pIndicator_P1->SetPosition({ textPosition.x - (NEWRECORD_FONTWIDTH * 4), textPosition.y });
 	m_pIndicator_P2->SetPosition({ textPosition.x + (NEWRECORD_FONTWIDTH * 2), textPosition.y });
+
+	m_pIndicator_P1->SetIndicatorChar(m_cNameInput_P1[m_uCharIndex_P1]);
+	m_pIndicator_P2->SetIndicatorChar(m_cNameInput_P2[m_uCharIndex_P2]);
 }
 
 void HighScores::ParsePlayerCharacterInputs()
@@ -469,7 +454,11 @@ void HighScores::ParsePlayerCharacterInputs()
 
 	m_pIndicator_P1->SetPosition( indicatorPos_1);
 	m_pIndicator_P2->SetPosition( indicatorPos_2);
+
+	m_pIndicator_P1->SetIndicatorChar(m_cNameInput_P1[m_uCharIndex_P1]);
+	m_pIndicator_P2->SetIndicatorChar(m_cNameInput_P2[m_uCharIndex_P2]);
 }
+
 
 void HighScores::MoveScoreDown(unsigned _inRankToMoveDown)
 {
