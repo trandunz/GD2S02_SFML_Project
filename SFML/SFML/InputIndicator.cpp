@@ -3,10 +3,10 @@
 #include "Animator.h"
 #include "GUI.h"
 
-InputIndicator::InputIndicator(std::string _label, sf::Vector2f _position, std::string _textureLocation)
+InputIndicator::InputIndicator(std::string _label, std::string _textureLocation, sf::Vector2f _position)
 {
-	m_sCharPreviewLabel_Prev = _label + "_Prev";
 	m_sCharPreviewLabel_Next = _label + "_Next";
+	m_sCharPreviewLabel_Prev = _label + "_Prev";
 
 	AnimStateProperties indicatorTexProp;
 	indicatorTexProp.StateTexture = &TextureLoader::LoadTexture(_textureLocation);
@@ -29,10 +29,10 @@ InputIndicator::InputIndicator(std::string _label, sf::Vector2f _position, std::
 	newTextProperties.iCharacterSize = 36;
 	newTextProperties.String = " ";
 	newTextProperties.v2fStartPos = { _position.x, _position.y + HEIGHTOFFSET };
-	GUI::GetInstance().CreateText(m_sCharPreviewLabel_Prev, newTextProperties);
+	GUI::GetInstance().CreateText(m_sCharPreviewLabel_Next, newTextProperties);
 
 	newTextProperties.v2fStartPos = { _position.x, _position.y - HEIGHTOFFSET };
-	GUI::GetInstance().CreateText(m_sCharPreviewLabel_Next, newTextProperties);
+	GUI::GetInstance().CreateText(m_sCharPreviewLabel_Prev, newTextProperties);
 
 }
 
@@ -49,8 +49,8 @@ void InputIndicator::SetPosition(sf::Vector2f _position)
 {
 	m_pIndicator->SetPosition(_position);
 
-	GUI::GetInstance().GetText(m_sCharPreviewLabel_Prev).setPosition({ _position.x, _position.y + HEIGHTOFFSET });
-	GUI::GetInstance().GetText(m_sCharPreviewLabel_Next).setPosition({ _position.x, _position.y - HEIGHTOFFSET });
+	GUI::GetInstance().GetText(m_sCharPreviewLabel_Next).setPosition({ _position.x, _position.y + HEIGHTOFFSET });
+	GUI::GetInstance().GetText(m_sCharPreviewLabel_Prev).setPosition({ _position.x, _position.y - HEIGHTOFFSET });
 }
 
 void InputIndicator::SetIndicatorChar(int _charCode)
@@ -75,4 +75,9 @@ void InputIndicator::SetIndicatorChar(int _charCode)
 void InputIndicator::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(*m_pIndicator);
+}
+
+sf::Vector2f InputIndicator::GetPosition()
+{
+	return m_pIndicator->GetPosition();
 }

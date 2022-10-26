@@ -11,7 +11,8 @@
 #include "HighScores.h"
 #include "LevelLoader.h"
 #include "TextureLoader.h"
-#include "Animator.h"
+#include "InputIndicator.h"
+//#include "Animator.h"
 #include "Helper.h"
 #include "GUI.h"
 
@@ -312,27 +313,8 @@ void HighScores::StartInputModeOnRankEntry(unsigned _inRank)
 	entryToChange->sName2 = std::string(m_cNameInput_P2, sizeof(m_cNameInput_P2));
 	entryToChange->sScore = std::to_string(int(Statics::fGameScore));
 
-	AnimStateProperties indicatorTexProp;
-	indicatorTexProp.StateTexture = &TextureLoader::LoadTexture(m_ksSelectorFileLocation_P1);
-	indicatorTexProp.bLoops = true;
-	indicatorTexProp.fFrameInterval = 1.0f;
-	//Scale is an attempt to scale the size to the set font size
-	indicatorTexProp.v2fScale = { 0.9f, 1.3f };
-
-	//Create the sprite for the player 1's indicator
-	m_pIndicator_P1 = new Animator();
-	m_pIndicator_P1->AddState("Default", indicatorTexProp);
-	m_pIndicator_P1->SetDefaultState("Default");
-	
-	//Modify the animProperties and then use it to create the sprite for player 2's indicator
-	indicatorTexProp.StateTexture = &TextureLoader::LoadTexture(m_ksSelectorFileLocation_P2);
-	m_pIndicator_P2 = new Animator();
-	m_pIndicator_P2->AddState("Default", indicatorTexProp);
-	m_pIndicator_P2->SetDefaultState("Default");
-	
-	//Start anims for both to get the sprites displayed
-	m_pIndicator_P1->StartState("Default");
-	m_pIndicator_P2->StartState("Default");
+	m_pIndicator_P1 = new InputIndicator("P1", m_ksSelectorFileLocation_P1);
+	m_pIndicator_P2 = new InputIndicator("P2", m_ksSelectorFileLocation_P2);
 
 	//Get the position of the name text object and and move both indicators to positions relative to 
 	//this text object
@@ -340,6 +322,9 @@ void HighScores::StartInputModeOnRankEntry(unsigned _inRank)
 	sf::Vector2f textPosition = GUI::GetInstance().GetText(nameKey).getPosition();
 	m_pIndicator_P1->SetPosition({ textPosition.x - (NEWRECORD_FONTWIDTH * 4), textPosition.y });
 	m_pIndicator_P2->SetPosition({ textPosition.x + (NEWRECORD_FONTWIDTH * 2), textPosition.y });
+
+	m_pIndicator_P1->SetIndicatorChar(m_cNameInput_P1[m_uCharIndex_P1]);
+	m_pIndicator_P2->SetIndicatorChar(m_cNameInput_P2[m_uCharIndex_P2]);
 }
 
 void HighScores::ParsePlayerCharacterInputs()
@@ -469,7 +454,11 @@ void HighScores::ParsePlayerCharacterInputs()
 
 	m_pIndicator_P1->SetPosition( indicatorPos_1);
 	m_pIndicator_P2->SetPosition( indicatorPos_2);
+
+	m_pIndicator_P1->SetIndicatorChar(m_cNameInput_P1[m_uCharIndex_P1]);
+	m_pIndicator_P2->SetIndicatorChar(m_cNameInput_P2[m_uCharIndex_P2]);
 }
+
 
 void HighScores::MoveScoreDown(unsigned _inRankToMoveDown)
 {
