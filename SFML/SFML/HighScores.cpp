@@ -212,22 +212,22 @@ void HighScores::CreateScoreDisplay()
 	float lastColumnCoordinate = (Statics::RenderWindow.getView().getCenter().x) * 5/ 3;
 
 	TextProperties newTextProperties;
-	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 40);
+	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, YPOS_TITLE);
 	newTextProperties.String = "HIGHSCORE";
 	newTextProperties.OutlineColor = sf::Color::White;
 	newTextProperties.iCharacterSize = 52;
 	GUI::GetInstance().CreateText("SceneTitle", newTextProperties);
 
-	newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, 85);
+	newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, YPOS_HEADER);
 	newTextProperties.iCharacterSize = 42;
 	newTextProperties.String = "Rank";
 	GUI::GetInstance().CreateText("Rank_Label", newTextProperties);
 
-	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 85);
+	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, YPOS_HEADER);
 	newTextProperties.String = "Name";
 	GUI::GetInstance().CreateText("Name_Label", newTextProperties);
 
-	newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, 85);
+	newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, YPOS_HEADER);
 	newTextProperties.String = "Score";
 	GUI::GetInstance().CreateText("Score_Label", newTextProperties);
 	
@@ -246,15 +246,15 @@ void HighScores::CreateScoreDisplay()
 		std::string scoreKey = "Score" + std::to_string(rank);
 
 		//Finally, set up the 3 text objects for the current rank
-		newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, 100.0f + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, YPOS_RANKSTART + (rank * YPOS_RANKOFFSET));
 		newTextProperties.String = std::to_string(rank);
 		GUI::GetInstance().CreateText(textKey, newTextProperties);
 
-		newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 100.0f + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, YPOS_RANKSTART + (rank * YPOS_RANKOFFSET));
 		newTextProperties.String = currentRank.sName1 + "  &  " + currentRank.sName2;
 		GUI::GetInstance().CreateText(nameKey, newTextProperties);
 
-		newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, 100.0f + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, YPOS_RANKSTART + (rank * YPOS_RANKOFFSET));
 		newTextProperties.String = currentRank.sScore;
 		GUI::GetInstance().CreateText(scoreKey, newTextProperties);
 	}

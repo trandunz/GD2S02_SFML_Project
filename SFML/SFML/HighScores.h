@@ -22,6 +22,11 @@
 #define INPUTMODE_POSITIONOFFSET 80
 #define SEPERATOR ","
 
+#define YPOS_TITLE 40.0f
+#define YPOS_HEADER 110.0f
+#define YPOS_RANKSTART 135.0f
+#define YPOS_RANKOFFSET 50.0f
+
 //class Animator;
 class InputIndicator;
 
