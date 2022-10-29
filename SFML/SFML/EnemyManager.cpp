@@ -70,6 +70,11 @@ void EnemyManager::CleanupDestroyed()
 void EnemyManager::CleanupEnemies()
 {
 	CleanupVector(m_Enemies);
+
+	m_iShamanCount = 0;
+	m_iWarriorCount = 0;
+	m_iArcherCount = 0;
+	m_iKamikazeCount = 0;
 }
 
 void EnemyManager::CreateEnemy(EnemyProperties _properties)
