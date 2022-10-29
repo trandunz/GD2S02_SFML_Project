@@ -79,7 +79,7 @@ public:
 	/// </summary>
 	/// <param name="_seconds"></param>
 	/// <param name="_color"></param>
-	void ApplyStop(float _seconds, sf::Color _color = { 0, 162, 232 });
+	void ApplyStop(float _seconds, sf::Color _color = { 138, 100, 36 });
 
 	/// <summary>
 	/// Sets the enemy to slow movement/shooting
@@ -91,7 +91,7 @@ public:
 	/// <param name="_seconds"></param>
 	/// <param name="_slowMovementPercentage"></param>
 	/// <param name="_color"></param>
-	void ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color = { 181, 230, 29 });
+	void ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color = { 0, 172, 232 });
 
 	/// <summary>
 	/// Checks collision between enemy and another collider
@@ -161,6 +161,7 @@ private:
 	// -Enemy being frozen variables (unable to move)-
 	bool m_bStopped{false};
 	float m_fStopTime{};
+	sf::Color m_StoppedSpriteColor;
 	// -Enemy being slowed variables-
 	bool m_bSlowed{false};
 	float m_fSlowTime{};

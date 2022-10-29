@@ -18,6 +18,7 @@
 
 MenuScene::MenuScene()
 {
+	Statics::fGameScore = 0;
 	CreateElements();
 
 	m_iButtonSelected = 0;

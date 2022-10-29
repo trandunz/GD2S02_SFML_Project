@@ -719,8 +719,8 @@ void Player::SetTextureByElement()
 
 void Player::ApplyStop(float _seconds, sf::Color _color)
 {
-
 	// Change sprite color
+	m_StoppedSpriteColor = _color;
 	m_Mesh->SetColor(_color);
 
 	m_bSpriteColorChanged = true;
@@ -730,6 +730,7 @@ void Player::ApplyStop(float _seconds, sf::Color _color)
 
 void Player::HandleStop()
 {
+	m_Mesh->SetColor(m_StoppedSpriteColor);
 	// Stop enemy movement
 	m_fMoveSpeed = 0.0f;
 
@@ -755,15 +756,6 @@ void Player::ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color 
 	m_bSpriteColorChanged = true;
 	m_bSlowed = true;
 	m_fSlowTime = _seconds;
-}
-
-void Player::CheckWarriorCollision()
-{
-	if (m_warriorCollided == nullptr) 
-	{
-		SetRestrictYPosition(true);
-		SetStopInput(false);
-	}
 }
 
 void Player::HandleSlow()
@@ -795,6 +787,15 @@ void Player::HandleSlow()
 		// Reset movement and jump speed
 		m_fMoveSpeed = m_Properties.fMoveSpeed;
 		m_fAttackSpeed = BASE_ATKSPD;
+	}
+}
+
+void Player::CheckWarriorCollision()
+{
+	if (m_warriorCollided == nullptr) 
+	{
+		SetRestrictYPosition(true);
+		SetStopInput(false);
 	}
 }
 
