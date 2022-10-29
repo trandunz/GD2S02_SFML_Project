@@ -117,6 +117,17 @@ void GameScene::HandleEvents()
 				}
 			}
 		}
+		if (m_bGameOver)
+		{
+			AudioManager::PlayAudioSource("MenuMove");
+			Button* button = nullptr;
+
+			button = GUI::GetInstance().GetButton("GotoHighscore");
+			if (button)
+				button->CallOnPress();
+
+			button = nullptr;
+		}
 	}
 }
 
