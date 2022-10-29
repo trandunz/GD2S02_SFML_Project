@@ -169,13 +169,6 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {
-	Movement(); // Update enemy movement
-
-	if (!m_bStopped) // Allow enemy attacking if not stunned
-		Attack();
-
-	m_AnimatedSprite.Update(); // Update animated sprite
-
 	// If enemy is damaged from fire spell, then run function to damage over time
 	// or when the player is hit with primary attack it flashes
 	if (m_bDamaged)
@@ -187,11 +180,20 @@ void Enemy::Update()
 	{
 		HandleStop();
 	}
+	else
+	{
+		Attack();// Allow enemy attacking if not stunned
+	}
 	// If enemy is hit from earth spell, then run function to slow enemy
 	if (m_bSlowed)
 	{
 		HandleSlow();
 	}
+
+	Movement(); // Update enemy movement
+
+	m_AnimatedSprite.Update(); // Update animated sprite
+
 
 	// Update collider position
 	m_BoxCollider->SetPosition({ m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
@@ -276,12 +278,8 @@ void Enemy::ApplyStop(float _seconds, sf::Color _color)
 	// Stop enemy movement
 	m_fMoveSpeed = Statics::fBackgroundScrollSpeed;
 	m_fJumpSpeed = Statics::fBackgroundScrollSpeed;
-
-	// Change sprite color
-	m_AnimatedSprite.SetSpriteColor(_color);
-
-	// Pause animations
-	m_AnimatedSprite.PauseAnim();
+	//Store the colour values for this state
+	m_StoppedSpriteColor = _color;
 
 	m_bSpriteColorChanged = true;
 	m_bStopped = true;
@@ -651,6 +649,12 @@ void Enemy::HandleDamageFlashFeedback()
 void Enemy::HandleStop()
 {
 	m_fStopTime -= 1 * Statics::fDeltaTime; // Count down
+
+	// Change sprite color
+	m_AnimatedSprite.SetSpriteColor(m_StoppedSpriteColor);
+
+	// Pause animations
+	m_AnimatedSprite.PauseAnim();
 
 	if (m_fStopTime <= 0)
 	{

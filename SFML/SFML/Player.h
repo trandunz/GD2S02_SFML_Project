@@ -300,10 +300,11 @@ private:
 	BoxCollider* m_BoxCollider{nullptr}; // Player  box collider
 	float m_fColliderOffset{}; // Y Offset position for box collider
 
-		// -Enemy being frozen variables (unable to move)-
+	// -Player being frozen variables (unable to move)-
 	bool m_bStopped{ false };
 	float m_fStopTime{};
-	// -Enemy being slowed variables-
+	sf::Color m_StoppedSpriteColor{ 0, 162, 232 };
+	// -Player being slowed variables-
 	bool m_bSlowed{ false };
 	float m_fSlowTime{};
 	sf::Color m_SlowedSpriteColor{sf::Color::Blue};
