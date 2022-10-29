@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : Statics.h 
 // Description : Statics Header File
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #pragma once
 #include <SFML/Graphics.hpp>

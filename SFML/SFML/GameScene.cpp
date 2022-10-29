@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : GameScene.cpp 
 // Description : GameScene Implementation File		
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #include "GameScene.h"
 #include "PlayerManager.h"

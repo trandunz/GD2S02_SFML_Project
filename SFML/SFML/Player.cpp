@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : Player.cpp 
 // Description : Player Implementation File		
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #include "Player.h"
 #include "GUI.h"
@@ -222,7 +222,7 @@ sf::Vector2f Player::GetMoveInput()
 {
 	sf::Vector2f input{};
 
-	if (m_bStopInput == false)
+	if (bStopInput == false)
 	{
 		if (sf::Keyboard::isKeyPressed(m_MoveUpKey))
 			input.y -= 1;
@@ -578,11 +578,6 @@ void Player::SetRestrictYPosition(bool _restrictYPosition)
 	m_bRestrictYPosition = _restrictYPosition;
 }
 
-void Player::SetStopInput(bool _stopInput)
-{
-	m_bStopInput = _stopInput;
-}
-
 bool Player::HasLostMana()
 {
 	return m_iCurrentMana < m_Properties.iMaxMana;
@@ -795,7 +790,7 @@ void Player::CheckWarriorCollision()
 	if (m_warriorCollided == nullptr) 
 	{
 		SetRestrictYPosition(true);
-		SetStopInput(false);
+		bStopInput = false;
 	}
 }
 
@@ -846,7 +841,7 @@ void Player::Respawn()
 	m_Mesh->SetPosition(m_Properties.v2fStartPos); // Reset player position to start position
 	TakeDamage(1); // Take damage
 	m_bRestrictYPosition = true; // Reset bool so player is locked to inside of window
-	m_bStopInput = false; // Reset bool so player can move character again
+	bStopInput = false; // Reset bool so player can move character again
 	m_bRespawn = false; // Reset respawn bool
 	m_bInvincible = true; // Set invinsibility
 }

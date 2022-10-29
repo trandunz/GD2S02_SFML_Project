@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : PlayerManager.cpp 
 // Description : PlayerManager Implementation File		
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #include "PlayerManager.h"
 #include "Player.h"
@@ -85,7 +85,7 @@ void PlayerManager::Update()
 		}
 		else
 		{
-			if (player->m_bInvincible == false) // Check if player is invinsible
+			if (player->m_bInvincible == false && player->bStopInput == false) // Check if player is invinsible or being pushed by warrior 
 			{
 				// If not invinsible, then check collisions with obstacles
 				for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
@@ -110,7 +110,7 @@ void PlayerManager::Update()
 								Statics::RenderWindow.getSize().y - 10.0f)
 							{
 								player->SetRestrictYPosition(false);
-								player->SetStopInput(true);
+								player->bStopInput = true;
 							}
 						}
 					}

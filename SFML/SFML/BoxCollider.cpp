@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : BoxCollider.cpp 
 // Description : BoxCollider Implementation File		
-// Author : 
+// Author : Frear, Stace
 
 #include "BoxCollider.h"
 
