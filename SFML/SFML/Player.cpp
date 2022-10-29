@@ -32,6 +32,7 @@ Player::Player(PlayerProperties _properties)
 	SetManaMax();
 
 	m_fMoveSpeed = _properties.fMoveSpeed;
+	m_fAttackSpeed = BASE_ATKSPD;
 
 	// Set box collider
 	m_fColliderOffset = _properties.fBoxColliderOffsetY;
@@ -108,6 +109,7 @@ void Player::HandleEvents()
 
 void Player::Update()
 {
+
 	if (m_fAttackTimer > 0)
 	{
 		m_fAttackTimer -= Statics::fDeltaTime;
@@ -123,40 +125,6 @@ void Player::Update()
 		m_fSecondaryTimer -= Statics::fDeltaTime;
 	}
 
-	if (sf::Keyboard::isKeyPressed(m_SpecialAttackKey))
-	{
-		if (m_fSpecialTimer <= 0 && m_iCurrentMana >= 3)
-		{
-			m_fSpecialTimer = m_fSpecialDuration;
-			//m_fAttackTimer = m_fAttackSpeed;
-			Special();
-		}
-		else if(!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
-			AudioManager::PlayAudioSource("CantCast");
-		}
-	}
-	if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
-	{
-		if (m_fSecondaryTimer <= 0 && m_iCurrentMana >= 1)
-		{
-			//m_fAttackTimer = m_fAttackSpeed;
-			m_fSecondaryTimer = m_fSecondaryCooldown;
-			SecondaryAttack();
-		}
-		else if (!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
-			AudioManager::PlayAudioSource("CantCast");
-		}
-	}
-	if (sf::Keyboard::isKeyPressed(m_BasicAttackKey))
-	{ 
-		if (m_fAttackTimer <= 0)
-		{
-			m_fAttackTimer = m_fAttackSpeed;
-			BasicAttack();
-			AudioManager::PlayAudioSource("Primary");
-		}
-	}
-
 	// If player is hit from earth spell, then run function to slow enemy
 	if (m_bSlowed)
 	{
@@ -166,6 +134,43 @@ void Player::Update()
 	if (m_bStopped)
 	{
 		HandleStop();
+	}
+	//If not frozen, then run regular key press checks
+	else
+	{
+		if (sf::Keyboard::isKeyPressed(m_SpecialAttackKey))
+		{
+			if (m_fSpecialTimer <= 0 && m_iCurrentMana >= 3)
+			{
+				m_fSpecialTimer = m_fSpecialDuration;
+				//m_fAttackTimer = m_fAttackSpeed;
+				Special();
+			}
+			else if(!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
+				AudioManager::PlayAudioSource("CantCast");
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(m_SecondaryAttackKey))
+		{
+			if (m_fSecondaryTimer <= 0 && m_iCurrentMana >= 1)
+			{
+				//m_fAttackTimer = m_fAttackSpeed;
+				m_fSecondaryTimer = m_fSecondaryCooldown;
+				SecondaryAttack();
+			}
+			else if (!(AudioManager::GetAudioSourceStatus("CantCast") == sf::SoundSource::Status::Playing)) {
+				AudioManager::PlayAudioSource("CantCast");
+			}
+		}
+		if (sf::Keyboard::isKeyPressed(m_BasicAttackKey))
+		{ 
+			if (m_fAttackTimer <= 0)
+			{
+				m_fAttackTimer = m_fAttackSpeed;
+				BasicAttack();
+				AudioManager::PlayAudioSource("Primary");
+			}
+		}
 	}
 
 	m_v2fVelocity = GetMoveInput();
@@ -764,6 +769,9 @@ void Player::CheckWarriorCollision()
 void Player::HandleSlow()
 {
 	m_fMoveSpeed = m_Properties.fMoveSpeed * m_fSlowMovementPercentage;
+	//Multiply to make it bigger. atk spd is currently time between attacks
+	//and slow percentage is assumed to be a value less than 1.
+	m_fAttackSpeed =  BASE_ATKSPD / m_fSlowMovementPercentage;
 
 	// Change sprite color
 	m_fSpriteChangeColorCounter -= 1 * Statics::fDeltaTime; // Count down
@@ -786,6 +794,7 @@ void Player::HandleSlow()
 		m_Mesh->SetColor(sf::Color(255, 255, 255)); // Change color back to normal sprite 
 		// Reset movement and jump speed
 		m_fMoveSpeed = m_Properties.fMoveSpeed;
+		m_fAttackSpeed = BASE_ATKSPD;
 	}
 }
 

@@ -10,6 +10,8 @@
 #pragma once
 #include "Statics.h"
 
+#define BASE_ATKSPD 0.2f
+
 class Animator;
 class BoxCollider;
 // For warrior collision bug fix
