@@ -171,7 +171,8 @@ void Enemy::Update()
 {
 	Movement(); // Update enemy movement
 
-	Attack();		
+	if (!m_bStopped) // Allow enemy attacking if not stunned
+		Attack();
 
 	m_AnimatedSprite.Update(); // Update animated sprite
 
@@ -395,15 +396,19 @@ void Enemy::Movement()
 		// Runs down until it reaches m_fArcherYPos, then starts moving left and right
 		case ENEMYTYPE::ARCHER:
 		{
-			// Move enemy object down to therandom Y position determined in the constructor
-			if (m_AnimatedSprite.GetPosition().y <= m_fArcherYPos)
+			// Move enemy object down to the random Y position determined in the constructor
+			if (m_AnimatedSprite.GetPosition().y <= m_fArcherYPos && m_bStopped == false)
 			{
 				m_v2fVelocity = { 0,1 };
 			}
 			// If enemy object reaches its Y value, then start moving left or right
-			else if (m_bFirstMoveComplete == false)
+			else if (m_bFirstMoveComplete == false && m_bStopped == false)
 			{
 				m_v2fVelocity = { 1,0 }; // Move right
+			}
+			else if (m_bStopped == true) // Freeze enemy movement - but move them with downwards at background speed
+			{
+				m_v2fVelocity = { 0,1 };
 			}
 
 			// If enemy object moves to the right side of the screen, then switch its velocity to move left
@@ -469,14 +474,18 @@ void Enemy::Movement()
 		case ENEMYTYPE::SHAMAN:
 		{
 			// Move enemy object down to therandom Y position determined in the constructor
-			if (m_AnimatedSprite.GetPosition().y <= m_fShamanYPos)
+			if (m_AnimatedSprite.GetPosition().y <= m_fShamanYPos && m_bStopped == false)
 			{
 				m_v2fVelocity = { 0,1 };
 			}
 			// If enemy object reaches its Y value, then start moving left or right
-			else if (m_bFirstMoveComplete == false)
+			else if (m_bFirstMoveComplete == false && m_bStopped == false)
 			{
 				m_v2fVelocity = { 1,0 }; // Move right
+			}
+			else if (m_bStopped == true) // Freeze enemy movement - but move them with downwards at background speed
+			{
+				m_v2fVelocity = { 0,1 };
 			}
 
 			// If enemy object moves to the right side of the screen, then switch its velocity to move left
