@@ -55,26 +55,47 @@ void InputIndicator::SetPosition(sf::Vector2f _position)
 
 void InputIndicator::SetIndicatorChar(int _charCode)
 {
-	char prevChar = _charCode - 1;
-	char nextChar = _charCode + 1;
-
-	if (prevChar < ' ')
+	if(m_bActive)
 	{
-		prevChar = 'z';
-	}
+		char prevChar = _charCode - 1;
+		char nextChar = _charCode + 1;
 
-	if (nextChar > 'z')
+		if (prevChar < ' ')
+		{
+			prevChar = 'z';
+		}
+
+		if (nextChar > 'z')
+		{
+			nextChar = ' ';
+		}
+
+		GUI::GetInstance().SetText(m_sCharPreviewLabel_Prev, { prevChar });
+		GUI::GetInstance().SetText(m_sCharPreviewLabel_Next, { nextChar });
+	}
+	else
 	{
-		nextChar = ' ';
+		GUI::GetInstance().SetText(m_sCharPreviewLabel_Prev, { ' ' });
+		GUI::GetInstance().SetText(m_sCharPreviewLabel_Next, { ' ' });
 	}
+}
 
-	GUI::GetInstance().SetText(m_sCharPreviewLabel_Prev, { prevChar });
-	GUI::GetInstance().SetText(m_sCharPreviewLabel_Next, { nextChar });
+void InputIndicator::Disable()
+{
+	m_bActive = false;
+}
+
+void InputIndicator::Enable()
+{
+	m_bActive = true;
 }
 
 void InputIndicator::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
-	_target.draw(*m_pIndicator);
+	if(m_bActive)
+	{
+		_target.draw(*m_pIndicator);
+	}
 }
 
 sf::Vector2f InputIndicator::GetPosition()
