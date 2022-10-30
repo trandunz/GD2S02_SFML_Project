@@ -153,7 +153,6 @@ void EnemyManager::Update()
 							default:
 								break;
 							}
-							break;
 						}
 					}
 				}

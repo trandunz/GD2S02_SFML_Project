@@ -21,6 +21,8 @@ public:
 	/// </summary>
 	/// <param name="_charCode"></param>
 	void SetIndicatorChar(int _charCode);
+	void Disable();
+	void Enable();
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
 	
@@ -31,6 +33,7 @@ private:
 	Animator* m_pIndicator = nullptr;
 	std::string m_sCharPreviewLabel_Next;
 	std::string m_sCharPreviewLabel_Prev;
+	bool m_bActive = true;
 
 public:
 	sf::Vector2f GetPosition();

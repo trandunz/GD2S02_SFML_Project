@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : Player.h 
 // Description : Player Header File
-// Author : Inman, Will; Frear, Stace
+// Author : Inman, Will; Frear, Stace, Sing
 
 #pragma once
 #include "Statics.h"
@@ -60,6 +60,11 @@ public:
 	/// <param name="_amount"></param>
 	void RestoreMana(unsigned _amount);
 
+	/// <summary>
+	/// reduces the specified amount of mana from the player
+	/// </summary>
+	/// <param name="_amount"></param>
+	void LoseMana(unsigned _amount);
 	/// <summary>
 	/// Checks collision between the player and the specified box collider
 	/// </summary>

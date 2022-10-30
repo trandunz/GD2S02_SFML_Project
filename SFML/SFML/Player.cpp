@@ -482,7 +482,8 @@ void Player::SecondaryAttack()
 	if (m_iCurrentMana >= 1 && !Statics::IsPaused())
 	{
 		AudioManager::PlayAudioSource("Secondary");
-		m_iCurrentMana--;
+		//m_iCurrentMana--;
+		LoseMana(1);
 		// Spawn Secondary Projectile
 		m_SecondaryAttackProperties.v2fStartPos = GetPosition(); // Get player position
 		ProjectileManager::GetInstance().CreateProjectile(m_SecondaryAttackProperties);
@@ -495,7 +496,9 @@ void Player::Special()
 	{
 		AudioManager::PlayAudioSource("Special");
 
-		m_iCurrentMana -= 3;
+		//m_iCurrentMana -= 3;
+		LoseMana(3);
+		
 		// Spawn Special Effect
 		if (m_Properties.bPlayerOne)
 		{
@@ -598,7 +601,13 @@ bool Player::HasLostHP()
 
 void Player::TakeDamage(unsigned _amount)
 {
-	m_iCurrentHealth -= _amount;
+	if( !Statics::bDebugMode)
+	{
+		m_iCurrentHealth -= _amount;
+	}
+
+	m_bInvincible = true;
+
 	AudioManager::PlayAudioSource("Hit");
 
 	if (_amount > 0.0f)
@@ -634,6 +643,14 @@ void Player::RestoreMana(unsigned _amount)
 
 	if (m_iCurrentMana > m_Properties.iMaxMana)
 		m_iCurrentMana = m_Properties.iMaxMana;
+}
+
+void Player::LoseMana(unsigned _amount)
+{
+	if (!Statics::bDebugMode)
+	{
+		m_iCurrentMana -= _amount;
+	}
 }
 
 bool Player::CheckCollision(BoxCollider& _otherCollider)

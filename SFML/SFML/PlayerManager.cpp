@@ -146,11 +146,11 @@ Player* PlayerManager::GetPlayerFromIndex(unsigned _index)
 
 void PlayerManager::WhipeScreenFromSpecial()
 {
-	SpecialEffectProperties whipeEffectProperties{ &TextureLoader::LoadTexture("VFX/FireWall.png") };
+	SpecialEffectProperties whipeEffectProperties{ &TextureLoader::LoadTexture("VFX/Mist.png") };
 
 	whipeEffectProperties.v2fStartPos = Statics::RenderWindow.getView().getCenter();
 	whipeEffectProperties.v2fStartPos.y += Statics::RenderWindow.getSize().y / 2.0f + whipeEffectProperties.Texture->getSize().y / 2;
-	whipeEffectProperties.v2fVelocity = { 0, -Statics::fBackgroundScrollSpeed * 4.0f};
+	whipeEffectProperties.v2fVelocity = { 0, -Statics::fBackgroundScrollSpeed * 6.0f};
 
 	m_sScreenWhipeVFXKey = VFX::GetInstance().CreateAndPlayEffect(whipeEffectProperties, m_fScreenWhipeDuration);
 	m_bIsWhipingScreen = true;
