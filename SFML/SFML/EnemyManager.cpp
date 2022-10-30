@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : EnemyManager.cpp 
 // Description : EnemyManager Implementation File		
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #include "EnemyManager.h"
 #include "Enemy.h"
@@ -124,7 +124,7 @@ void EnemyManager::Update()
 								player->m_bInvincible = true;
 								break;
 							}
-							// If player collides with warrior, then player dies, but warrior keeps going
+							// If player collides with warrior, then player get pushed down
 							case ENEMYTYPE::WARRIOR:
 							{
 								if (player->GetCollisionBox()->GetCollider().getPosition().y - player->GetCollisionBox()->GetCollider().getSize().y / 2
@@ -135,7 +135,7 @@ void EnemyManager::Update()
 										(Statics::fBackgroundScrollSpeed * Statics::fDeltaTime) + 2 });
 
 									player->SetRestrictYPosition(false);
-									player->SetStopInput(true);
+									player->bStopInput = true;
 
 									// To fix bug where player couldn't move if warrior died while pushing the player.
 									player->SetWarriorCollided(enemy);
@@ -153,9 +153,6 @@ void EnemyManager::Update()
 							default:
 								break;
 							}
-
-							
-
 							break;
 						}
 					}

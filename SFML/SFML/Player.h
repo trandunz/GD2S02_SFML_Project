@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : Player.h 
 // Description : Player Header File
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #pragma once
 #include "Statics.h"
@@ -121,6 +121,7 @@ public:
 	bool bDestroy{ false };
 
 	bool m_bInvincible{ false };
+	bool bStopInput{ false };
 	
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
@@ -276,7 +277,6 @@ private:
 	int m_iCurrentHealth{};
 	int m_iCurrentMana{};
 	bool m_bRestrictYPosition{ true };
-	bool m_bStopInput{ false };
 	bool m_bRespawn{ false };
 	float m_fMoveSpeed{};
 	float m_fSlowMovementPercentage{ 0.0f };
@@ -337,8 +337,6 @@ public:
 	sf::Vector2f GetPreviousMove() const; 
 
 	void SetRestrictYPosition(bool _restrictYPosition);
-
-	void SetStopInput(bool _stopInput);
 
 	bool HasLostMana();
 

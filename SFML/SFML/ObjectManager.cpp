@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : ObjectManager.cpp 
 // Description : ObjectManager Implementation File		
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #include "ObjectManager.h"
 #include "Obstacle.h"

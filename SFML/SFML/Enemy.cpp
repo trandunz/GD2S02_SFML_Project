@@ -410,14 +410,14 @@ void Enemy::Movement()
 			}
 
 			// If enemy object moves to the right side of the screen, then switch its velocity to move left
-			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 10))
 			{
 				m_v2fVelocity = { -1,0 };
 				m_bFirstMoveComplete = true;
 			}
 			
 			// If enemy object moves to the left side of the screen, then switch its velocity to move right
-			if (m_AnimatedSprite.GetPosition().x <= 0 + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			if (m_AnimatedSprite.GetPosition().x <= 0 - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 8))
 			{
 				m_v2fVelocity = { 1,0 };
 			}
@@ -487,14 +487,14 @@ void Enemy::Movement()
 			}
 
 			// If enemy object moves to the right side of the screen, then switch its velocity to move left
-			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 4))
 			{
 				m_v2fVelocity = { -1,0 };
 				m_bFirstMoveComplete = true;
 			}
 
 			// If enemy object moves to the left side of the screen, then switch its velocity to move right
-			if (m_AnimatedSprite.GetPosition().x <= 0 + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			if (m_AnimatedSprite.GetPosition().x <= 0 + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 4))
 			{
 				m_v2fVelocity = { 1,0 };
 			}

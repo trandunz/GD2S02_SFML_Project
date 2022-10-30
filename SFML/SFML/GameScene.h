@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : GameScene.h 
 // Description : GameScene Header File
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #pragma once
 #include "Level.h"
