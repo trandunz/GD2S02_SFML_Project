@@ -146,7 +146,7 @@ Enemy::~Enemy()
 					{
 						player->SetWarriorCollided(nullptr);
 						player->SetRestrictYPosition(true);
-						player->
+						//player->
 					}
 				}
 			}

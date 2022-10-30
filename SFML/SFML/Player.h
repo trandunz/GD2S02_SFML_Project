@@ -11,10 +11,8 @@
 #include "Statics.h"
 
 #define BASE_ATKSPD 0.2f
-<<<<<<< Updated upstream
-=======
 #define GOD_MODE false;
->>>>>>> Stashed changes
+
 
 class Animator;
 class BoxCollider;
