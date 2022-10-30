@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "Statics.h"
 class SettingsMenu;
 class PauseMenu
 {
@@ -26,6 +27,19 @@ public:
 	/// Pause menu update
 	/// </summary>
 	void Update();
+
+	/// <summary>
+	/// Handles which button is selected
+	/// and if enter is pressed calls the
+	/// selected buttons CallOnPress() function
+	/// </summary>
+	void HandleEvents();
+
+	/// <summary>
+	/// Scales the selected button up and down.
+	/// </summary>
+	/// <param name="_button"></param>
+	void ScaleSelectedButton(std::string _button);
 
 	bool bDestroy{ false };
 
@@ -49,5 +63,10 @@ private:
 	void CleanupElements();
 
 	SettingsMenu* m_SettingsMenu{ nullptr };
+	std::vector<std::string> m_vecButtons;
+	int m_iButtonSelected{};
+	bool m_bPlayMenuMove{};
+	bool m_bButtonReleased{};
+
 };
 
