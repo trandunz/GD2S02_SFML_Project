@@ -98,12 +98,12 @@ void HighScores::Draw()
 {
 	Statics::RenderWindow.draw(GUI::GetInstance());
 
-	if (m_pIndicator_P1 != nullptr && !m_bPlayer1_Finish)
+	if (m_pIndicator_P1 != nullptr)
 	{
 		Statics::RenderWindow.draw(*m_pIndicator_P1);
 	}
 
-	if (m_pIndicator_P2 != nullptr && !m_bPlayer2_Finish)
+	if (m_pIndicator_P2 != nullptr)
 	{
 		Statics::RenderWindow.draw(*m_pIndicator_P2);
 	}
@@ -130,6 +130,7 @@ void HighScores::CreateAudioElements()
 	//confirming highlighted char
 	AudioManager::CreateAudioSource("MenuEnter", "menu_enter.wav");
 	//Cancelling previous confirmed charac
+	AudioManager::CreateAudioSource("MenuBack", "denied.wav");
 }
 
 void HighScores::InitializeHighScores()
@@ -357,7 +358,7 @@ void HighScores::ParsePlayerCharacterInputs()
 				m_uCharIndex_P1--;
 				indicatorPos_1.x -= NEWRECORD_FONTWIDTH;
 			}
-			//TODO: play cancel sound clip
+			AudioManager::PlayAudioSource("MenuBack");
 		}
 
 		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::D)
@@ -371,6 +372,7 @@ void HighScores::ParsePlayerCharacterInputs()
 			else
 			{
 				m_bPlayer1_Finish = true;
+				m_pIndicator_P1->Disable();
 			}
 			AudioManager::PlayAudioSource("MenuEnter");
 		}
@@ -415,7 +417,8 @@ void HighScores::ParsePlayerCharacterInputs()
 			Statics::EventHandle.key.code == sf::Keyboard::Key::B)
 		{
 			m_bPlayer1_Finish = false;
-			//TODO: play cancel sound clip
+			m_pIndicator_P1->Enable();
+			AudioManager::PlayAudioSource("MenuBack");
 		}
 	}
 
@@ -431,7 +434,7 @@ void HighScores::ParsePlayerCharacterInputs()
 				m_uCharIndex_P2--;
 				indicatorPos_2.x -= NEWRECORD_FONTWIDTH;
 			}
-			//TODO: play cancel sound clip
+			AudioManager::PlayAudioSource("MenuBack");
 		}
 
 		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::Right)
@@ -444,7 +447,9 @@ void HighScores::ParsePlayerCharacterInputs()
 			}
 			else
 			{
-				m_bPlayer1_Finish = true;
+				m_bPlayer2_Finish = true;
+				m_pIndicator_P2->Disable();
+
 			}
 			AudioManager::PlayAudioSource("MenuEnter");
 		}
@@ -490,7 +495,8 @@ void HighScores::ParsePlayerCharacterInputs()
 			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
 		{
 			m_bPlayer2_Finish = false;
-			//TODO: play cancel sound clip
+			m_pIndicator_P2->Enable();
+			AudioManager::PlayAudioSource("MenuBack");
 		}
 	}
 
