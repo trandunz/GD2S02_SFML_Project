@@ -62,7 +62,6 @@ private:
 	/// </summary>
 	void CreateElements();
 
-	std::string m_sHighLighted{};
 	int m_iButtonSelected{};
 	SettingsMenu* m_SettingsMenu{ nullptr };
 

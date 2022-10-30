@@ -39,7 +39,9 @@ void MenuScene::HandleEvents()
 	bool playMenuMove = false;
 	if (Statics::EventHandle.type == sf::Event::KeyPressed) 
 	{
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::B ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
 		{
 			if (m_SettingsMenu)
 			{
@@ -69,12 +71,8 @@ void MenuScene::HandleEvents()
 
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Enter ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::B ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::N ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2 ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad3)
+			Statics::EventHandle.key.code == sf::Keyboard::Key::V  ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1)
 		{
 			Button* button = nullptr;
 
@@ -103,6 +101,8 @@ void MenuScene::Update()
 	if (m_SettingsMenu)
 	{
 		CleanupElements();
+		m_SettingsMenu->HandleEvents();
+		ScaleSelectedButton(m_SettingsMenu->GetAudioTypeButton());
 
 		if (m_SettingsMenu->bDestroy)
 		{
