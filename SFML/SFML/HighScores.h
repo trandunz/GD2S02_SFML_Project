@@ -59,6 +59,10 @@ private:
 	};
 
 	/// <summary>
+	/// Load required audio elements
+	/// </summary>
+	void CreateAudioElements();
+	/// <summary>
 	/// Sets up the intial list of high scores
 	/// </summary>
 	void InitializeHighScores();
