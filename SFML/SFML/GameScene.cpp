@@ -178,13 +178,13 @@ void GameScene::Draw()
 void GameScene::CreateScrollingBackground()
 {
 	m_vecBackgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
-	m_vecBackgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
+	//m_vecBackgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
 	for (auto& background : m_vecBackgrounds)
 	{
 		SetOriginCenter(background); 
 	}
-	m_vecBackgrounds[0].setPosition(400, 0);
-	m_vecBackgrounds[1].setPosition(400, 9600);
+	m_vecBackgrounds[0].setPosition(400, -4000 );
+	//m_vecBackgrounds[1].setPosition(400, 9600);
 }
 
 void GameScene::ScrollBackground()
@@ -196,14 +196,23 @@ void GameScene::ScrollBackground()
 	}
 
 	// Rotate the background positions above one another, after scrolling out of the screen
-	if (m_vecBackgrounds[0].getPosition().y >= m_vecBackgrounds[0].getGlobalBounds().height)
-	{
-		m_vecBackgrounds[0].setPosition(m_vecBackgrounds[0].getPosition().x, (m_vecBackgrounds[1].getPosition().y - m_vecBackgrounds[1].getGlobalBounds().height) + Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
-	}
+	//if (m_vecBackgrounds[0].getPosition().y >= m_vecBackgrounds[0].getGlobalBounds().height)
+	//{
+	//	m_vecBackgrounds[0].setPosition(m_vecBackgrounds[0].getPosition().x, (m_vecBackgrounds[1].getPosition().y - m_vecBackgrounds[1].getGlobalBounds().height));// +Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
+	//}
+	//
+	//if (m_vecBackgrounds[1].getPosition().y >= m_vecBackgrounds[1].getGlobalBounds().height)
+	//{
+	//	m_vecBackgrounds[1].setPosition(m_vecBackgrounds[1].getPosition().x, (m_vecBackgrounds[0].getPosition().y - m_vecBackgrounds[0].getGlobalBounds().height));// +Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
+	//}
 
-	if (m_vecBackgrounds[1].getPosition().y >= m_vecBackgrounds[1].getGlobalBounds().height)
+	// For testing output of distance between the two scrolling background images
+	//float distanceBetweenTwoBackgrounds = m_vecBackgrounds[1].getPosition().y - m_vecBackgrounds[0].getPosition().y;
+	//std::cout << distanceBetweenTwoBackgrounds << "\n";
+
+	if (m_vecBackgrounds[0].getPosition().y >= 4800)
 	{
-		m_vecBackgrounds[1].setPosition(m_vecBackgrounds[1].getPosition().x, (m_vecBackgrounds[0].getPosition().y - m_vecBackgrounds[0].getGlobalBounds().height) + Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
+		m_vecBackgrounds[0].setPosition(400, -4000);
 	}
 }
 
