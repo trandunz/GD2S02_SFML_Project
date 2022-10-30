@@ -129,20 +129,23 @@ void ProjectileManager::Update()
 				{
 					if (player != nullptr)
 					{
-						if (projectile->CheckCollision(*player->GetCollisionBox()))
+						if (!player->m_bInvincible)
 						{
-							player->TakeDamage(projectile->GetDamagedDealt());
-
-							if (projectile->DoesApplyElementToTarget())
+							if (projectile->CheckCollision(*player->GetCollisionBox()))
 							{
-								ApplyDebuff(player, projectile->GetElement());
-							}
+								player->TakeDamage(projectile->GetDamagedDealt());
 
-							if (projectile->IsDestroyedOnCollision())
-							{
-								projectile->bDestroy = true;
+								if (projectile->DoesApplyElementToTarget())
+								{
+									ApplyDebuff(player, projectile->GetElement());
+								}
+
+								if (projectile->IsDestroyedOnCollision())
+								{
+									projectile->bDestroy = true;
+								}
+								break;
 							}
-							break;
 						}
 					}
 				}

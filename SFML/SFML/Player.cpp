@@ -598,6 +598,8 @@ void Player::TakeDamage(unsigned _amount)
 		m_iCurrentHealth -= _amount;
 	}
 
+	m_bInvincible = true;
+
 	AudioManager::PlayAudioSource("Hit");
 
 	if (_amount > 0.0f)
