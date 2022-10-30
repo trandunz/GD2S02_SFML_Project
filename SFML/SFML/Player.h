@@ -5,12 +5,13 @@
 // (c) Media Design School
 // File Name : Player.h 
 // Description : Player Header File
-// Author : Inman, Will; Frear, Stace
+// Author : Inman, Will; Frear, Stace, Sing
 
 #pragma once
 #include "Statics.h"
 
 #define BASE_ATKSPD 0.2f
+#define GOD_MODE true;
 
 class Animator;
 class BoxCollider;
@@ -58,6 +59,11 @@ public:
 	/// <param name="_amount"></param>
 	void RestoreMana(unsigned _amount);
 
+	/// <summary>
+	/// reduces the specified amount of mana from the player
+	/// </summary>
+	/// <param name="_amount"></param>
+	void LoseMana(unsigned _amount);
 	/// <summary>
 	/// Checks collision between the player and the specified box collider
 	/// </summary>
@@ -257,6 +263,11 @@ private:
 	/// <param name="_prefix"></param>
 	/// <param name="_color"></param>
 	void SetHeartColor(std::string _prefix, sf::Color _color);
+
+	//========================
+	//Temporary unitl in work out where debug mode is controlled
+	bool m_bGodMode = GOD_MODE;
+	//========================
 
 	ProjectileProperties m_BasicAttackProperties{};
 	ProjectileProperties m_EmpoweredBasicAttackProperties{};

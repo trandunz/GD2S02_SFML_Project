@@ -5,7 +5,8 @@
 // (c) Media Design School
 // File Name : HighScores.h 
 // 
-// Description :
+// Description : High score scene that displays current stored high scores
+// Include systems to allow both players to enter intials for new high scores
 //		
 // Author : Chuang, Kee
 
