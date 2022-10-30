@@ -11,8 +11,6 @@
 #include "Statics.h"
 
 #define BASE_ATKSPD 0.2f
-#define GOD_MODE false;
-
 
 class Animator;
 class BoxCollider;

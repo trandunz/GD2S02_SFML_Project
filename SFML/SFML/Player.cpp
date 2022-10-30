@@ -211,7 +211,7 @@ void Player::Update()
 
 void Player::CheckPushedOffScreenByWarrior()
 {
-	if (m_BoxCollider->GetCollider().getPosition().y >= Statics::RenderWindow.getSize().y + m_BoxCollider->GetCollider().getSize().y)
+	if (m_BoxCollider->GetCollider().getPosition().y + m_BoxCollider->GetCollider().getSize().y / 2.0f >= Statics::RenderWindow.getSize().y)
 	{
 		m_bRespawn = true; // Set player to respawn
 	}
