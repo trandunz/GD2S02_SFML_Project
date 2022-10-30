@@ -593,7 +593,7 @@ bool Player::HasLostHP()
 
 void Player::TakeDamage(unsigned _amount)
 {
-	if( !m_bGodMode)
+	if( !Statics::bDebugMode)
 	{
 		m_iCurrentHealth -= _amount;
 	}
@@ -639,7 +639,7 @@ void Player::RestoreMana(unsigned _amount)
 
 void Player::LoseMana(unsigned _amount)
 {
-	if (!m_bGodMode)
+	if (!Statics::bDebugMode)
 	{
 		m_iCurrentMana -= _amount;
 	}

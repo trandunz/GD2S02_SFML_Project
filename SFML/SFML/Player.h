@@ -11,7 +11,6 @@
 #include "Statics.h"
 
 #define BASE_ATKSPD 0.2f
-#define GOD_MODE true;
 
 class Animator;
 class BoxCollider;
@@ -263,11 +262,6 @@ private:
 	/// <param name="_prefix"></param>
 	/// <param name="_color"></param>
 	void SetHeartColor(std::string _prefix, sf::Color _color);
-
-	//========================
-	//Temporary unitl in work out where debug mode is controlled
-	bool m_bGodMode = GOD_MODE;
-	//========================
 
 	ProjectileProperties m_BasicAttackProperties{};
 	ProjectileProperties m_EmpoweredBasicAttackProperties{};
