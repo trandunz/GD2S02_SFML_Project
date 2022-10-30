@@ -15,12 +15,14 @@
 //#include "Animator.h"
 #include "Helper.h"
 #include "GUI.h"
+#include "AudioManager.h"
 
 HighScores::HighScores()
 {
 	InitializeHighScores();
 	ReadScores();
 	CreateScoreDisplay();
+	CreateAudioElements();
 
 	if (Statics::fGameScore > 0.0f)
 	{
@@ -96,12 +98,12 @@ void HighScores::Draw()
 {
 	Statics::RenderWindow.draw(GUI::GetInstance());
 
-	if (m_pIndicator_P1 != nullptr)
+	if (m_pIndicator_P1 != nullptr && !m_bPlayer1_Finish)
 	{
 		Statics::RenderWindow.draw(*m_pIndicator_P1);
 	}
 
-	if (m_pIndicator_P2 != nullptr)
+	if (m_pIndicator_P2 != nullptr && !m_bPlayer2_Finish)
 	{
 		Statics::RenderWindow.draw(*m_pIndicator_P2);
 	}
@@ -119,6 +121,15 @@ int HighScores::CheckIfNewHighScore()
 		}
 	}
 	return 0;
+}
+
+void HighScores::CreateAudioElements()
+{
+	//moving indicator
+	AudioManager::CreateAudioSource("MenuMove", "menu_move.wav");
+	//confirming highlighted char
+	AudioManager::CreateAudioSource("MenuEnter", "menu_enter.wav");
+	//Cancelling previous confirmed charac
 }
 
 void HighScores::InitializeHighScores()
@@ -332,28 +343,37 @@ void HighScores::ParsePlayerCharacterInputs()
 	sf::Vector2f indicatorPos_1 = m_pIndicator_P1->GetPosition();
 	sf::Vector2f indicatorPos_2 = m_pIndicator_P2->GetPosition();
 
+	//Player 1 input
 	if (!m_bPlayer1_Finish)
 	{
-		//Player 1 input
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::A)
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::A)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::B)
 		{
 			if (m_uCharIndex_P1 > 0)
 			{
 				m_uCharIndex_P1--;
 				indicatorPos_1.x -= NEWRECORD_FONTWIDTH;
 			}
+			//TODO: play cancel sound clip
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::D)
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::D)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::V)
 		{
 			if (m_uCharIndex_P1 < 2)
 			{
 				m_uCharIndex_P1++;
 				indicatorPos_1.x += NEWRECORD_FONTWIDTH;
 			}
+			else
+			{
+				m_bPlayer1_Finish = true;
+			}
+			AudioManager::PlayAudioSource("MenuEnter");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::W)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::A || 
+			Statics::EventHandle.key.code == sf::Keyboard::Key::W)
 		{
 			if (m_cNameInput_P1[m_uCharIndex_P1] > ' ')
 			{
@@ -363,9 +383,11 @@ void HighScores::ParsePlayerCharacterInputs()
 			{
 				m_cNameInput_P1[m_uCharIndex_P1] = 'z';
 			}
+			AudioManager::PlayAudioSource("MenuMove");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::S)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::D || 
+			Statics::EventHandle.key.code == sf::Keyboard::Key::S)
 		{
 			if (m_cNameInput_P1[m_uCharIndex_P1] < 'z')
 			{
@@ -375,45 +397,56 @@ void HighScores::ParsePlayerCharacterInputs()
 			{
 				m_cNameInput_P1[m_uCharIndex_P1] = ' ';
 			}
+			AudioManager::PlayAudioSource("MenuMove");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::B)
-		{
-			m_bPlayer1_Finish = true;
-		}
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
+		//	Statics::EventHandle.key.code == sf::Keyboard::Key::B)
+		//{
+		//	m_bPlayer1_Finish = true;
+		//}
 	}
 	else
 	{
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
+		if (/*Statics::EventHandle.key.code == sf::Keyboard::Key::V ||*/
 			Statics::EventHandle.key.code == sf::Keyboard::Key::B)
 		{
 			m_bPlayer1_Finish = false;
+			//TODO: play cancel sound clip
 		}
 	}
 
+	//Player 2 Input
 	if (!m_bPlayer2_Finish)
 	{
-		//Player 2 Input
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Left)
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::Left)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
 		{
 			if (m_uCharIndex_P2 > 0)
 			{
 				m_uCharIndex_P2--;
 				indicatorPos_2.x -= NEWRECORD_FONTWIDTH;
 			}
+			//TODO: play cancel sound clip
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Right)
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::Right)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1)
 		{
 			if (m_uCharIndex_P2 < 2)
 			{
 				m_uCharIndex_P2++;
 				indicatorPos_2.x += NEWRECORD_FONTWIDTH;
 			}
+			else
+			{
+				m_bPlayer1_Finish = true;
+			}
+			AudioManager::PlayAudioSource("MenuEnter");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Left || 
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
 		{
 			if (m_cNameInput_P2[m_uCharIndex_P2] > ' ')
 			{
@@ -423,9 +456,11 @@ void HighScores::ParsePlayerCharacterInputs()
 			{
 				m_cNameInput_P2[m_uCharIndex_P2] = 'z';
 			}
+			AudioManager::PlayAudioSource("MenuMove");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Down)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Right || 
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Down)
 		{
 			if (m_cNameInput_P2[m_uCharIndex_P2] < 'z')
 			{
@@ -435,20 +470,23 @@ void HighScores::ParsePlayerCharacterInputs()
 			{
 				m_cNameInput_P2[m_uCharIndex_P2] = ' ';
 			}
+			AudioManager::PlayAudioSource("MenuMove");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
-		{
-			m_bPlayer2_Finish = true;
-		}
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
+		//	Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
+		//{
+		//	m_bPlayer2_Finish = true;
+		//}
+
 	}
 	else
 	{
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
+		if (/*Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||*/
 			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
 		{
 			m_bPlayer2_Finish = false;
+			//TODO: play cancel sound clip
 		}
 	}
 
