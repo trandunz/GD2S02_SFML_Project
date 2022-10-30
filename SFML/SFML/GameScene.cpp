@@ -182,11 +182,17 @@ void GameScene::ScrollBackground()
 	for (auto& background : m_vecBackgrounds)
 	{
 		background.move({ 0,Statics::fBackgroundScrollSpeed * Statics::fDeltaTime });
-		if (background.getPosition().y - Statics::RenderWindow.getView().getCenter().y
-			>= background.getGlobalBounds().height)
-		{
-			background.move({ 0, -2 * background.getGlobalBounds().height + 1 });
-		}
+	}
+
+	// Rotate the background positions above one another, after scrolling out of the screen
+	if (m_vecBackgrounds[0].getPosition().y >= m_vecBackgrounds[0].getGlobalBounds().height)
+	{
+		m_vecBackgrounds[0].setPosition(m_vecBackgrounds[0].getPosition().x, (m_vecBackgrounds[1].getPosition().y - m_vecBackgrounds[1].getGlobalBounds().height) + Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
+	}
+
+	if (m_vecBackgrounds[1].getPosition().y >= m_vecBackgrounds[1].getGlobalBounds().height)
+	{
+		m_vecBackgrounds[1].setPosition(m_vecBackgrounds[1].getPosition().x, (m_vecBackgrounds[0].getPosition().y - m_vecBackgrounds[0].getGlobalBounds().height) + Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
 	}
 }
 
