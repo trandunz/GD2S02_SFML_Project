@@ -343,6 +343,9 @@ void HighScores::ParsePlayerCharacterInputs()
 	sf::Vector2f indicatorPos_1 = m_pIndicator_P1->GetPosition();
 	sf::Vector2f indicatorPos_2 = m_pIndicator_P2->GetPosition();
 
+	//If the basix attack key is pressed, it functions as confirm and moves to the next character
+	//If the secondary attack is pressed, it funcitons as cancel and moves to the pevious character
+
 	//Player 1 input
 	if (!m_bPlayer1_Finish)
 	{
@@ -419,6 +422,7 @@ void HighScores::ParsePlayerCharacterInputs()
 	//Player 2 Input
 	if (!m_bPlayer2_Finish)
 	{
+
 		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::Left)
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
 		{
