@@ -209,6 +209,14 @@ void Player::Update()
 	CheckWarriorCollision();
 }
 
+void Player::CheckPushedOffScreenByWarrior()
+{
+	if (m_BoxCollider->GetCollider().getPosition().y >= Statics::RenderWindow.getSize().y + m_BoxCollider->GetCollider().getSize().y)
+	{
+		m_bRespawn = true; // Set player to respawn
+	}
+}
+
 void Player::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(*m_Mesh);
@@ -788,8 +796,7 @@ void Player::HandleSlow()
 void Player::CheckWarriorCollision()
 {
 	if (m_warriorCollided == nullptr) 
-	{
-		SetRestrictYPosition(true);
+	{		
 		bStopInput = false;
 	}
 }

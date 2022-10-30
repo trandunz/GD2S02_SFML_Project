@@ -11,6 +11,10 @@
 #include "Statics.h"
 
 #define BASE_ATKSPD 0.2f
+<<<<<<< Updated upstream
+=======
+#define GOD_MODE false;
+>>>>>>> Stashed changes
 
 class Animator;
 class BoxCollider;
@@ -118,6 +122,7 @@ public:
 	/// <returns></returns>
 	Enemy* GetWarriorCollided() { return m_warriorCollided; };
 
+	void CheckPushedOffScreenByWarrior();
 	bool bDestroy{ false };
 
 	bool m_bInvincible{ false };
