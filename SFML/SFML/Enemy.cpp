@@ -145,6 +145,8 @@ Enemy::~Enemy()
 					if (player->GetWarriorCollided() == this) 
 					{
 						player->SetWarriorCollided(nullptr);
+						player->CheckPushedOffScreenByWarrior();
+						player->SetRestrictYPosition(true);
 					}
 				}
 			}

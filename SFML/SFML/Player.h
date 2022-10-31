@@ -11,7 +11,6 @@
 #include "Statics.h"
 
 #define BASE_ATKSPD 0.2f
-#define GOD_MODE true;
 
 class Animator;
 class BoxCollider;
@@ -124,6 +123,7 @@ public:
 	/// <returns></returns>
 	Enemy* GetWarriorCollided() { return m_warriorCollided; };
 
+	void CheckPushedOffScreenByWarrior();
 	bool bDestroy{ false };
 
 	bool m_bInvincible{ false };
@@ -263,11 +263,6 @@ private:
 	/// <param name="_prefix"></param>
 	/// <param name="_color"></param>
 	void SetHeartColor(std::string _prefix, sf::Color _color);
-
-	//========================
-	//Temporary unitl in work out where debug mode is controlled
-	bool m_bGodMode = GOD_MODE;
-	//========================
 
 	ProjectileProperties m_BasicAttackProperties{};
 	ProjectileProperties m_EmpoweredBasicAttackProperties{};

@@ -209,6 +209,14 @@ void Player::Update()
 	CheckWarriorCollision();
 }
 
+void Player::CheckPushedOffScreenByWarrior()
+{
+	if (m_BoxCollider->GetCollider().getPosition().y + m_BoxCollider->GetCollider().getSize().y / 2.0f >= Statics::RenderWindow.getSize().y)
+	{
+		m_bRespawn = true; // Set player to respawn
+	}
+}
+
 void Player::draw(sf::RenderTarget& _target, sf::RenderStates _states) const
 {
 	_target.draw(*m_Mesh);
@@ -593,7 +601,7 @@ bool Player::HasLostHP()
 
 void Player::TakeDamage(unsigned _amount)
 {
-	if( !m_bGodMode)
+	if( !Statics::bDebugMode)
 	{
 		m_iCurrentHealth -= _amount;
 	}
@@ -639,7 +647,7 @@ void Player::RestoreMana(unsigned _amount)
 
 void Player::LoseMana(unsigned _amount)
 {
-	if (!m_bGodMode)
+	if (!Statics::bDebugMode)
 	{
 		m_iCurrentMana -= _amount;
 	}
@@ -805,8 +813,7 @@ void Player::HandleSlow()
 void Player::CheckWarriorCollision()
 {
 	if (m_warriorCollided == nullptr) 
-	{
-		SetRestrictYPosition(true);
+	{		
 		bStopInput = false;
 	}
 }
