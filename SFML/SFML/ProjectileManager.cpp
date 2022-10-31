@@ -133,8 +133,11 @@ void ProjectileManager::Update()
 						{
 							if (projectile->CheckCollision(*player->GetCollisionBox()))
 							{
-								player->TakeDamage(projectile->GetDamagedDealt());
-
+								if (projectile->GetProjectileType() == PROJECTILETYPE::ARROW)
+								{
+									player->TakeDamage(projectile->GetDamagedDealt());
+								}
+								
 								if (projectile->DoesApplyElementToTarget())
 								{
 									ApplyDebuff(player, projectile->GetElement());
