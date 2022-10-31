@@ -91,7 +91,8 @@ void EnemyManager::Update()
 		// Destroy enemy if its health is equal or less than 0
 		if (enemy->GetCurrentHealth() <= 0)
 		{
-			Statics::fGameScore += enemy->GetPoints(); // Increase game score
+			if (Statics::fGameScore < 2100000000)
+				Statics::fGameScore += enemy->GetPoints(); // Increase game score
 			enemy->bDestroy = true; // Set enemy to die
 			
 			AudioManager::PlayAudioSource("EnemyDeath"); // Play enemy death SFX
