@@ -92,13 +92,10 @@ Enemy::Enemy(EnemyProperties _properties)
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.GetSprite().setPosition(_properties.v2fStartPos);
 	m_AnimatedSprite.StartState("Moving");
-
-
 }
 
 Enemy::~Enemy()
 {
-
 	switch (m_Properties.eEnemyType)
 	{
 		// Set VFX for enemy death based on type
