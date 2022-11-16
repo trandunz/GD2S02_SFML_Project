@@ -40,7 +40,7 @@ Player::Player(PlayerProperties _properties)
 
 	//Set up properties that are the same for both players
 	m_BasicAttackProperties.uDamage = 1;
-	
+	m_SecondaryAttackProperties.uDamage = 7.0f;
 	m_SecondaryAttackProperties.bDestroyOnCollision = false;
 	m_SecondaryAttackProperties.fMoveSpeed = 250.0f;
 	m_SecondaryAttackProperties.bApplyElementToTarget = true;
@@ -48,6 +48,7 @@ Player::Player(PlayerProperties _properties)
 	
 	m_EmpoweredBasicAttackProperties = m_BasicAttackProperties;
 	m_EmpoweredBasicAttackProperties.bApplyElementToTarget = true;
+	m_EmpoweredBasicAttackProperties.uDamage = 3;
 
 	if (m_Properties.bPlayerOne == false)
 	{
