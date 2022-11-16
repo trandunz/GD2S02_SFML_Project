@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : EnemyManager.h 
 // Description : EnemyManager Header File
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #pragma once
 #include "Statics.h"

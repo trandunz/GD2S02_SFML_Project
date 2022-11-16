@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : Statics.h 
 // Description : Statics Header File
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #pragma once
 #include <SFML/Graphics.hpp>
@@ -65,7 +65,7 @@ struct ProjectileProperties
 	unsigned uDamage{ 0 };
 	float fMoveSpeed{ 1000.0f };
 	unsigned uNumberOfFrames{ 1 };
-	ELEMENTTYPE Element{ ELEMENTTYPE::NONE };
+	ELEMENTTYPE eElement{ ELEMENTTYPE::NONE };
 	bool bDestroyOnCollision{ true };
 	bool bApplyElementToTarget{ false };
 	PROJECTILETYPE eProjectileType{ PROJECTILETYPE::BASIC };
@@ -76,7 +76,7 @@ struct ObstacleProperties
 	sf::Texture* Texture{ nullptr };
 	sf::Vector2f v2fStartPos{};
 	sf::Vector2f v2fScale{ 1,1 };
-	OBSTACLETYPE ObstacleType{ OBSTACLETYPE::ROCK };
+	OBSTACLETYPE eObstacleType{ OBSTACLETYPE::ROCK };
 	sf::Vector2f v2fBoxColliderSize{ 10,10 };
 	float fBoxColliderOffsetY{};	
 	float fMoveSpeed{ 160.0f };
@@ -99,7 +99,7 @@ struct EnemyProperties
 {
 	sf::Texture* Texture{ nullptr };
 	sf::Vector2f v2fStartPos{};
-	ENEMYTYPE EnemyType{ ENEMYTYPE::KAMIKAZE };
+	ENEMYTYPE eEnemyType{ ENEMYTYPE::KAMIKAZE };
 	sf::Vector2f v2fMoveScale{ 1.0f,1.0f };
 	sf::Vector2f v2fJumpScale{ 1.2f,1.2f };
 	float fMoveSpeed{ 200.0f };
@@ -182,7 +182,7 @@ public:
 	static sf::RenderWindow RenderWindow;
 	static sf::Event EventHandle;
 	static sf::Font MetalMania;
-	static void InitRenderWindow(sf::Vector2i _size, std::string _title, sf::Uint32 _style, sf::ContextSettings _settings);
+	static void InitRenderWindow(sf::Vector2i _size, std::string _title, sf::Uint32 _style = sf::Style::Default, sf::ContextSettings _settings = sf::ContextSettings());
 	static void InitGlobalFont(std::string _fileName);
 
 	static sf::Clock Time;
@@ -196,7 +196,9 @@ public:
 	static float fGameScore;
 
 	static float fBackgroundScrollSpeed;
+	
 
+	static void ToggleDebug();
 	static bool bDebugMode;
 
 private:

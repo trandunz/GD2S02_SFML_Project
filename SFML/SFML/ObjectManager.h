@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : ObjectManager.h 
 // Description : ObjectManager Header File
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #pragma once
 #include "Statics.h"
@@ -27,8 +27,14 @@ public:
 	/// </summary>
 	void CleanupPickups();
 
+	/// <summary>
+	/// Cleans up all objects that are marked for destroy
+	/// </summary>
 	void CleanupDestroyed();
 
+	/// <summary>
+	/// Force clean up everything including obstacles
+	/// </summary>
 	void CleanupEverything();
 
 	/// <summary>

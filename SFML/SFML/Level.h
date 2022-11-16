@@ -19,8 +19,13 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 
-	float GetElaspedTime();
-
 protected:
 	float m_fElaspedTime{};
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
+
+	float GetElaspedTime();
 };

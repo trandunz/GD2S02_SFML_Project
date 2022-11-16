@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : EnemyManager.cpp 
 // Description : EnemyManager Implementation File		
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #include "EnemyManager.h"
 #include "Enemy.h"
@@ -70,6 +70,11 @@ void EnemyManager::CleanupDestroyed()
 void EnemyManager::CleanupEnemies()
 {
 	CleanupVector(m_Enemies);
+
+	m_iShamanCount = 0;
+	m_iWarriorCount = 0;
+	m_iArcherCount = 0;
+	m_iKamikazeCount = 0;
 }
 
 void EnemyManager::CreateEnemy(EnemyProperties _properties)
@@ -87,7 +92,8 @@ void EnemyManager::Update()
 		// Destroy enemy if its health is equal or less than 0
 		if (enemy->GetCurrentHealth() <= 0)
 		{
-			Statics::fGameScore += enemy->GetPoints(); // Increase game score
+			if (Statics::fGameScore < 2100000000)
+				Statics::fGameScore += enemy->GetPoints(); // Increase game score
 			enemy->bDestroy = true; // Set enemy to die
 			
 			AudioManager::PlayAudioSource("EnemyDeath"); // Play enemy death SFX
@@ -120,7 +126,7 @@ void EnemyManager::Update()
 								player->m_bInvincible = true;
 								break;
 							}
-							// If player collides with warrior, then player dies, but warrior keeps going
+							// If player collides with warrior, then player get pushed down
 							case ENEMYTYPE::WARRIOR:
 							{
 								if (player->GetCollisionBox()->GetCollider().getPosition().y - player->GetCollisionBox()->GetCollider().getSize().y / 2
@@ -131,7 +137,10 @@ void EnemyManager::Update()
 										(Statics::fBackgroundScrollSpeed * Statics::fDeltaTime) + 2 });
 
 									player->SetRestrictYPosition(false);
-									player->SetStopInput(true);
+									player->bStopInput = true;
+
+									// To fix bug where player couldn't move if warrior died while pushing the player.
+									player->SetWarriorCollided(enemy);
 
 								if (!(AudioManager::GetAudioSourceStatus("Warrior") == sf::SoundSource::Status::Playing)) {
 									AudioManager::PlayAudioSource("Warrior");
@@ -146,10 +155,6 @@ void EnemyManager::Update()
 							default:
 								break;
 							}
-
-							
-
-							break;
 						}
 					}
 				}
@@ -226,6 +231,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 	float elapsedTime = LevelLoader::GetElaspedTime();
 	if (m_fSpawnTimer <= 0)
 	{
+		srand((unsigned)Statics::Time.getElapsedTime().asSeconds());
 		m_fSpawnTimer = _rate;
 
 		int iRandomEnemy = rand() % 4;

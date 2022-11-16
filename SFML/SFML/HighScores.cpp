@@ -1,15 +1,28 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : HighScores.cpp 
+// Description : HighScores Implementation File		
+// Author : 
+
 #include <fstream>
 #include "HighScores.h"
 #include "LevelLoader.h"
 #include "TextureLoader.h"
+#include "InputIndicator.h"
+//#include "Animator.h"
 #include "Helper.h"
 #include "GUI.h"
+#include "AudioManager.h"
 
 HighScores::HighScores()
 {
 	InitializeHighScores();
 	ReadScores();
 	CreateScoreDisplay();
+	CreateAudioElements();
 
 	if (Statics::fGameScore > 0.0f)
 	{
@@ -27,6 +40,19 @@ HighScores::HighScores()
 HighScores::~HighScores()
 {
 	Statics::fGameScore = 0;
+
+	if (m_pIndicator_P1 != nullptr)
+	{
+		delete m_pIndicator_P1;
+		m_pIndicator_P1 = nullptr;
+	}
+
+	if (m_pIndicator_P2 != nullptr)
+	{
+		delete m_pIndicator_P2;
+		m_pIndicator_P2 = nullptr;
+	}
+
 	GUI::GetInstance().CleanupElements();
 }
 
@@ -71,6 +97,16 @@ void HighScores::Update()
 void HighScores::Draw()
 {
 	Statics::RenderWindow.draw(GUI::GetInstance());
+
+	if (m_pIndicator_P1 != nullptr)
+	{
+		Statics::RenderWindow.draw(*m_pIndicator_P1);
+	}
+
+	if (m_pIndicator_P2 != nullptr)
+	{
+		Statics::RenderWindow.draw(*m_pIndicator_P2);
+	}
 }
 
 int HighScores::CheckIfNewHighScore()
@@ -84,7 +120,17 @@ int HighScores::CheckIfNewHighScore()
 			return rank;
 		}
 	}
-	return -1;
+	return 0;
+}
+
+void HighScores::CreateAudioElements()
+{
+	//moving indicator
+	AudioManager::CreateAudioSource("MenuMove", "menu_move.wav");
+	//confirming highlighted char
+	AudioManager::CreateAudioSource("MenuEnter", "menu_enter.wav");
+	//Cancelling previous confirmed charac
+	AudioManager::CreateAudioSource("MenuBack", "denied.wav");
 }
 
 void HighScores::InitializeHighScores()
@@ -178,27 +224,27 @@ void HighScores::CreateScoreDisplay()
 	float lastColumnCoordinate = (Statics::RenderWindow.getView().getCenter().x) * 5/ 3;
 
 	TextProperties newTextProperties;
-	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 40);
+	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, YPOS_TITLE);
 	newTextProperties.String = "HIGHSCORE";
 	newTextProperties.OutlineColor = sf::Color::White;
 	newTextProperties.iCharacterSize = 52;
 	GUI::GetInstance().CreateText("SceneTitle", newTextProperties);
 
-	newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, 85);
+	newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, YPOS_HEADER);
 	newTextProperties.iCharacterSize = 42;
 	newTextProperties.String = "Rank";
 	GUI::GetInstance().CreateText("Rank_Label", newTextProperties);
 
-	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 85);
+	newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, YPOS_HEADER);
 	newTextProperties.String = "Name";
 	GUI::GetInstance().CreateText("Name_Label", newTextProperties);
 
-	newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, 85);
+	newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, YPOS_HEADER);
 	newTextProperties.String = "Score";
 	GUI::GetInstance().CreateText("Score_Label", newTextProperties);
 	
-	//Set the text size to be 36 henceforth
-	newTextProperties.iCharacterSize = 36;
+	//Set the text size to be the set font size for high score entries henceforth
+	newTextProperties.iCharacterSize = RECORD_FONTSIZE;
 	//Set up text for each rank to be displayed
 	for (unsigned rank = 1; rank <= MAX_SCORES_DISPLAY; rank++)
 	{
@@ -212,15 +258,15 @@ void HighScores::CreateScoreDisplay()
 		std::string scoreKey = "Score" + std::to_string(rank);
 
 		//Finally, set up the 3 text objects for the current rank
-		newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, 100 + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(firstColumnCoordinate, YPOS_RANKSTART + (rank * YPOS_RANKOFFSET));
 		newTextProperties.String = std::to_string(rank);
 		GUI::GetInstance().CreateText(textKey, newTextProperties);
 
-		newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, 100 + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(middleColumnCoordinate, YPOS_RANKSTART + (rank * YPOS_RANKOFFSET));
 		newTextProperties.String = currentRank.sName1 + "  &  " + currentRank.sName2;
 		GUI::GetInstance().CreateText(nameKey, newTextProperties);
 
-		newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, 100 + (rank * 40));
+		newTextProperties.v2fStartPos = sf::Vector2f(lastColumnCoordinate, YPOS_RANKSTART + (rank * YPOS_RANKOFFSET));
 		newTextProperties.String = currentRank.sScore;
 		GUI::GetInstance().CreateText(scoreKey, newTextProperties);
 	}
@@ -251,43 +297,88 @@ void HighScores::UpdateScores()
 void HighScores::StartInputModeOnRankEntry(unsigned _inRank)
 {
 	m_uNewScoreRank = _inRank;
+
 	for (unsigned currentRankEdited = MAX_SCORES_DISPLAY-1; currentRankEdited >= _inRank; currentRankEdited-- )
 	{
 		MoveScoreDown(currentRankEdited);
 	}
+
+	//Set the intial characters displayed
 	for ( short index = 0; index < 3;index++)
 	{
 		m_cNameInput_P1[index] = 'A';
 		m_cNameInput_P2[index] = 'A';
 	}
+
+	AdjustDisplayForInput(_inRank, INPUTMODE_POSITIONOFFSET);
+	//construct the name of the text objects
+	std::string textKey = "Rank" + std::to_string(_inRank);
+	std::string nameKey = "Name" + std::to_string(_inRank);
+	std::string scoreKey = "Score" + std::to_string(_inRank);
+	//Maake the objects bigger
+	GUI::GetInstance().GetText(textKey).setScale({1.3f,1.3f});
+	GUI::GetInstance().GetText(nameKey).setScale({ 1.3f,1.3f });
+	GUI::GetInstance().GetText(scoreKey).setScale({ 1.3f,1.3f });
+
 	HighScoreEntry* entryToChange = &(m_mapScoreList.find(_inRank)->second);
 	entryToChange->sName1 = std::string(m_cNameInput_P1, sizeof(m_cNameInput_P1));
-	entryToChange->sName2 = std::string(m_cNameInput_P2, sizeof(m_cNameInput_P1));
+	entryToChange->sName2 = std::string(m_cNameInput_P2, sizeof(m_cNameInput_P2));
 	entryToChange->sScore = std::to_string(int(Statics::fGameScore));
+
+	m_pIndicator_P1 = new InputIndicator("P1", m_ksSelectorFileLocation_P1);
+	m_pIndicator_P2 = new InputIndicator("P2", m_ksSelectorFileLocation_P2);
+
+	//Get the position of the name text object and and move both indicators to positions relative to 
+	//this text object
+	nameKey = "Name" + std::to_string(_inRank);
+	sf::Vector2f textPosition = GUI::GetInstance().GetText(nameKey).getPosition();
+	m_pIndicator_P1->SetPosition({ textPosition.x - (NEWRECORD_FONTWIDTH * 4), textPosition.y });
+	m_pIndicator_P2->SetPosition({ textPosition.x + (NEWRECORD_FONTWIDTH * 2), textPosition.y });
+
+	m_pIndicator_P1->SetIndicatorChar(m_cNameInput_P1[m_uCharIndex_P1]);
+	m_pIndicator_P2->SetIndicatorChar(m_cNameInput_P2[m_uCharIndex_P2]);
 }
 
 void HighScores::ParsePlayerCharacterInputs()
 {
+	sf::Vector2f indicatorPos_1 = m_pIndicator_P1->GetPosition();
+	sf::Vector2f indicatorPos_2 = m_pIndicator_P2->GetPosition();
+
+	//If the basix attack key is pressed, it functions as confirm and moves to the next character
+	//If the secondary attack is pressed, it funcitons as cancel and moves to the pevious character
+
+	//Player 1 input
 	if (!m_bPlayer1_Finish)
 	{
-		//Player 1 input
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::A)
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::A)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::B)
 		{
 			if (m_uCharIndex_P1 > 0)
 			{
 				m_uCharIndex_P1--;
+				indicatorPos_1.x -= NEWRECORD_FONTWIDTH;
 			}
+			AudioManager::PlayAudioSource("MenuBack");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::D)
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::D)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::V)
 		{
 			if (m_uCharIndex_P1 < 2)
 			{
 				m_uCharIndex_P1++;
+				indicatorPos_1.x += NEWRECORD_FONTWIDTH;
 			}
+			else
+			{
+				m_bPlayer1_Finish = true;
+				m_pIndicator_P1->Disable();
+			}
+			AudioManager::PlayAudioSource("MenuEnter");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::W)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::A || 
+			Statics::EventHandle.key.code == sf::Keyboard::Key::W)
 		{
 			if (m_cNameInput_P1[m_uCharIndex_P1] > ' ')
 			{
@@ -297,9 +388,11 @@ void HighScores::ParsePlayerCharacterInputs()
 			{
 				m_cNameInput_P1[m_uCharIndex_P1] = 'z';
 			}
+			AudioManager::PlayAudioSource("MenuMove");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::S)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::D || 
+			Statics::EventHandle.key.code == sf::Keyboard::Key::S)
 		{
 			if (m_cNameInput_P1[m_uCharIndex_P1] < 'z')
 			{
@@ -309,43 +402,60 @@ void HighScores::ParsePlayerCharacterInputs()
 			{
 				m_cNameInput_P1[m_uCharIndex_P1] = ' ';
 			}
+			AudioManager::PlayAudioSource("MenuMove");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::B)
-		{
-			m_bPlayer1_Finish = true;
-		}
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
+		//	Statics::EventHandle.key.code == sf::Keyboard::Key::B)
+		//{
+		//	m_bPlayer1_Finish = true;
+		//}
 	}
 	else
 	{
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
+		if (/*Statics::EventHandle.key.code == sf::Keyboard::Key::V ||*/
 			Statics::EventHandle.key.code == sf::Keyboard::Key::B)
 		{
 			m_bPlayer1_Finish = false;
+			m_pIndicator_P1->Enable();
+			AudioManager::PlayAudioSource("MenuBack");
 		}
 	}
 
+	//Player 2 Input
 	if (!m_bPlayer2_Finish)
 	{
-		//Player 2 Input
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Left)
+
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::Left)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
 		{
 			if (m_uCharIndex_P2 > 0)
 			{
 				m_uCharIndex_P2--;
+				indicatorPos_2.x -= NEWRECORD_FONTWIDTH;
 			}
+			AudioManager::PlayAudioSource("MenuBack");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Right)
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::Right)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1)
 		{
 			if (m_uCharIndex_P2 < 2)
 			{
 				m_uCharIndex_P2++;
+				indicatorPos_2.x += NEWRECORD_FONTWIDTH;
 			}
+			else
+			{
+				m_bPlayer2_Finish = true;
+				m_pIndicator_P2->Disable();
+
+			}
+			AudioManager::PlayAudioSource("MenuEnter");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Left || 
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
 		{
 			if (m_cNameInput_P2[m_uCharIndex_P2] > ' ')
 			{
@@ -355,9 +465,11 @@ void HighScores::ParsePlayerCharacterInputs()
 			{
 				m_cNameInput_P2[m_uCharIndex_P2] = 'z';
 			}
+			AudioManager::PlayAudioSource("MenuMove");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Down)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Right || 
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Down)
 		{
 			if (m_cNameInput_P2[m_uCharIndex_P2] < 'z')
 			{
@@ -367,23 +479,34 @@ void HighScores::ParsePlayerCharacterInputs()
 			{
 				m_cNameInput_P2[m_uCharIndex_P2] = ' ';
 			}
+			AudioManager::PlayAudioSource("MenuMove");
 		}
 
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
-		{
-			m_bPlayer2_Finish = true;
-		}
+		//if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
+		//	Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
+		//{
+		//	m_bPlayer2_Finish = true;
+		//}
+
 	}
 	else
 	{
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
+		if (/*Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||*/
 			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
 		{
 			m_bPlayer2_Finish = false;
+			m_pIndicator_P2->Enable();
+			AudioManager::PlayAudioSource("MenuBack");
 		}
 	}
+
+	m_pIndicator_P1->SetPosition( indicatorPos_1);
+	m_pIndicator_P2->SetPosition( indicatorPos_2);
+
+	m_pIndicator_P1->SetIndicatorChar(m_cNameInput_P1[m_uCharIndex_P1]);
+	m_pIndicator_P2->SetIndicatorChar(m_cNameInput_P2[m_uCharIndex_P2]);
 }
+
 
 void HighScores::MoveScoreDown(unsigned _inRankToMoveDown)
 {
@@ -403,3 +526,29 @@ void HighScores::MoveScoreDown(unsigned _inRankToMoveDown)
 	}
 }
 
+void HighScores::AdjustDisplayForInput(unsigned _inRank, int _Offset)
+{
+	auto Move = [&](unsigned _CurrentRank, int _Offset)
+	{
+		//construc the name of the text objects
+		std::string textKey = "Rank" + std::to_string(_CurrentRank);
+		std::string nameKey = "Name" + std::to_string(_CurrentRank);
+		std::string scoreKey = "Score" + std::to_string(_CurrentRank);
+
+		//Finally, update the position of each text object
+		sf::Vector2f position_Rank = GUI::GetInstance().GetText(textKey).getPosition();
+		sf::Vector2f position_Name = GUI::GetInstance().GetText(nameKey).getPosition();
+		sf::Vector2f position_Score = GUI::GetInstance().GetText(scoreKey).getPosition();
+
+		GUI::GetInstance().GetText(textKey).setPosition({ position_Rank.x, position_Rank.y + _Offset });
+		GUI::GetInstance().GetText(nameKey).setPosition({ position_Name.x, position_Name.y + _Offset });
+		GUI::GetInstance().GetText(scoreKey).setPosition({ position_Score.x, position_Score.y + _Offset });
+	};
+
+	for (unsigned currentRankEdited = MAX_SCORES_DISPLAY; currentRankEdited > _inRank; currentRankEdited--)
+	{
+		Move(currentRankEdited, _Offset);
+	}
+
+	Move(_inRank, _Offset /2);
+}

@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : PlayerManager.cpp 
 // Description : PlayerManager Implementation File		
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #include "PlayerManager.h"
 #include "Player.h"
@@ -85,7 +85,7 @@ void PlayerManager::Update()
 		}
 		else
 		{
-			if (player->m_bInvincible == false) // Check if player is invinsible
+			if (player->m_bInvincible == false && player->bStopInput == false) // Check if player is invinsible or being pushed by warrior 
 			{
 				// If not invinsible, then check collisions with obstacles
 				for (auto& obstacle : ObjectManager::GetInstance().GetObstacles())
@@ -110,7 +110,7 @@ void PlayerManager::Update()
 								Statics::RenderWindow.getSize().y - 10.0f)
 							{
 								player->SetRestrictYPosition(false);
-								player->SetStopInput(true);
+								player->bStopInput = true;
 							}
 						}
 					}
@@ -146,11 +146,11 @@ Player* PlayerManager::GetPlayerFromIndex(unsigned _index)
 
 void PlayerManager::WhipeScreenFromSpecial()
 {
-	SpecialEffectProperties whipeEffectProperties{ &TextureLoader::LoadTexture("VFX/FireWall.png") };
+	SpecialEffectProperties whipeEffectProperties{ &TextureLoader::LoadTexture("VFX/Mist.png") };
 
 	whipeEffectProperties.v2fStartPos = Statics::RenderWindow.getView().getCenter();
 	whipeEffectProperties.v2fStartPos.y += Statics::RenderWindow.getSize().y / 2.0f + whipeEffectProperties.Texture->getSize().y / 2;
-	whipeEffectProperties.v2fVelocity = { 0, -Statics::fBackgroundScrollSpeed * 4.0f};
+	whipeEffectProperties.v2fVelocity = { 0, -Statics::fBackgroundScrollSpeed * 6.0f};
 
 	m_sScreenWhipeVFXKey = VFX::GetInstance().CreateAndPlayEffect(whipeEffectProperties, m_fScreenWhipeDuration);
 	m_bIsWhipingScreen = true;

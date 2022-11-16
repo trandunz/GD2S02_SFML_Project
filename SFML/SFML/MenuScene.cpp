@@ -18,6 +18,7 @@
 
 MenuScene::MenuScene()
 {
+	Statics::fGameScore = 0;
 	CreateElements();
 
 	m_iButtonSelected = 0;
@@ -38,9 +39,19 @@ void MenuScene::HandleEvents()
 	bool playMenuMove = false;
 	if (Statics::EventHandle.type == sf::Event::KeyPressed) 
 	{
-		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape)
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Escape ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::B ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2)
 		{
-			Statics::RenderWindow.close();
+			if (m_SettingsMenu)
+			{
+				delete m_SettingsMenu;
+				m_SettingsMenu = nullptr;
+
+				CreateElements();
+			}
+			else
+				Statics::RenderWindow.close();
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::W ||
 			Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
@@ -60,12 +71,8 @@ void MenuScene::HandleEvents()
 
 		}
 		if (Statics::EventHandle.key.code == sf::Keyboard::Key::Enter ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::B ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::N ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1 ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad2 ||
-			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad3)
+			Statics::EventHandle.key.code == sf::Keyboard::Key::V  ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Numpad1)
 		{
 			Button* button = nullptr;
 
@@ -94,6 +101,8 @@ void MenuScene::Update()
 	if (m_SettingsMenu)
 	{
 		CleanupElements();
+		m_SettingsMenu->HandleEvents();
+		ScaleSelectedButton(m_SettingsMenu->GetAudioTypeButton());
 
 		if (m_SettingsMenu->bDestroy)
 		{
@@ -143,7 +152,7 @@ void MenuScene::CreateElements()
 			{
 				LevelLoader::LoadLevel(LEVELS::CHARACTERSELECTSCENE);
 			},
-			&TextureLoader::LoadTexture("StartButton.png")
+			&TextureLoader::LoadTexture("GUI/StartButton.png")
 		}
 	);
 
@@ -156,7 +165,7 @@ void MenuScene::CreateElements()
 			{
 				m_SettingsMenu = new SettingsMenu;
 			},
-			&TextureLoader::LoadTexture("OptionsButton.png")
+			&TextureLoader::LoadTexture("GUI/OptionsButton.png")
 		}
 	);
 
@@ -167,9 +176,10 @@ void MenuScene::CreateElements()
 			{ windowSize.x / 2.0f, (windowSize.y / 1.3f) },
 			[]()
 			{
-				LevelLoader::LoadLevel(LEVELS::HIGHSCORE);
-			},
-			&TextureLoader::LoadTexture("HighScoreButton.png")
+			//Statics::fGameScore = 9000;
+			LevelLoader::LoadLevel(LEVELS::HIGHSCORESCENE);
+		},
+		&TextureLoader::LoadTexture("GUI/HighScoreButton.png")
 		}
 	);
 
@@ -182,13 +192,13 @@ void MenuScene::CreateElements()
 			{
 				Statics::RenderWindow.close();
 			},
-			&TextureLoader::LoadTexture("QuitButton.png")
+			&TextureLoader::LoadTexture("GUI/QuitButton.png")
 		}
 	);
 
 	GUI::GetInstance().CreateImage("Title",
 		{
-			&TextureLoader::LoadTexture("Title.png"),
+			&TextureLoader::LoadTexture("GUI/Title.png"),
 			{windowSize.x / 2.0f, (windowSize.y / 4.0f)},
 			{1.5f, 1.5f}
 		});
@@ -202,8 +212,14 @@ void MenuScene::CreateElements()
 
 	// SFX
 	AudioManager::CreateAudioSource("MenuMove", "menu_move.wav");
-	AudioManager::CreateAudioSource("Abracadabros", "Abracadabrooooos.wav");
-	AudioManager::PlayAudioSource("Abracadabros");
+	if (!AudioManager::HasAudioSource("Abracadabros"))
+	{
+		AudioManager::CreateAudioSource("Abracadabros", "Abracadabrooooos.wav");
+	}
+
+	if (AudioManager::GetAudioSourceStatus("Abracadabros") != sf::SoundSource::Status::Playing)
+		AudioManager::PlayAudioSource("Abracadabros");
+
 	AudioManager::StopMusic();
 
 }

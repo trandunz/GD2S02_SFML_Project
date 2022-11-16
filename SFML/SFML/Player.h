@@ -5,13 +5,18 @@
 // (c) Media Design School
 // File Name : Player.h 
 // Description : Player Header File
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace, Sing
 
 #pragma once
 #include "Statics.h"
 
+#define BASE_ATKSPD 0.2f
+
 class Animator;
 class BoxCollider;
+// For warrior collision bug fix
+class Enemy;
+
 class Player : public sf::Drawable
 {
 public:
@@ -47,8 +52,17 @@ public:
 	/// <param name="_amount"></param>
 	void Heal(unsigned _amount);
 
+	/// <summary>
+	/// restores the player with the specified amount of mana
+	/// </summary>
+	/// <param name="_amount"></param>
 	void RestoreMana(unsigned _amount);
 
+	/// <summary>
+	/// reduces the specified amount of mana from the player
+	/// </summary>
+	/// <param name="_amount"></param>
+	void LoseMana(unsigned _amount);
 	/// <summary>
 	/// Checks collision between the player and the specified box collider
 	/// </summary>
@@ -56,6 +70,9 @@ public:
 	/// <returns></returns>
 	bool CheckCollision(BoxCollider& _otherCollider);
 
+	/// <summary>
+	/// Sets the texture of the player depending on the element chosen in player selection screen
+	/// </summary>
 	void SetTextureByElement();
 
 	/// <summary>
@@ -80,11 +97,37 @@ public:
 	/// <param name="_seconds"></param>
 	/// <param name="_slowMovementPercentage"></param>
 	/// <param name="_color"></param>
-	void ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color = { 181, 230, 29 });
+	void ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color = sf::Color::Blue);
 
+	/// <summary>
+	/// When a warrior collides with a player, this function is called
+	/// which sets m_warriorCollided as the warrior who collided with the player.
+	/// </summary>
+	/// <param name="_warrior"></param>
+	void SetWarriorCollided(Enemy* _warrior) { m_warriorCollided = _warrior; };
+
+	/// <summary>
+	/// This is called every frame to check if there is a warrior pushing
+	/// the player down. Its a bug fix where the warrior would be killed 
+	/// while pushing the player - leaving the player disabled. This check
+	/// now sets the player to move if the warrior is killed during a warrior
+	/// charge.
+	/// </summary>
+	void CheckWarriorCollision();
+
+	/// <summary>
+	/// Returns m_warriorCollided - used in the warriors deconstructor
+	/// to check if the warrior is colliding with a player on death so
+	/// m_warriorCollided can be set to nullptr.
+	/// </summary>
+	/// <returns></returns>
+	Enemy* GetWarriorCollided() { return m_warriorCollided; };
+
+	void CheckPushedOffScreenByWarrior();
 	bool bDestroy{ false };
 
 	bool m_bInvincible{ false };
+	bool bStopInput{ false };
 	
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const override;
@@ -188,7 +231,9 @@ private:
 	/// </summary>
 	void SetElement_Earth();
 
-	sf::Vector2f GetFuturePosition(sf::Vector2f _velocity) const;
+	/// <summary>
+	/// Restricts the player from moving out of the screen
+	/// </summary>
 	void RestrictToScreen();
 
 	/// <summary>
@@ -238,7 +283,6 @@ private:
 	int m_iCurrentHealth{};
 	int m_iCurrentMana{};
 	bool m_bRestrictYPosition{ true };
-	bool m_bStopInput{ false };
 	bool m_bRespawn{ false };
 	float m_fMoveSpeed{};
 	float m_fSlowMovementPercentage{ 0.0f };
@@ -262,13 +306,14 @@ private:
 	BoxCollider* m_BoxCollider{nullptr}; // Player  box collider
 	float m_fColliderOffset{}; // Y Offset position for box collider
 
-		// -Enemy being frozen variables (unable to move)-
+	// -Player being frozen variables (unable to move)-
 	bool m_bStopped{ false };
 	float m_fStopTime{};
-	// -Enemy being slowed variables-
+	sf::Color m_StoppedSpriteColor{ 0, 162, 232 };
+	// -Player being slowed variables-
 	bool m_bSlowed{ false };
 	float m_fSlowTime{};
-	sf::Color m_SlowedSpriteColor;
+	sf::Color m_SlowedSpriteColor{sf::Color::Blue};
 
 	sf::Keyboard::Key m_MoveUpKey {sf::Keyboard::Key::W };
 	sf::Keyboard::Key m_MoveDownKey { sf::Keyboard::Key::S};
@@ -277,6 +322,9 @@ private:
 	sf::Keyboard::Key m_BasicAttackKey {sf::Keyboard::Key::V };
 	sf::Keyboard::Key m_SecondaryAttackKey {sf::Keyboard::Key::B };
 	sf::Keyboard::Key m_SpecialAttackKey {sf::Keyboard::Key::N };
+
+	// Hold a pointer to a warrior if collided with one
+	Enemy* m_warriorCollided;
 
 public:
 	///////////////////////////
@@ -295,8 +343,6 @@ public:
 	sf::Vector2f GetPreviousMove() const; 
 
 	void SetRestrictYPosition(bool _restrictYPosition);
-
-	void SetStopInput(bool _stopInput);
 
 	bool HasLostMana();
 

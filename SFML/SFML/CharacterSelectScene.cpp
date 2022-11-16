@@ -26,11 +26,14 @@ CharacterSelectScene::CharacterSelectScene()
 		{
 			"",
 			{windowSize.x / 2.0f, windowSize.y / 1.3f},
-			[]()
+			[this]()
 			{
-				LevelLoader::LoadLevel(LEVELS::GAMESCENE);
+				if (m_bPlayer1Selected && m_bPlayer2Selected)
+				{
+					LevelLoader::LoadLevel(LEVELS::GAMESCENE);
+				}
 			},
-			&TextureLoader::LoadTexture("StartButton.png")
+			&TextureLoader::LoadTexture("GUI/StartButton.png")
 		}
 	);
 
@@ -57,14 +60,14 @@ CharacterSelectScene::CharacterSelectScene()
 
 	GUI::GetInstance().CreateImage("Player1",
 		{
-			&TextureLoader::LoadTexture("Player1.png"),
+			&TextureLoader::LoadTexture("GUI/Player1.png"),
 			{(windowSize.x / 4.0f), (windowSize.y / 6.0f)},
 			{0.5f, 0.5f}
 		});
 
 	GUI::GetInstance().CreateImage("Player2",
 		{
-			&TextureLoader::LoadTexture("Player2.png"),
+			&TextureLoader::LoadTexture("GUI/Player2.png"),
 			{(windowSize.x / 4.0f) * 3.0f, (windowSize.y / 6.0f)},
 			{0.5f, 0.5f}
 		});
@@ -329,5 +332,9 @@ ELEMENTTYPE CharacterSelectScene::SetPlayerElement(int _player)
 			return ELEMENTTYPE::WATER;
 			break;
 		}
+		default:
+			break;
 	}
+
+	return ELEMENTTYPE::NONE;
 }

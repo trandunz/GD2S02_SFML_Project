@@ -33,14 +33,14 @@ Enemy::Enemy(EnemyProperties _properties)
 	AnimStateProperties animProperties;
 	animProperties.StateTexture = _properties.Texture;
 
-	switch (m_Properties.EnemyType)
+	switch (m_Properties.eEnemyType)
 	{
 		// Set related indivudual animation properties based on type
 		case ENEMYTYPE::KAMIKAZE: 
 		{
 			// Pick a random sprite for kamikaze enemy
 			int iRandomKamakazi = rand() % 5;
-			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Enemy/Goblin_Kamakazi" + FloatToString(iRandomKamakazi + 1, 0) + ".png");
+			animProperties.StateTexture = &TextureLoader::LoadTexture("Unit/Enemy/Goblin_Kamakazi" + FloatToString(iRandomKamakazi + 1.0f, 0) + ".png");
 
 			// Set box collider
 			m_BoxCollider = new BoxCollider(sf::Vector2f(32, 24), { m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
@@ -92,14 +92,11 @@ Enemy::Enemy(EnemyProperties _properties)
 	m_AnimatedSprite.SetDefaultState("Moving");
 	m_AnimatedSprite.GetSprite().setPosition(_properties.v2fStartPos);
 	m_AnimatedSprite.StartState("Moving");
-
-
 }
 
 Enemy::~Enemy()
 {
-
-	switch (m_Properties.EnemyType)
+	switch (m_Properties.eEnemyType)
 	{
 		// Set VFX for enemy death based on type
 		case ENEMYTYPE::KAMIKAZE:
@@ -136,6 +133,20 @@ Enemy::~Enemy()
 			explosionProperties.fAnimFrameInterval = 0.5f / 4;
 			explosionProperties.v2fVelocity = { 0.0f, 0.0f };
 			VFX::GetInstance().CreateAndPlayEffect(explosionProperties, 0.5f);
+
+			// Fix bug where player can't move after warrior collision
+			for (auto& player : PlayerManager::GetInstance().GetPlayers())
+			{
+				if (player)
+				{
+					if (player->GetWarriorCollided() == this) 
+					{
+						player->SetWarriorCollided(nullptr);
+						player->CheckPushedOffScreenByWarrior();
+						player->SetRestrictYPosition(true);
+					}
+				}
+			}
 			break;
 		}
 		case ENEMYTYPE::SHAMAN:
@@ -157,13 +168,6 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {
-	Movement(); // Update enemy movement
-
-	Attack();
-		
-
-	m_AnimatedSprite.Update(); // Update animated sprite
-
 	// If enemy is damaged from fire spell, then run function to damage over time
 	// or when the player is hit with primary attack it flashes
 	if (m_bDamaged)
@@ -175,11 +179,20 @@ void Enemy::Update()
 	{
 		HandleStop();
 	}
+	else
+	{
+		Attack();// Allow enemy attacking if not stunned
+	}
 	// If enemy is hit from earth spell, then run function to slow enemy
 	if (m_bSlowed)
 	{
 		HandleSlow();
 	}
+
+	Movement(); // Update enemy movement
+
+	m_AnimatedSprite.Update(); // Update animated sprite
+
 
 	// Update collider position
 	m_BoxCollider->SetPosition({ m_AnimatedSprite.GetPosition().x, m_AnimatedSprite.GetPosition().y + 8.0f });
@@ -187,7 +200,7 @@ void Enemy::Update()
 
 ENEMYTYPE Enemy::GetType()
 {
-	return m_Properties.EnemyType;
+	return m_Properties.eEnemyType;
 }
 
 sf::Vector2f Enemy::GetPosition() const
@@ -215,7 +228,7 @@ void Enemy::TakeDamage(unsigned _amount)
 		VFX::GetInstance().CreateAndPlayTextEffect(
 			{
 				GetPosition(), // position
-				"+" + FloatToString(GetPoints(),0), // text / string
+				"+" + FloatToString((float)GetPoints(),0), // text / string
 				{255, 215, 0}, // Fill colour (gold)
 				36, // font size
 				sf::Color::Black, // Outline colour
@@ -255,7 +268,7 @@ void Enemy::FlashWhenHit()
 	m_fSpriteChangeColorCounter = m_fSpriteChangeColorSpeed;
 	m_bSpriteColorChanged = true;
 	m_bDamaged = true;
-	m_uDamageOverTime = 0.0f;
+	m_uDamageOverTime = 0;
 	m_fDamageTime = 0.05f;
 }
 
@@ -264,12 +277,8 @@ void Enemy::ApplyStop(float _seconds, sf::Color _color)
 	// Stop enemy movement
 	m_fMoveSpeed = Statics::fBackgroundScrollSpeed;
 	m_fJumpSpeed = Statics::fBackgroundScrollSpeed;
-
-	// Change sprite color
-	m_AnimatedSprite.SetSpriteColor(_color);
-
-	// Pause animations
-	m_AnimatedSprite.PauseAnim();
+	//Store the colour values for this state
+	m_StoppedSpriteColor = _color;
 
 	m_bSpriteColorChanged = true;
 	m_bStopped = true;
@@ -279,8 +288,8 @@ void Enemy::ApplyStop(float _seconds, sf::Color _color)
 void Enemy::ApplySlow(float _seconds, float _slowMovementPercentage, sf::Color _color)
 {
 	// Slow enemy movement by percentage
-	m_fMoveSpeed = m_fMoveSpeed * _slowMovementPercentage;
-	m_fJumpSpeed = m_fJumpSpeed * _slowMovementPercentage;
+	m_fMoveSpeed = m_Properties.fMoveSpeed * _slowMovementPercentage;
+	m_fJumpSpeed = m_Properties.fJumpSpeed * _slowMovementPercentage;
 
 	m_SlowedSpriteColor = _color; // Set damage color
 	m_fSpriteChangeColorSpeed = 0.5f; // Set speed of color change
@@ -350,7 +359,7 @@ void Enemy::SetHPMax()
 
 void Enemy::Movement()
 {
-	switch (m_Properties.EnemyType)
+	switch (m_Properties.eEnemyType)
 	{
 		// Movement of Kamikaze enemy
 		// Runs straight down, and jumps over obstacles 
@@ -384,26 +393,30 @@ void Enemy::Movement()
 		// Runs down until it reaches m_fArcherYPos, then starts moving left and right
 		case ENEMYTYPE::ARCHER:
 		{
-			// Move enemy object down to therandom Y position determined in the constructor
-			if (m_AnimatedSprite.GetPosition().y <= m_fArcherYPos)
+			// Move enemy object down to the random Y position determined in the constructor
+			if (m_AnimatedSprite.GetPosition().y <= m_fArcherYPos && m_bStopped == false)
 			{
 				m_v2fVelocity = { 0,1 };
 			}
 			// If enemy object reaches its Y value, then start moving left or right
-			else if (m_bFirstMoveComplete == false)
+			else if (m_bFirstMoveComplete == false && m_bStopped == false)
 			{
 				m_v2fVelocity = { 1,0 }; // Move right
 			}
+			else if (m_bStopped == true) // Freeze enemy movement - but move them with downwards at background speed
+			{
+				m_v2fVelocity = { 0,1 };
+			}
 
 			// If enemy object moves to the right side of the screen, then switch its velocity to move left
-			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 10))
 			{
 				m_v2fVelocity = { -1,0 };
 				m_bFirstMoveComplete = true;
 			}
 			
 			// If enemy object moves to the left side of the screen, then switch its velocity to move right
-			if (m_AnimatedSprite.GetPosition().x <= 0 + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			if (m_AnimatedSprite.GetPosition().x <= 0 - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 8))
 			{
 				m_v2fVelocity = { 1,0 };
 			}
@@ -458,25 +471,29 @@ void Enemy::Movement()
 		case ENEMYTYPE::SHAMAN:
 		{
 			// Move enemy object down to therandom Y position determined in the constructor
-			if (m_AnimatedSprite.GetPosition().y <= m_fShamanYPos)
+			if (m_AnimatedSprite.GetPosition().y <= m_fShamanYPos && m_bStopped == false)
 			{
 				m_v2fVelocity = { 0,1 };
 			}
 			// If enemy object reaches its Y value, then start moving left or right
-			else if (m_bFirstMoveComplete == false)
+			else if (m_bFirstMoveComplete == false && m_bStopped == false)
 			{
 				m_v2fVelocity = { 1,0 }; // Move right
 			}
+			else if (m_bStopped == true) // Freeze enemy movement - but move them with downwards at background speed
+			{
+				m_v2fVelocity = { 0,1 };
+			}
 
 			// If enemy object moves to the right side of the screen, then switch its velocity to move left
-			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			if (m_AnimatedSprite.GetPosition().x >= Statics::RenderWindow.getSize().x - (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 4))
 			{
 				m_v2fVelocity = { -1,0 };
 				m_bFirstMoveComplete = true;
 			}
 
 			// If enemy object moves to the left side of the screen, then switch its velocity to move right
-			if (m_AnimatedSprite.GetPosition().x <= 0 + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 2))
+			if (m_AnimatedSprite.GetPosition().x <= 0 + (m_AnimatedSprite.GetSprite().getGlobalBounds().width / 4))
 			{
 				m_v2fVelocity = { 1,0 };
 			}
@@ -528,7 +545,7 @@ void Enemy::Attack()
 
 		m_fAttackTimer = fAttackSpeed; // Reset timer
 
-		if (m_Properties.EnemyType == ENEMYTYPE::ARCHER)
+		if (m_Properties.eEnemyType == ENEMYTYPE::ARCHER)
 		{
 			// Create projectile
 			ProjectileManager::GetInstance().CreateProjectile(
@@ -549,7 +566,7 @@ void Enemy::Attack()
 
 			AudioManager::PlayAudioSource("Bow");
 		}
-		else if (m_Properties.EnemyType == ENEMYTYPE::SHAMAN)
+		else if (m_Properties.eEnemyType == ENEMYTYPE::SHAMAN)
 		{
 			int randomInt = rand() % 4;
 
@@ -631,6 +648,12 @@ void Enemy::HandleDamageFlashFeedback()
 void Enemy::HandleStop()
 {
 	m_fStopTime -= 1 * Statics::fDeltaTime; // Count down
+
+	// Change sprite color
+	m_AnimatedSprite.SetSpriteColor(m_StoppedSpriteColor);
+
+	// Pause animations
+	m_AnimatedSprite.PauseAnim();
 
 	if (m_fStopTime <= 0)
 	{

@@ -125,7 +125,14 @@ public:
 	/// <param name="_sound"></param>
 	static void SetSound(std::string _audioSource, std::string _sound);
 
+	/// <summary>
+	/// Returns the status of an audio source if its present
+	/// </summary>
+	/// <param name="_audioSource"></param>
+	/// <returns></returns>
 	static sf::SoundSource::Status GetAudioSourceStatus(std::string _audioSource);
+
+	static bool HasAudioSource(std::string _audioSource);
 
 	/// <summary>
 	/// Cleanup all audio sources and loaded audio clips
@@ -139,5 +146,10 @@ private:
 	inline static sf::Music m_Jutebox;
 	inline static std::map<std::string, sf::Sound*> m_AudioSources;
 	inline static std::map<std::string, sf::SoundBuffer*> m_LoadedSounds;
+
+public:
+	///////////////////////////
+	/// Getters and Setters	///
+	/////////////////////////// 
 };
 

@@ -5,17 +5,32 @@
 // (c) Media Design School
 // File Name : Main.cpp 
 // Description : Main Implementation File		
-// Author : Inman, Will
+// Author :
 
-#include "Statics.h"
 #include "LevelLoader.h"
 #include "TextureLoader.h"
 
+/// <summary>
+/// Main Init / Start Function
+/// </summary>
 void Start();
+/// <summary>
+/// Main Update function
+/// </summary>
 void Update();
+/// <summary>
+/// Main Poll Events Function
+/// </summary>
 void PollEvents();
+/// <summary>
+/// Main Render Function
+/// </summary>
 void Render();
 
+/// <summary>
+/// End of program cleanup function
+/// </summary>
+/// <returns></returns>
 int Cleanup();
 
 int main()
@@ -28,7 +43,7 @@ int main()
 
 void Start()
 {
-	Statics::InitRenderWindow({ 800, 800 }, "Game Name", sf::Style::Default, sf::ContextSettings());
+	Statics::InitRenderWindow({ 800, 800 }, "Abracadabros");
 	Statics::RenderWindow.setKeyRepeatEnabled(false);
 	Statics::InitGlobalFont("MetalMania.ttf");
 	LevelLoader::LoadLevel(LEVELS::MENUSCENE);
@@ -57,11 +72,7 @@ void PollEvents()
 		{
 			if (Statics::EventHandle.key.code == sf::Keyboard::Key::End)
 			{
-				Statics::bDebugMode = !Statics::bDebugMode;
-				if (Statics::bDebugMode)
-					printf("Debug mode turned on \n");
-				else
-					printf("Debug mode turned off \n");
+				Statics::ToggleDebug();
 			}
 		}
 		if (Statics::EventHandle.type == sf::Event::Closed)

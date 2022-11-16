@@ -14,9 +14,19 @@ class BoxCollider;
 class Projectile : public sf::Drawable
 {
 public:
+	/// <summary>
+	/// Create a projectile with the specified properties
+	/// </summary>
+	/// <param name="_properties"></param>
 	Projectile(ProjectileProperties _properties);
+	/// <summary>
+	/// Projectile destructor
+	/// </summary>
 	~Projectile();
 
+	/// <summary>
+	/// Projectile update
+	/// </summary>
 	void Update();
 
 	/// <summary>
@@ -25,8 +35,12 @@ public:
 	/// <returns></returns>
 	bool IsFriendly() const;
 
+	/// <summary>
+	/// Check the collision between the projectile and the specified collider. Returns bools.
+	/// </summary>
+	/// <param name="_otherCollider"></param>
+	/// <returns></returns>
 	bool CheckCollision(BoxCollider& _otherCollider);
-	BoxCollider* GetCollider();
 
 	bool bDestroy{ false };
 private:
@@ -40,6 +54,8 @@ public:
 	///////////////////////////
 	/// Getters and Setters	///
 	/////////////////////////// 
+
+	BoxCollider* GetCollider();
 
 	sf::Vector2f GetPosition() const;
 

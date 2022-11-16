@@ -1,3 +1,12 @@
+// Bachelor of Software Engineering 
+// Media Design School 
+// Auckland 
+// New Zealand 
+// (c) Media Design School
+// File Name : SettingsMenu.cpp 
+// Description : SettingsMenu Implementation File		
+// Author : 
+
 #include "SettingsMenu.h"
 #include "GUI.h"
 #include "TextureLoader.h"
@@ -10,11 +19,80 @@ SettingsMenu::SettingsMenu()
 	CreateMenuBackground();
 	CreateMenuText();
 	CreateMenuButtons();
+	m_sAudioType = "MusicVolume";
 }
 
 SettingsMenu::~SettingsMenu()
 {
 	CleanupElements();
+}
+
+void SettingsMenu::HandleEvents()
+{
+	bool playMenuMove = false;
+	bool playMenuSelect = false;
+
+	if (Statics::EventHandle.type == sf::Event::KeyPressed && m_bButtonReleased)
+	{
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::W ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Up)
+		{
+			m_sAudioType = "MusicVolume";
+			playMenuMove = true;
+			m_bButtonReleased = false;
+		}
+		if(Statics::EventHandle.key.code == sf::Keyboard::Key::S ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Down)
+		{
+			m_sAudioType = "EffectsVolume";
+			playMenuMove = true;
+			m_bButtonReleased = false;
+		}
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::A ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Left)
+		{
+			m_sAdjustAudio = "Decrease";
+			playMenuSelect = true;
+			m_bButtonReleased = false;
+		}
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::D ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Right)
+		{
+			m_sAdjustAudio = "Increase";
+			playMenuSelect = true;
+			m_bButtonReleased = false;
+		}
+		if (Statics::EventHandle.key.code == sf::Keyboard::Key::V ||
+			Statics::EventHandle.key.code == sf::Keyboard::Key::Num1)
+		{
+			if (m_sAudioType == "EffectsVolume")
+			{
+				AudioManager::ToggleMuteEffects();
+			}
+			else {
+			AudioManager::ToggleMuteMusic();
+			}
+			UnMuteIconChange(m_sAudioType);
+			playMenuMove = true;
+			m_bButtonReleased = false;
+		}
+	}
+	// Allow audio to play once
+	if (playMenuMove)
+	{
+		playMenuMove = false;
+		AudioManager::PlayAudioSource("MenuMove");
+	}
+	else if (playMenuSelect)
+	{
+		playMenuSelect = false;
+		AdjustVolume(m_sAdjustAudio, m_sAudioType);
+	}
+
+	if (Statics::EventHandle.type == sf::Event::KeyReleased)
+	{
+		m_bButtonReleased = true;
+	}
 }
 
 void SettingsMenu::CreateMenuBackground()
@@ -114,9 +192,9 @@ void SettingsMenu::CreateMenuButtons()
 
 	sf::Texture* muteEffectsTexture = nullptr;
 	if (AudioManager::IsEffectsMuted())
-		muteEffectsTexture = &TextureLoader::LoadTexture("GUI/VolumeButton_Muted.png");
+		muteEffectsTexture = &TextureLoader::LoadTexture("GUI/EffectsButton_Muted.png");
 	else
-		muteEffectsTexture = &TextureLoader::LoadTexture("GUI/VolumeButton.png");
+		muteEffectsTexture = &TextureLoader::LoadTexture("GUI/EffectsButton.png");
 	GUI::GetInstance().CreateButton("MuteEffects", // Key
 		{
 			"", // Label / String
@@ -125,9 +203,9 @@ void SettingsMenu::CreateMenuButtons()
 			{
 				AudioManager::ToggleMuteEffects();
 				if (AudioManager::IsEffectsMuted())
-					GUI::GetInstance().GetButton("MuteEffects")->SetTexture("GUI/VolumeButton_Muted.png");
+					GUI::GetInstance().GetButton("MuteEffects")->SetTexture("GUI/EffectsButton_Muted.png");
 				else
-					GUI::GetInstance().GetButton("MuteEffects")->SetTexture("GUI/VolumeButton.png");
+					GUI::GetInstance().GetButton("MuteEffects")->SetTexture("GUI/EffectsButton.png");
 			},
 			muteEffectsTexture,
 			{1.25f,1.25f}, // Scale
@@ -451,10 +529,10 @@ void SettingsMenu::CreatePlayerTwoKeybinds()
 		});
 	GUI::GetInstance().CreateButton("P2BasicAttack", // Key
 		{
-			"1", // Label / String
+			"", // Label / String
 			{ScreenCentre.x + 270.0f, ScreenCentre.y + 40}, // Position
 			nullptr,
-			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			&TextureLoader::LoadTexture("GUI/num1.png"),
 			{1.0f,1.0f}, // Scale
 		});
 	GUI::GetInstance().CreateText("P2SecondaryAttack", // Key
@@ -467,10 +545,10 @@ void SettingsMenu::CreatePlayerTwoKeybinds()
 		});
 	GUI::GetInstance().CreateButton("P2SecondaryAttack", // Key
 		{
-			"2", // Label / String
+			"", // Label / String
 			{ScreenCentre.x + 270.0f, ScreenCentre.y + 70}, // Position
 			nullptr,
-			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			&TextureLoader::LoadTexture("GUI/num2.png"),
 			{1.0f,1.0f}, // Scale
 		});
 	GUI::GetInstance().CreateText("P2SpecialAttack", // Key
@@ -483,10 +561,43 @@ void SettingsMenu::CreatePlayerTwoKeybinds()
 		});
 	GUI::GetInstance().CreateButton("P2SpecialAttack", // Key
 		{
-			"3", // Label / String
+			"", // Label / String
 			{ScreenCentre.x + 270.0f, ScreenCentre.y + 100.0f}, // Position
 			nullptr,
-			&TextureLoader::LoadTexture("GUI/CircleButton.png"),
+			&TextureLoader::LoadTexture("GUI/num3.png"),
 			{1.0f,1.0f}, // Scale
 		});
+}
+
+void SettingsMenu::AdjustVolume(std::string _increaseOrDecrease, std::string _volumeToAdjust)
+{
+
+	AudioManager::PlayAudioSource("MenuMove");
+	Button* button = nullptr;
+
+	button = GUI::GetInstance().GetButton(_increaseOrDecrease + _volumeToAdjust);
+	if (button)
+		button->CallOnPress();
+
+	button = nullptr;
+
+	UnMuteIconChange(_volumeToAdjust);
+}
+
+void SettingsMenu::UnMuteIconChange(std::string _audioType)
+{
+
+	if (_audioType == "EffectsVolume")
+	{
+		if (AudioManager::IsEffectsMuted())
+			GUI::GetInstance().GetButton("MuteEffects")->SetTexture("GUI/EffectsButton_Muted.png");
+		else
+			GUI::GetInstance().GetButton("MuteEffects")->SetTexture("GUI/EffectsButton.png");
+	}
+	else {
+		if (AudioManager::IsMusicMuted())
+			GUI::GetInstance().GetButton("MuteMusic")->SetTexture("GUI/MusicButton_Muted.png");
+		else
+			GUI::GetInstance().GetButton("MuteMusic")->SetTexture("GUI/MusicButton.png");
+	}
 }

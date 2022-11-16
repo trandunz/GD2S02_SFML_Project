@@ -13,14 +13,34 @@
 class Button : public sf::Drawable
 {
 public:
+	/// <summary>
+	/// Button Constuctor
+	/// </summary>
 	Button();
+	/// <summary>
+	/// Construct a button with the specified properties
+	/// </summary>
+	/// <param name="_properties"></param>
 	Button(ButtonProperties _properties);
+	/// <summary>
+	/// Button Destructor
+	/// </summary>
 	~Button();
 
+	/// <summary>
+	/// Calls on press function if mouse is over
+	/// </summary>
+	/// <returns></returns>
 	bool CallOnMouseOver();
-	void CallOnPress();
-	sf::Sprite GetSprite()const;
 
+	/// <summary>
+	/// Call on press function forcefully
+	/// </summary>
+	void CallOnPress();
+
+	/// <summary>
+	/// Reset the scale of the button to its original value from creation
+	/// </summary>
 	void ResetScale();
 private:
 	virtual void draw(sf::RenderTarget& _target, sf::RenderStates _states) const;
@@ -40,5 +60,7 @@ public:
 
 	void SetTexture(std::string _fileName);
 	void SetTexture(sf::Texture& _texture);
+
+	sf::Sprite GetSprite()const;
 };
 

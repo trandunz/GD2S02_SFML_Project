@@ -39,6 +39,15 @@ void Statics::InitGlobalFont(std::string _fileName)
 	Statics::MetalMania.loadFromFile("Resources/Fonts/" + _fileName);
 }
 
+void Statics::ToggleDebug()
+{
+	bDebugMode = !bDebugMode;
+	if (bDebugMode)
+		printf("Debug mode turned on \n");
+	else
+		printf("Debug mode turned off \n");
+}
+
 void Statics::SetPaused(bool _paused)
 {
 	if (_paused)

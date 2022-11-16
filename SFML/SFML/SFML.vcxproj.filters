@@ -150,6 +150,9 @@
     <ClCompile Include="Level.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="InputIndicator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnemyManager.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="HighScores.h">
       <Filter>Header Files\SceneManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="InputIndicator.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

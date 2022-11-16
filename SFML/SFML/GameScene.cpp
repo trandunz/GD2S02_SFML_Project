@@ -5,7 +5,7 @@
 // (c) Media Design School
 // File Name : GameScene.cpp 
 // Description : GameScene Implementation File		
-// Author : Inman, Will
+// Author : Inman, Will; Frear, Stace
 
 #include "GameScene.h"
 #include "PlayerManager.h"
@@ -117,6 +117,17 @@ void GameScene::HandleEvents()
 				}
 			}
 		}
+		if (m_bGameOver)
+		{
+			AudioManager::PlayAudioSource("MenuMove");
+			Button* button = nullptr;
+
+			button = GUI::GetInstance().GetButton("GotoHighscore");
+			if (button)
+				button->CallOnPress();
+
+			button = nullptr;
+		}
 	}
 }
 
@@ -153,7 +164,7 @@ void GameScene::Update()
 
 void GameScene::Draw()
 {
-	for (auto& background : m_Backgrounds)
+	for (auto& background : m_vecBackgrounds)
 		Statics::RenderWindow.draw(background);
 
 	Statics::RenderWindow.draw(ObjectManager::GetInstance());
@@ -166,27 +177,42 @@ void GameScene::Draw()
 
 void GameScene::CreateScrollingBackground()
 {
-	m_Backgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
-	m_Backgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
-	for (auto& background : m_Backgrounds)
+	m_vecBackgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
+	//m_vecBackgrounds.emplace_back(sf::Sprite(TextureLoader::LoadTexture("Terrain/map.png")));
+	for (auto& background : m_vecBackgrounds)
 	{
 		SetOriginCenter(background); 
 	}
-	m_Backgrounds[0].setPosition(400, 0);
-	m_Backgrounds[1].setPosition(400, 9600);
+	m_vecBackgrounds[0].setPosition(400, -4000 );
+	//m_vecBackgrounds[1].setPosition(400, 9600);
 }
 
 void GameScene::ScrollBackground()
 {
 	m_fDistanceTravelled += Statics::fBackgroundScrollSpeed * Statics::fDeltaTime;
-	for (auto& background : m_Backgrounds)
+	for (auto& background : m_vecBackgrounds)
 	{
 		background.move({ 0,Statics::fBackgroundScrollSpeed * Statics::fDeltaTime });
-		if (background.getPosition().y - Statics::RenderWindow.getView().getCenter().y
-			>= background.getGlobalBounds().height)
-		{
-			background.move({ 0, -2 * background.getGlobalBounds().height + 1 });
-		}
+	}
+
+	// Rotate the background positions above one another, after scrolling out of the screen
+	//if (m_vecBackgrounds[0].getPosition().y >= m_vecBackgrounds[0].getGlobalBounds().height)
+	//{
+	//	m_vecBackgrounds[0].setPosition(m_vecBackgrounds[0].getPosition().x, (m_vecBackgrounds[1].getPosition().y - m_vecBackgrounds[1].getGlobalBounds().height));// +Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
+	//}
+	//
+	//if (m_vecBackgrounds[1].getPosition().y >= m_vecBackgrounds[1].getGlobalBounds().height)
+	//{
+	//	m_vecBackgrounds[1].setPosition(m_vecBackgrounds[1].getPosition().x, (m_vecBackgrounds[0].getPosition().y - m_vecBackgrounds[0].getGlobalBounds().height));// +Statics::fBackgroundScrollSpeed * Statics::fDeltaTime);
+	//}
+
+	// For testing output of distance between the two scrolling background images
+	//float distanceBetweenTwoBackgrounds = m_vecBackgrounds[1].getPosition().y - m_vecBackgrounds[0].getPosition().y;
+	//std::cout << distanceBetweenTwoBackgrounds << "\n";
+
+	if (m_vecBackgrounds[0].getPosition().y >= 4800)
+	{
+		m_vecBackgrounds[0].setPosition(400, -4000);
 	}
 }
 

@@ -5,7 +5,8 @@
 // (c) Media Design School
 // File Name : HighScores.h 
 // 
-// Description :
+// Description : High score scene that displays current stored high scores
+// Include systems to allow both players to enter intials for new high scores
 //		
 // Author : Chuang, Kee
 
@@ -13,9 +14,22 @@
 #include "Level.h"
 #include "Statics.h"
 
-
-#define MAX_SCORES_DISPLAY 15
+#define MAX_SCORES_DISPLAY 10
+#define RECORD_FONTSIZE 36
+//Value obtained through trial and error
+//to get the correct change in position when moving
+//the indicator
+#define NEWRECORD_FONTWIDTH 26
+#define INPUTMODE_POSITIONOFFSET 80
 #define SEPERATOR ","
+
+#define YPOS_TITLE 40.0f
+#define YPOS_HEADER 110.0f
+#define YPOS_RANKSTART 135.0f
+#define YPOS_RANKOFFSET 50.0f
+
+//class Animator;
+class InputIndicator;
 
 class HighScores : public Level
 {
@@ -45,6 +59,10 @@ private:
 		std::string sScore{ '0' };
 	};
 
+	/// <summary>
+	/// Load required audio elements
+	/// </summary>
+	void CreateAudioElements();
 	/// <summary>
 	/// Sets up the intial list of high scores
 	/// </summary>
@@ -90,6 +108,17 @@ private:
 	/// </summary>
 	/// <param name="_inRankToMoveDown"></param>
 	void MoveScoreDown(unsigned _inRankToMoveDown);
+	/// <summary>
+	/// Move other rank entries down by an offset, 
+	/// and move the new entry down slightly and increase its size
+	/// </summary>
+	/// <param name="_inRank"></param>
+	/// <param name="_inOffset"></param>
+	void AdjustDisplayForInput(unsigned _inRank, int _inOffset);
+
+	const std::string m_ksFileLocation = "Resources/Data/HighScores.csv";
+	const std::string m_ksSelectorFileLocation_P1 = "GUI/CharacterSelector_P1.png";
+	const std::string m_ksSelectorFileLocation_P2 = "GUI/CharacterSelector_P2.png";
 
 	bool m_bReadOnly{ true };
 	std::map<unsigned, HighScoreEntry> m_mapScoreList;
@@ -98,13 +127,17 @@ private:
 	unsigned m_uCharIndex_P2{0};
 	unsigned m_uNewScoreRank = 0;
 
+	//Animator* m_pIndicator_P1 = nullptr;
+	//Animator* m_pIndicator_P2 = nullptr;
+	 
+	InputIndicator* m_pIndicator_P1 = nullptr;
+	InputIndicator* m_pIndicator_P2 = nullptr;
+
 	bool m_bPlayer1_Finish{false};
 	bool m_bPlayer2_Finish{false};
 
 	char m_cNameInput_P1[3]{'A','A','A'};
 	char m_cNameInput_P2[3]{'A','A','A'};
-
-	const std::string m_ksFileLocation = "Resources/Data/HighScores.csv";
 
 public:
 	///////////////////////////
