@@ -193,6 +193,13 @@ void MenuScene::CreateElements()
 			{1.5f, 1.5f}
 		});
 
+	GUI::GetInstance().CreateImage("Logo",
+		{
+			&TextureLoader::LoadTexture("Logo.png"),
+			{(windowSize.x - 40.0f), (windowSize.y - 38.4f)},
+			{0.2f, 0.2f}
+		});
+
 	// SFX
 	AudioManager::CreateAudioSource("MenuMove", "menu_move.wav");
 	AudioManager::CreateAudioSource("Abracadabros", "Abracadabrooooos.wav");

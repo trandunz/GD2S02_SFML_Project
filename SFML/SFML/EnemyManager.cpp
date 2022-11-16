@@ -79,7 +79,8 @@ void EnemyManager::CreateEnemy(EnemyProperties _properties)
 
 void EnemyManager::Update()
 {
-	SpawnEnemies(1.0f);
+	SpawnEnemies(m_fSpawnRate);
+	IncreaseDifficulty(LevelLoader::GetElaspedTime());
 
 	for(auto& enemy : m_Enemies)
 	{
@@ -181,6 +182,24 @@ void EnemyManager::draw(sf::RenderTarget& _target, sf::RenderStates _states) con
 	}
 }
 
+void EnemyManager::IncreaseDifficulty(float _elapsedTime)
+{
+	// _elapsedTime > 120 
+	// From 120, decrease m_fSpawnRate by 0.1 every 20s until its 0.1
+	// From 300, Increase amount of archers and shamans by 1 every 20s
+
+	if (_elapsedTime > m_fDifficultyIncrease + 120.0f) 
+	{
+		m_fDifficultyIncrease += 20.0f;
+		m_fSpawnRate -= 0.1f;
+		if (m_fSpawnRate < 0.1f)
+		{
+			m_fSpawnRate = 0.1f;
+			m_iShamanArcherCount++;
+		}
+	}
+}
+
 int EnemyManager::GetShamanCount()
 {
 	return m_iShamanCount;
@@ -210,7 +229,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 		m_fSpawnTimer = _rate;
 
 		int iRandomEnemy = rand() % 4;
-		if (elapsedTime > 90.0f && m_iShamanCount < 3)
+		if (elapsedTime > 90.0f && m_iShamanCount < m_iShamanArcherCount)
 		{
 			// Create Shaman
 			if (iRandomEnemy == 3)
@@ -252,7 +271,7 @@ void EnemyManager::SpawnEnemies(float _rate)
 					});
 			}
 		}
-		if (elapsedTime > 30.0f && m_iArcherCount < 3)
+		if (elapsedTime > 30.0f && m_iArcherCount < m_iShamanArcherCount)
 		{
 			// Create Archer
 			if (iRandomEnemy == 1)

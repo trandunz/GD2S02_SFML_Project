@@ -55,6 +55,8 @@ private:
 	inline EnemyManager(const EnemyManager&) {}
 	inline ~EnemyManager() {}
 
+	void IncreaseDifficulty(float _elapsedTime);
+
 	float m_fSpawnTimer{1.0f}; // Timer for spawning enemies
 	std::vector<Enemy*> m_Enemies{}; // Vector to hold all enemy types
 
@@ -64,6 +66,11 @@ private:
 	int m_iWarriorCount{};
 	int m_iArcherCount{};
 	int m_iKamikazeCount{};
+
+	float m_fSpawnRate = 1.0f;
+	float m_fDifficultyIncrease = 0.0f;
+	int m_iShamanArcherCount = 3;
+
 public:
 	///////////////////////////
 	/// Getters and Setters	///

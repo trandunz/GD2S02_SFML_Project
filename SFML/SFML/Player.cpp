@@ -40,7 +40,9 @@ Player::Player(PlayerProperties _properties)
 	m_SecondaryAttackProperties.fMoveSpeed = 250.0f;
 	m_SecondaryAttackProperties.bApplyElementToTarget = true;
 	m_SecondaryAttackProperties.eProjectileType = PROJECTILETYPE::SECONDARY;
+	m_SecondaryAttackProperties.uDamage = 7;
 	m_EmpoweredBasicAttackProperties.bApplyElementToTarget = true;
+	m_EmpoweredBasicAttackProperties.uDamage = 2;
 
 	if (m_Properties.bPlayerOne == false)
 	{
